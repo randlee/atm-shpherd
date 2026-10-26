@@ -33,3 +33,6 @@ config/local.json
 .env.*
 !.env.example
 clients/apps/shpherd-tauri/src-tauri/gen/
+
+# Beads workspace gate (machine-local, beside the .beads directory)
+/.beads.gate.lock*
