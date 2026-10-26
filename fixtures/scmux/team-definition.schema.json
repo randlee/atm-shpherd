@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://atm-shpherd.invalid/fixtures/scmux/team-definition.schema.json",
+  "title": "Sanitized scmux team-definition fixture",
+  "type": "object",
+  "required": ["fixture_kind", "fixture_version", "provenance", "armadas", "fleets", "flotillas", "crews", "crew_refs"],
+  "additionalProperties": false,
+  "properties": {
+    "fixture_kind": { "const": "scmux-team-definition" },
+    "fixture_version": { "const": 1 },
+    "provenance": {
+      "type": "object", "required": ["source_repository", "source_commit", "source_paths", "sanitization"], "additionalProperties": false,
+      "properties": {
+        "source_repository": { "const": "scmux" },
+        "source_commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "source_paths": { "type": "array", "minItems": 1, "items": { "type": "string", "pattern": "^(docs|crates|dashboard)/" } },
+        "sanitization": { "type": "string", "minLength": 1 }
+      }
+    },
+    "armadas": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/armada" } },
+    "fleets": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/fleet" } },
+    "flotillas": { "type": "array", "items": { "$ref": "#/$defs/flotilla" } },
+    "crews": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/crew" } },
+    "crew_refs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/crewRef" } }
+  },
+  "$defs": {
+    "id": { "type": "string", "minLength": 1 },
+    "armada": { "type": "object", "required": ["id", "name"], "additionalProperties": false, "properties": { "id": { "$ref": "#/$defs/id" }, "name": { "type": "string", "minLength": 1 }, "description": { "type": "string" } } },
+    "fleet": { "type": "object", "required": ["id", "armada_id", "name"], "additionalProperties": false, "properties": { "id": { "$ref": "#/$defs/id" }, "armada_id": { "$ref": "#/$defs/id" }, "name": { "type": "string", "minLength": 1 }, "color": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" } } },
+    "flotilla": { "type": "object", "required": ["id", "fleet_id", "name"], "additionalProperties": false, "properties": { "id": { "$ref": "#/$defs/id" }, "fleet_id": { "$ref": "#/$defs/id" }, "name": { "type": "string", "minLength": 1 } } },
+    "member": { "type": "object", "required": ["member_id", "role", "ai_provider", "model", "startup_prompts"], "additionalProperties": false, "properties": { "member_id": { "type": "string", "minLength": 1 }, "role": { "type": "string", "minLength": 1 }, "ai_provider": { "type": "string", "minLength": 1 }, "model": { "type": "string", "minLength": 1 }, "startup_prompts": { "type": "array", "minItems": 1, "items": { "type": "string", "pattern": "^(?!/)(?!.*\\.\\.)[^\\r\\n]+$" } } } },
+    "variant": { "type": "object", "required": ["id", "host_id", "root_path", "tmux"], "additionalProperties": false, "properties": { "id": { "$ref": "#/$defs/id" }, "host_id": { "$ref": "#/$defs/id" }, "repo_url": { "type": "string", "format": "uri" }, "branch_ref": { "type": "string", "minLength": 1 }, "root_path": { "type": "string", "pattern": "^(?!/)(?!.*\\.\\.)[^\\r\\n]+$" }, "tmux": { "type": "object", "required": ["session", "window", "pane"], "additionalProperties": false, "properties": { "session": { "type": "string", "minLength": 1 }, "window": { "type": "string", "minLength": 1 }, "pane": { "type": "string", "minLength": 1 } } } } },
+    "crew": { "type": "object", "required": ["id", "crew_name", "crew_ulid", "members", "variants"], "additionalProperties": false, "properties": { "id": { "$ref": "#/$defs/id" }, "crew_name": { "type": "string", "minLength": 1 }, "crew_ulid": { "type": "string", "pattern": "^[0-9A-Z]{26}$" }, "members": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/member" }, "contains": { "type": "object", "properties": { "role": { "pattern": "^[Cc]aptain$" } }, "required": ["role"] }, "minContains": 1, "maxContains": 1 }, "variants": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/variant" } } } },
+    "crewRef": { "type": "object", "required": ["id", "crew_id", "armada_id", "fleet_id"], "additionalProperties": false, "properties": { "id": { "$ref": "#/$defs/id" }, "crew_id": { "$ref": "#/$defs/id" }, "armada_id": { "$ref": "#/$defs/id" }, "fleet_id": { "$ref": "#/$defs/id" }, "flotilla_id": { "$ref": "#/$defs/id" }, "alias_name": { "type": "string", "minLength": 1 } } }
+  }
+}

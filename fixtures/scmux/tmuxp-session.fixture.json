@@ -1,0 +1,23 @@
+{
+  "fixture_kind": "scmux-tmuxp-session",
+  "fixture_version": 1,
+  "provenance": {
+    "source_repository": "scmux",
+    "source_commit": "91928539961cd4638354a3cd635bc948daa099d6",
+    "source_path": "docs/example-session.json",
+    "sanitization": "All source paths, environment values, and launch commands were replaced with non-executable placeholders."
+  },
+  "session_name": "fixture-navigation",
+  "start_directory": "workspace/fixture-navigation",
+  "environment": { "PROJECT": "fixture-navigation", "FIXTURE_ONLY": "true" },
+  "windows": [
+    {
+      "window_name": "fixture-navigation",
+      "layout": "even-horizontal",
+      "panes": [
+        { "label": "team-lead", "shell_command": ["fixture-command captain"] },
+        { "label": "systems-mate", "shell_command": ["fixture-command mate"] }
+      ]
+    }
+  ]
+}
