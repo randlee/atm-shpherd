@@ -13,7 +13,7 @@ modified.
 
 | Concern | Current owner/evidence | atm-shpherd boundary |
 | --- | --- | --- |
-| Canonical roster | ATM retained roster store. `atm-core/src/team_admin.rs` and `team_admin/member_mutation.rs` expose member list/add/update/remove. | Read catalogue facts through documented ATM JSON commands. Never write ATM SQLite directly. |
+| Catalog and canonical roster | ATM SQLite is the upstream catalog source; the retained roster surface in `atm-core/src/team_admin.rs` and `team_admin/member_mutation.rs` exposes member list/add/update/remove. | Ordinary catalog ingestion is a Shpherd-owned, versioned, read-only ATM SQLite importer over the defined projection. It never writes ATM SQLite. CLI JSON is reserved for roster mutation/reconciliation and optional advisory projections. |
 | Roster mutation | `atm teams add-member`, `update-member`, and `remove-member` in `crates/atm/src/commands/teams.rs`. | The daemon service, after an explicit operator intent and domain validation, is the only Shpherd caller. |
 | Runtime member status | `atm members --team <team> --json` overlays runtime observation; unavailable observation is represented explicitly rather than as “dead.” `crates/atm/src/commands/members.rs`. | Import as observation/evidence; never persist it as definition truth. |
 | Herdr process integration | ATM carries backend/target/session/alias metadata; `atm-herdr` is intentionally a leaf adapter and has no direct roster/SQLite writes (`docs/atm-herdr/boundaries.md`). | hmux owns the compatible Herdr workspace/pane creation and agent command construction. |
@@ -21,12 +21,16 @@ modified.
 
 ## ATM command capabilities evidenced today
 
-The integration must invoke executable commands, capture structured JSON, and
-record their version/capability evidence. Do not substitute raw database SQL.
+Ordinary catalog ingestion uses the versioned, read-only ATM SQLite importer
+specified by PRD §9; its source revision/fingerprint is part of the imported
+evidence. Shpherd never writes ATM SQLite. Executable ATM commands and their
+structured JSON are the boundary for roster mutation and reconciliation, and
+their version/capability evidence must be recorded. Optional picker projections
+do not replace the authoritative catalog importer.
 
 | Command | Evidence-backed behavior | Integration use |
 | --- | --- | --- |
-| `atm teams --json --members` | Emits a picker projection from retained roster plus live runtime status. See `crates/atm/src/commands/teams.rs` and `atm-core/src/picker_projection.rs`. | Optional catalog/read projection when its schema/version is accepted. |
+| `atm teams --json --members` | Emits a picker projection from retained roster plus live runtime status. See `crates/atm/src/commands/teams.rs` and `atm-core/src/picker_projection.rs`. | Optional advisory picker/read projection; it is not the ordinary catalog importer. |
 | `atm members --team <team> --json` | Lists the canonical roster for one selected team and overlays runtime observation. If runtime is unavailable or incomplete, the command marks affected status unavailable/unknown instead of silently reporting them stopped. See `crates/atm/src/commands/members.rs`. | Reconcile the post-mutation roster and retain runtime evidence separately. |
 | `atm teams add-member <team> <member> ... --json` | Validates team/name; creates a canonical roster row (and inbox on the current retained path); rejects an existing member. Supports type/model, host, backend, target/session, and alias metadata. See `teams.rs` and `team_admin/member_mutation.rs` `add_member_with_roster_store`. | Register a new member only after Shpherd has persisted an expansion intent. A duplicate error is a reconciliation signal, never permission to create a second runtime pane. |
 | `atm teams update-member <team> <member> ... --json` | Changes existing member metadata; requires member existence, validates caller authorization and backend/name constraints. | Repair/update metadata only under an explicit service operation. |
@@ -84,8 +88,8 @@ They are product decisions, not permission to invent a second launch protocol.
 
 ## Gaps that require an explicit decision
 
-1. Which ATM command output/version is the supported catalog import schema and
-   how its source revision/fingerprint is derived.
+1. Which ATM SQLite catalog projection/table version is supported and how its
+   source revision/fingerprint is derived.
 2. Which fields map between Shpherd member definitions and ATM `agent_type`,
    `model`, `backend`, `target`, `session`, `alias`, and `host` without leaking
    paths, mail, or credentials to PostgreSQL or telemetry.
