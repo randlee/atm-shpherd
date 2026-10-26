@@ -1,0 +1,39 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Shpherd",
+  "version": "0.1.0",
+  "identifier": "com.synapticcanvas.shpherd",
+  "build": {
+    "beforeDevCommand": "pnpm --filter @shpherd/ui dev",
+    "beforeBuildCommand": "pnpm --filter @shpherd/ui build",
+    "devUrl": "http://127.0.0.1:1420",
+    "frontendDist": "../../shpherd-ui/dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Shpherd",
+        "label": "main",
+        "width": 1200,
+        "height": 800,
+        "minWidth": 360,
+        "minHeight": 600
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src ipc: http://ipc.localhost",
+      "capabilities": []
+    }
+  },
+  "bundle": {
+    "active": false,
+    "targets": "all"
+  },
+  "plugins": {
+    "deep-link": {
+      "desktop": {
+        "schemes": ["shpherd"]
+      }
+    }
+  }
+}

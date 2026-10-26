@@ -60,6 +60,11 @@ The shared TypeScript UI uses `@synaptic-canvas/sc-observability` for non-throwi
 
 ## Documentation
 
+The independent [client preview workspace](clients/README.md) runs now with
+Corepack/pnpm under `clients/`. It provides a responsive fixture-backed team
+catalog and a thin Tauri debug host while sc-runtime Phase B work continues.
+It does not connect to a production daemon or implement team mutations.
+
 The detailed requirements, strict runtime boundaries, Tauri client contract, scheduler boundary, hmux capability set, and delivery plan are in [the PRD](docs/atm-shpherd-prd.md).
 
 ## Branches

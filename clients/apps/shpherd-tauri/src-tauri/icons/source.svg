@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <title>Shpherd</title>
+  <rect width="512" height="512" rx="104" fill="#112b32"/>
+  <path d="M344 156H216c-86 0-86 100 0 100h80c86 0 86 100 0 100H168" fill="none" stroke="#b9d5c7" stroke-width="44" stroke-linecap="round"/>
+</svg>
