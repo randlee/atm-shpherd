@@ -19,6 +19,7 @@ The app owns all team semantics: the schema, host-aggregate sync policy, ATM cat
 3. Use hmux and Herdr as the primary initial launch/view path; retain tmux only as a compatible adapter where needed.
 4. Add one agent to a live team's roster on demand without duplicate ATM members or duplicate runtime panes.
 5. Synchronize host-local facts to PostgreSQL on a schedule the application registers with `sc-cron`.
+6. Provide one responsive team-management UI with the same authenticated API and command capabilities in a browser, a dedicated desktop application, and a phone application.
 
 ## 3. Non-goals
 
@@ -47,7 +48,7 @@ Phase B is used from its source/generation work after its relevant work lands; t
 
 The generator input is `sqlite-postgres`. Postgres is the chosen shared engine; MySQL is the other Phase B pairing option and is not selected. SQL Server is out of scope.
 
-All application packages use a `shpherd-` prefix for crates.io coexistence. Executable names remain `shpherd` and `atm-shpherd`.
+All Rust application packages use a `shpherd-` prefix for crates.io coexistence. Executable names remain `shpherd` and `atm-shpherd`.
 
 | Package | Responsibility |
 | --- | --- |
@@ -57,12 +58,22 @@ All application packages use a `shpherd-` prefix for crates.io coexistence. Exec
 | `shpherd-store-postgres` | Postgres-only migrations, sqlx queries, and `EngineStore` implementation. |
 | `shpherd-store-adaptor` | Consumer-owned host-aggregate row movement. It depends on schema and calls `read_rows`/`write_rows`; it starts no timer. |
 | `shpherd-service` | Domain rules and service functions called by routes, CLI, and MCP; it depends on the adaptor, not directly on engine SQL. |
-| `shpherd-daemon` | Axum routes, optional MCP, dashboard assets, local adapters, and application-scheduled workers; produces `atm-shpherd`. |
+| `shpherd-daemon` | Axum routes, optional MCP, static UI hosting, local adapters, and application-scheduled workers; produces `atm-shpherd`. |
 | `shpherd-cli` | Thin HTTP client; produces `shpherd`; never opens either store. |
 
 Routes, CLI, MCP, dashboard, and pollers call service functions and contain no SQL. The adaptor is the one exception to “service is the writer”: it writes rows through the paired `EngineStore` implementations as the consumer-owned sync mechanism. `dyn EngineStore`, a generic `StorageBackend`, and cross-engine SQL are prohibited.
 
-### 4.3 Generated examples and general database commands
+### 4.3 Shared UI and Tauri clients
+
+`shpherd-ui` is a responsive TypeScript web client that consumes the daemon's authenticated HTTP/WebSocket API. It is the same product UI in every form factor: it is served to ordinary browsers and bundled by Tauri for macOS, Windows, Linux, iOS, and Android. The phone and desktop clients are presentation shells; they do not open Shpherd stores, run hmux, or acquire launch leases.
+
+Tauri is a first-class supported client target, not a replacement transport. Its desktop build supplies the durable application identity operators need—icon, Dock/task-switcher presence, dedicated window, tray/status surface, native notifications, and deep links. Its mobile builds supply an installed phone client with deep links, notifications, and optional biometric unlock. Browser, desktop, and phone clients use the same versioned API, authorization policy, command semantics, and real-time event stream; responsive presentation and explicit confirmation requirements may differ by screen size.
+
+The daemon is authoritative for every team action. A remote browser or phone connects to the enrolled host/control-plane endpoint over authenticated TLS, including through Tailscale; no Tauri IPC or mobile-local daemon is part of the remote-control protocol. Platform-specific functionality is isolated behind client capability adapters, so a browser never needs a Tauri API to perform an ordinary Shpherd operation.
+
+The TypeScript UI uses `@synaptic-canvas/sc-observability` (starting from the published 1.5.0 line, pinned in the application lockfile) for client-side, non-throwing observability host bindings. Its use must redact credentials, terminal content, raw ATM mailbox data, and prompt bodies; telemetry failure must never block a team action. Browser compatibility is provided by a deliberate browser/no-op adapter rather than by granting browser code native Tauri capabilities.
+
+### 4.4 Generated examples and general database commands
 
 The generated widget example is a scaffolding example, not an atm-shpherd domain command. It is retained only until the first real shpherd vertical slice replaces it.
 
@@ -189,10 +200,11 @@ If roster registration succeeds but launch fails, the durable state is `register
 | M0 | Generate `sqlite-postgres` workspace after Phase B b-8; wire all `shpherd-*` package boundaries | Phase B generation layout |
 | M1 | Define `shpherd-schema`; implement both engine stores, migrations, and host-aggregate adaptor | Phase B b-4/b-5/b-7 |
 | M2 | Register scheduled adaptor sync using Phase B `sc-cron`; prove adaptor has no timer | Phase B b-3 and its beads-cache b-8 prerequisite |
-| M3 | Port scmux definitions, writer service, read projection, CLI/API/dashboard behavior | M0-M2 |
-| M4 | Port hmux/Herdr and compatible tmux launch/observe/doctor vertical slice | M3 |
-| M5 | Add ATM catalog importer and cross-host launch binding/reconciliation | M1-M4 |
-| M6 | Add idempotent roster expansion and ATM/Herdr runtime evidence | M5 |
+| M3 | Port scmux definitions, writer service, read projection, and API behavior | M0-M2 |
+| M4 | Build `shpherd-ui`; package it through Tauri for desktop and iOS/Android while retaining browser parity | M3 |
+| M5 | Port hmux/Herdr and compatible tmux launch/observe/doctor vertical slice | M3 |
+| M6 | Add ATM catalog importer and cross-host launch binding/reconciliation | M1-M5 |
+| M7 | Add idempotent roster expansion and ATM/Herdr runtime evidence | M6 |
 
 ## 13. Acceptance criteria
 
@@ -206,6 +218,9 @@ If roster registration succeeds but launch fails, the durable state is `register
 8. A second enrolled host receives the required aggregate rows, resolves its local repository binding, and can launch exactly one eligible team variant under the app's lease policy.
 9. Retried roster expansion creates neither a duplicate ATM member nor a duplicate hmux/Herdr pane.
 10. A failure in one team, one host, one adaptor run, or one scheduled job does not stop or mutate an unrelated team.
+11. The browser, desktop Tauri app, and mobile Tauri app use the same authenticated API and can each perform every supported team operation permitted to that operator.
+12. Tauri client code contains no direct store, hmux, ATM, launch-lease, or domain-mutation implementation; platform-specific capabilities are optional enhancements.
+13. Client observability is non-throwing, redacts the defined sensitive fields, and cannot change the result of a service request.
 
 ## 14. Decisions still owned by atm-shpherd
 
