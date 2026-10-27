@@ -1,7 +1,10 @@
 {
   "database": "dolt",
   "backend": "dolt",
-  "dolt_mode": "proxied-server",
-  "dolt_database": "shpherd",
-  "project_id": "87ecf57e-7335-4cb9-b87a-c3cc99d61d5b"
+  "dolt_mode": "server",
+  "dolt_server_user": "skillrx",
+  "dolt_database": "atm-shpherd",
+  "project_id": "281475c5-9043-4ad9-93d7-514ed78bb04c",
+  "global_dolt_database": "beads_global",
+  "global_project_id": "00000000-0000-0000-0000-000000000000"
 }
