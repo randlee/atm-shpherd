@@ -1,0 +1,70 @@
+[atm]
+identity = "shp-lead"
+default_team = "shpherd"
+
+[rmux]
+session = "shpherd"
+
+# Window 1: core agents (lead + primary codex dev + QA)
+[[rmux.windows]]
+name = "agents"
+layout = "even-horizontal"
+
+[[rmux.windows.panes]]
+name = "shp-lead"
+alias = "shp-lead"
+model = "sonnet"
+env = { ATM_IDENTITY = "shp-lead", ATM_TEAM = "shpherd", CLAUDE_CODE_TASK_LIST_ID = "shpherd" }
+
+[[rmux.windows.panes]]
+name = "shp-clint"
+command = "codex -c features.hooks=true --model gpt-5.6-terra --yolo"
+env = { ATM_IDENTITY = "shp-clint", ATM_TEAM = "shpherd", CLAUDE_CODE_TASK_LIST_ID = "shpherd" }
+
+[[rmux.windows.panes]]
+name = "shp-quality-mgr"
+alias = "shp-quality-mgr"
+model = "sonnet"
+env = { ATM_IDENTITY = "shp-quality-mgr", ATM_TEAM = "shpherd", CLAUDE_CODE_TASK_LIST_ID = "shpherd" }
+
+# Window 2: specialists (fast codex workers + claude specialist)
+[[rmux.windows]]
+name = "support"
+layout = "even-horizontal"
+
+[[rmux.windows.panes]]
+name = "shp-cfast"
+command = "codex -c features.hooks=true --model gpt-6.1-luna --yolo"
+env = { ATM_IDENTITY = "shp-cfast", ATM_TEAM = "shpherd", CLAUDE_CODE_TASK_LIST_ID = "shpherd" }
+
+[[rmux.windows.panes]]
+name = "shp-llint"
+command = "codex -c features.hooks=true --model gpt-6.1-luna --yolo"
+env = { ATM_IDENTITY = "shp-llint", ATM_TEAM = "shpherd", CLAUDE_CODE_TASK_LIST_ID = "shpherd" }
+
+[[rmux.windows.panes]]
+name = "shp-flint"
+model = "fable"
+env = { ATM_IDENTITY = "shp-flint", ATM_TEAM = "shpherd", CLAUDE_CODE_TASK_LIST_ID = "shpherd" }
+
+# Window 3: publishing + sanity + QA-fast
+[[rmux.windows]]
+name = "publishing"
+layout = "even-horizontal"
+
+[[rmux.windows.panes]]
+name = "shp-publisher"
+alias = "shp-publisher"
+model = "sonnet"
+env = { ATM_IDENTITY = "shp-publisher", ATM_TEAM = "shpherd", CLAUDE_CODE_TASK_LIST_ID = "shpherd" }
+
+[[rmux.windows.panes]]
+name = "shp-sanity"
+alias = "shp-sanity"
+model = "sonnet"
+env = { ATM_IDENTITY = "shp-sanity", ATM_TEAM = "shpherd", CLAUDE_CODE_TASK_LIST_ID = "shpherd" }
+
+[[rmux.windows.panes]]
+name = "shp-qlint"
+model = "haiku"
+env = { ATM_IDENTITY = "shp-qlint", ATM_TEAM = "shpherd", CLAUDE_CODE_TASK_LIST_ID = "shpherd" }
