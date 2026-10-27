@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Announcements · atm-shpherd</title>
+  <style>
+    body { font-family: -apple-system, system-ui, sans-serif; max-width: 52rem; margin: 3rem auto; padding: 0 1.5rem; line-height: 1.6; color: #1a1a2e; }
+    nav a { margin-right: 1rem; }
+    .note { background: #f4f6fb; border-left: 3px solid #5566aa; padding: .75rem 1rem; }
+    .old { color: #666; font-size: .9em; }
+  </style>
+</head>
+<body>
+  <nav><a href="../">&#8592; atm-shpherd home</a></nav>
+  <h1>Announcements</h1>
+  <p>Press releases and release announcements for <code>atm-shpherd</code>.</p>
+
+  <p class="note"><strong>No atm-shpherd release yet.</strong> This product is the successor to
+  <code>scmux</code> and is still pre-release; the announcement below is the predecessor's final
+  release, migrated so the lineage is tracked in one place.</p>
+
+  <ul>
+    <li>
+      <a href="scmux-v0.6.0.md">scmux v0.6.0</a> — Armada/Fleet/Flotilla/Crew Architecture
+      <span class="old">(predecessor product, March 10 2026; kept verbatim for lineage)</span>
+    </li>
+  </ul>
+
+  <h2>Release tracking</h2>
+  <p>atm-shpherd releases will be listed here as they ship. The dependency that gates the first
+  release is <code>sc-runtime</code> Phase B (the <code>sqlite-postgres</code> generated layout plus
+  generation and scheduler work); until sc-runtime publishes to crates.io, shpherd's dependencies
+  are git-tag pinned.</p>
+</body>
+</html>
