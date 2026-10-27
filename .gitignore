@@ -36,3 +36,10 @@ clients/apps/shpherd-tauri/src-tauri/gen/
 
 # Beads workspace gate (machine-local, beside the .beads directory)
 /.beads.gate.lock*
+
+# Beads / Dolt files (added by bd init)
+.dolt/
+*.db
+.beads-credential-key
+.beads/proxieddb/
+*.gate.lock*
