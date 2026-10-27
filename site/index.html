@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>atm-shpherd</title>
+  <style>
+    body { font-family: -apple-system, system-ui, sans-serif; max-width: 52rem; margin: 3rem auto; padding: 0 1.5rem; line-height: 1.6; color: #1a1a2e; }
+    nav a { margin-right: 1rem; }
+    code { background: #f4f6fb; padding: .1rem .3rem; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <nav><a href="announcements/">Announcements</a></nav>
+  <h1>atm-shpherd</h1>
+  <p>Multi-host control plane for defining, launching and observing ATM-backed agent teams.
+  Successor to <code>scmux</code>; an application built on <code>sc-runtime</code>, not a fork.</p>
+
+  <h2>Commands</h2>
+  <ul>
+    <li><code>shpherd</code> — the operator CLI</li>
+    <li><code>atm-shpherd</code> — the local daemon (database access, runtime adapters, sync, dashboard/API)</li>
+  </ul>
+  <p>The CLI never opens SQLite or PostgreSQL directly.</p>
+
+  <h2>Further reading</h2>
+  <ul>
+    <li><a href="../docs/user-stories.md">User stories / personas</a></li>
+    <li><a href="../docs/atm-shpherd-prd.md">Product requirements</a></li>
+    <li><a href="announcements/">Announcements and release tracking</a></li>
+  </ul>
+</body>
+</html>
