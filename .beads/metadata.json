@@ -2,7 +2,7 @@
   "database": "dolt",
   "backend": "dolt",
   "dolt_mode": "server",
-  "dolt_server_user": "root",
+  "dolt_server_user": "skillrx",
   "dolt_database": "atm-shpherd",
   "project_id": "281475c5-9043-4ad9-93d7-514ed78bb04c",
   "global_dolt_database": "beads_global",
