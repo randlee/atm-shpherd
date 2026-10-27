@@ -1,0 +1,14 @@
+{
+  "name": "@shpherd/tauri",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tauri dev",
+    "build:debug": "tauri build --debug --no-bundle --features custom-protocol -- --locked",
+    "tauri": "tauri"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "2.12.4"
+  }
+}

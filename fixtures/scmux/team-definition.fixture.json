@@ -1,0 +1,47 @@
+{
+  "fixture_kind": "scmux-team-definition",
+  "fixture_version": 1,
+  "provenance": {
+    "source_repository": "scmux",
+    "source_commit": "91928539961cd4638354a3cd635bc948daa099d6",
+    "source_paths": [
+      "docs/requirements.md",
+      "crates/scmux-daemon/src/definition_writer.rs",
+      "dashboard/team-dashboard.jsx"
+    ],
+    "sanitization": "Synthetic identifiers, relative placeholder paths, and no credentials, mailbox bodies, personal absolute paths, or live database data."
+  },
+  "armadas": [
+    { "id": "armada-fixture", "name": "Fixture Armada", "description": "Synthetic catalog view" }
+  ],
+  "fleets": [
+    { "id": "fleet-fixture", "armada_id": "armada-fixture", "name": "Fixture Fleet", "color": "#3b82f6" }
+  ],
+  "flotillas": [
+    { "id": "flotilla-fixture", "fleet_id": "fleet-fixture", "name": "Fixture Flotilla" }
+  ],
+  "crews": [
+    {
+      "id": "crew-fixture",
+      "crew_name": "fixture-navigation",
+      "crew_ulid": "0123456789ABCDEFGHJKMNPQRS",
+      "members": [
+        { "member_id": "team-lead", "role": "captain", "ai_provider": "claude", "model": "fixture-model-captain", "startup_prompts": ["prompts/captain-startup.md"] },
+        { "member_id": "systems-mate", "role": "mate", "ai_provider": "codex", "model": "fixture-model-mate", "startup_prompts": ["prompts/mate-startup.md"] }
+      ],
+      "variants": [
+        {
+          "id": "variant-fixture-local",
+          "host_id": "fixture-host-local",
+          "repo_url": "https://example.invalid/fixture/navigation.git",
+          "branch_ref": "fixture/behavior-oracle",
+          "root_path": "workspace/fixture-navigation",
+          "tmux": { "session": "fixture-navigation", "window": "fixture-navigation", "pane": "team-lead" }
+        }
+      ]
+    }
+  ],
+  "crew_refs": [
+    { "id": "crew-ref-fixture", "crew_id": "crew-fixture", "armada_id": "armada-fixture", "fleet_id": "fleet-fixture", "flotilla_id": "flotilla-fixture", "alias_name": "Fixture Navigation" }
+  ]
+}

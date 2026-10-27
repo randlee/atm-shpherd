@@ -1,0 +1,50 @@
+name: Client scaffold
+on:
+  pull_request:
+    paths: ["clients/**", ".github/workflows/clients.yml"]
+  push:
+    branches: [develop, main]
+    paths: ["clients/**", ".github/workflows/clients.yml"]
+permissions:
+  contents: read
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: clients
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm install --global --force corepack@0.32.0
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+  native:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: clients
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm install --global --force corepack@0.32.0
+      - run: corepack enable
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      - if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev libxdo-dev librsvg2-dev patchelf
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm tauri:fmt
+      - run: pnpm build
+      - run: pnpm tauri:check
+      - run: pnpm tauri:debug

@@ -22,3 +22,17 @@ rustc-ice-*.txt
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+
+# Client builds and local runtime state
+node_modules/
+dist/
+coverage/
+.shpherd/
+config/local.json
+.env
+.env.*
+!.env.example
+clients/apps/shpherd-tauri/src-tauri/gen/
+
+# Beads workspace gate (machine-local, beside the .beads directory)
+/.beads.gate.lock*
