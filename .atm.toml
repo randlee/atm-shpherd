@@ -22,7 +22,7 @@ env = { ATM_IDENTITY = "shp-lead", ATM_TEAM = "shpherd", CLAUDE_CODE_TASK_LIST_I
 
 [[rmux.windows.panes]]
 name = "tribe"
-command = "codex --no-daemon -c features.hooks=true --model gpt-5.6-terra --yolo"
+command = "codex --no-daemon -c features.hooks=true --model gpt-6.1-terra --yolo"
 env = { ATM_IDENTITY = "tribe", ATM_TEAM = "shpherd", CLAUDE_CODE_TASK_LIST_ID = "shpherd" }
 
 [[rmux.windows.panes]]
