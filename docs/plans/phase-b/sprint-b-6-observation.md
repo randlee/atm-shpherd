@@ -4,23 +4,29 @@ bead: shp-phase-b.7
 status: planned
 closure_type: boundary
 target_boundary: shpherd-service-observation
+requirements: []
+adrs: [ADR-SHP-003, ADR-SHP-004]
+owned_paths:
+  - crates/shpherd-service/src/observation/**
+  - crates/shpherd-service/tests/observation/**
+relations:
+  must_follow:
+    - sprint: b-3b-service-launch-api-contract
+      artifact: observation-types-and-definition-reader-double
+  parallel_safe: [b-5-definition-service, b-6a-atm-projection, b-7-herdr-launcher, b-8-tmux-launcher, b-10a-daemon-api]
 recommended_agent: rust-domain-developer
 recommended_model: workhorse
 ---
 
 # B6 — Port observation, discovery, focus, and doctor
 
-requirements: REQ-DEFINITION, REQ-LAUNCH; PRD §6 and scmux oracle.
-adrs: ADR-SHP-003, ADR-SHP-004.
-
-## Deliverables and owned paths
+## Deliverables
 
 - Implement backend-neutral observation projections, lifecycle states, stale/degraded semantics, per-team error isolation, read-only discovery, explicit import request, focus resolution, and doctor diagnostics.
-- Owned paths: observation/discovery/doctor modules in `shpherd-service`, observation types fixed by B3A, service tests.
 
 ## Relationships
 
-`must_follow` B5 because it consumes definition read and import contracts. Parallel-safe with B4/B6A.
+`must_follow` only B3B's observation types and definition-reader double. It is parallel-safe with B5, the external adapters, launchers, and daemon API.
 
 ## This sprint does not close
 

@@ -14,8 +14,11 @@ The normative product requirements are in `docs/atm-shpherd-prd.md`. Phase B als
 | REQ-SYNC | App-owned SQLite/PostgreSQL projection and deterministic reconciliation | PRD §7 |
 | REQ-LEASE | Multi-host eligibility, lease, fencing, and crash convergence | PRD §§7, 11 |
 | REQ-API | Versioned authenticated daemon API; thin CLI/browser/Tauri clients | PRD §§4.2-4.3 |
-| REQ-UI | Port retained scmux dashboard/editor behavior to browser and Tauri | ANC-007; PRD §§2, 4.3, 6 |
+| REQ-UI-READ | Port retained scmux catalog/dashboard read behavior | ANC-007; PRD §§2, 4.3, 6 |
+| REQ-UI-COMMAND | Port editor and team command behavior to browser/desktop | PRD §§4.3, 6, 10-11 |
+| REQ-UI-MOBILE | Deliver the shared command surface in native iOS/Android shells | PRD §4.3 |
 | REQ-SCHEDULE | App-owned sc-cron registration and recurring guarded operations | PRD §8 |
-| REQ-OPERATE | Supervision, observability, upgrade safety, and cross-platform release evidence | PRD §§4.3, 5, 12 |
+| REQ-OPERATE-SUPERVISION | Supervision, observability, reboot, and upgrade safety | PRD §§4.3, 5, 12 |
+| REQ-RELEASE-EVIDENCE | Assemble immutable evidence for every already-owned feature and platform gate | PRD §§12-13 |
 
 These IDs are traceability labels, not replacements for the underlying acceptance text.

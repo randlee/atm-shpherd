@@ -2,22 +2,26 @@
 id: b-1-generate-baseline
 bead: shp-phase-b.1
 status: planned
-closure_type: contract
+closure_type: integration
 target_boundary: runtime-workspace
+requirements: [ANC-001, ANC-002]
+adrs: [ADR-SHP-001, ADR-SHP-003]
+owned_paths:
+  - config/generator/shpherd-0.1.1.json
+  - docs/evidence/b-1/**
+relations:
+  must_follow: []
+  parallel_safe: []
 recommended_agent: background-rust-developer
 recommended_model: workhorse
 ---
 
 # B1 — Generate and prove the 0.1.1 baseline
 
-requirements: ANC-001, ANC-002, REQ-BOOTSTRAP; PRD §§4.1-4.2, 12.
-adrs: ADR-SHP-001, ADR-SHP-003.
-
-## Deliverables and owned paths
+## Deliverables
 
 - Generate an untouched sc-runtime `v0.1.1` `sqlite-postgres` release workspace in an absent staging destination using a retained Shpherd answers file.
 - Prove published crates resolve without local patches and record setup/lint/test/CLI/daemon results.
-- Owned paths: `docs/evidence/b-1/**`, `config/generator/shpherd-0.1.1.json`. The generated staging directory stays outside the repository.
 
 ## Relationships
 

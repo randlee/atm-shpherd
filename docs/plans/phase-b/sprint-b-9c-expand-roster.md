@@ -4,19 +4,32 @@ bead: shp-phase-b.18
 status: planned
 closure_type: integration
 target_boundary: roster-expansion
+requirements: [REQ-ATM]
+adrs: [ADR-SHP-004, ADR-SHP-005, ADR-SHP-006, ADR-SHP-007]
+owned_paths:
+  - crates/shpherd-service/src/roster_expansion/**
+  - crates/shpherd-service/tests/roster_expansion/**
+  - tests/integration/roster-expansion/**
+relations:
+  must_follow:
+    - sprint: b-6a-atm-projection
+      artifact: versioned-atm-adapter
+    - sprint: b-7-herdr-launcher
+      artifact: guarded-dynamic-spawn-adapter
+    - sprint: b-9a-sync-projection
+      artifact: synchronized-roster-projection
+    - sprint: b-9b-launch-leases
+      artifact: verified-launch-lease-guard
+  parallel_safe: [b-10-dashboard, b-12-scheduling]
 recommended_agent: rust-integration-developer
 recommended_model: deep-reasoning
 ---
 
 # B9C — Add and launch roster members on demand
 
-requirements: REQ-ATM, REQ-LEASE, REQ-LAUNCH; PRD §11.
-adrs: ADR-SHP-004, ADR-SHP-005, ADR-SHP-006, ADR-SHP-007.
-
-## Deliverables and owned paths
+## Deliverables
 
 - Implement durable idempotent expansion state across ATM mutation, re-import, synchronization, lease guard, hmux spawn, observation, retry, update, and removal reconciliation.
-- Owned paths: roster-expansion service workflow, command integration tests, crash-boundary simulator fixtures.
 
 ## Relationships
 

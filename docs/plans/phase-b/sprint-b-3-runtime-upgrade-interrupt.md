@@ -4,20 +4,29 @@ bead: shp-phase-b.3
 status: planned
 closure_type: integration
 target_boundary: runtime-workspace
+requirements: [ANC-003, ANC-004, ANC-005, REQ-BOOTSTRAP]
+adrs: [ADR-SHP-001]
+owned_paths:
+  - Cargo.toml
+  - Cargo.lock
+  - .sc-lint/**
+  - .github/workflows/**
+  - docs/evidence/runtime-upgrade/**
+relations:
+  must_follow:
+    - sprint: b-2-integrate-workspace
+      artifact: integrated-generated-workspace
+  parallel_safe: []
 recommended_agent: rust-integration-developer
 recommended_model: workhorse
 ---
 
 # Interrupt — Upgrade to sc-runtime 0.2.0
 
-requirements: ANC-003, ANC-004, ANC-005, REQ-BOOTSTRAP.
-adrs: ADR-SHP-001.
-
-## Deliverables and owned paths
+## Deliverables
 
 - When `v0.2.0` exists, diff fresh 0.1.1/0.2.0 generations from identical answers and apply managed dependency/template changes without overwriting app work.
 - Install the release-provided sc-lint consumer assets with minimum version 0.8.4.
-- Owned paths: runtime-managed root manifests, `.sc-lint/**`, generated CI/setup assets, `docs/evidence/runtime-upgrade/**`.
 
 ## Relationships
 

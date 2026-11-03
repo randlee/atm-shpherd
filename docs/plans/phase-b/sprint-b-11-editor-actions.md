@@ -4,24 +4,36 @@ bead: shp-phase-b.12
 status: planned
 closure_type: integration
 target_boundary: client-command-experience
+requirements: [REQ-UI-COMMAND]
+adrs: [ADR-SHP-003, ADR-SHP-005, ADR-SHP-008]
+owned_paths:
+  - clients/src/features/editor/**
+  - clients/src/features/actions/**
+  - clients/tests/editor/**
+  - clients/tests/actions/**
+relations:
+  must_follow:
+    - sprint: b-10-dashboard
+      artifact: authenticated-shared-client-shell
+    - sprint: b-9b-launch-leases
+      artifact: guarded-launch-command
+    - sprint: b-9c-expand-roster
+      artifact: idempotent-roster-expansion-command
+  parallel_safe: [b-12-scheduling, b-12a-daemon-supervision]
 recommended_agent: full-stack-client-developer
 recommended_model: workhorse
 ---
 
 # B11 — Port editor and launch actions
 
-requirements: ANC-007, ANC-008, ANC-009, REQ-UI, REQ-LAUNCH, REQ-ATM.
-adrs: ADR-SHP-003, ADR-SHP-005, ADR-SHP-008.
-
-## Deliverables and owned paths
+## Deliverables
 
 - Port definition editor, discovery/import, start/stop/focus, launcher/host selection, confirmations/errors, and roster expansion through authenticated daemon commands.
 - Keep browser and desktop Tauri command capability equivalent with Herdr preselected and tmux explicit.
-- Owned paths: `clients/src/features/editor/**`, `clients/src/features/actions/**`, action E2E tests.
 
 ## Relationships
 
-`must_follow` B10 read client, B10A commands, B7/B8 launchers, B9B leases, and B9C roster workflow.
+`must_follow` B10's authenticated client shell, B9B's guarded launch command, and B9C's idempotent roster-expansion command.
 
 ## This sprint does not close
 

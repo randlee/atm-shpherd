@@ -145,7 +145,7 @@ Cloud sync is scheduled by `atm-shpherd`, not by sc-runtime. At application comp
 
 The normal schedule expression has five minute-first fields: minute, hour, day-of-month, month, day-of-week. Six-field seconds-first input remains compatibility parsing only. The registered job is either an in-process Rust hook or the documented `python3 <module> cron.tick` / `python3 <module> cron.stop` hook. It receives one JSON object containing the schedule name and row payload only—never ATM team or phase fields—and returns fallible public results as `CronError`.
 
-The required `sc-cron` source is Phase B sprint b-3 after its beads-cache b-8 prerequisite, not a future HTTP/MCP scheduler API and not a later published crate.
+B3C must pin the exact `sc-cron` repository revision or published package version and capture its public grammar/callback fixtures before B12 begins. The integration uses that public in-process API; it does not wait for or invent a future HTTP/MCP scheduler surface.
 
 ## 9. ATM catalog and roster integration
 

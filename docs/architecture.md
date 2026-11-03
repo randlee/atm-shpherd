@@ -1,6 +1,6 @@
 # atm-shpherd architecture and ADR index
 
-Status values are `proposed`, `approved`, and `superseded`. B3A converts every proposed contract below to approved text with executable contract fixtures before dependent implementation begins.
+Status values are `proposed`, `approved`, and `superseded`. B3A, B3B, and B3C convert their assigned proposed contracts below to approved text with executable contract fixtures before dependent implementation begins.
 
 ## Boundary map
 
@@ -26,17 +26,17 @@ Clients never access stores or services in-process. External ATM, hmux/Herdr, tm
 | ADR-SHP-001 | approved | sc-runtime remains generic; all product policy lives in app-named packages | PRD §§1, 4 |
 | ADR-SHP-002 | proposed | SQLite is complete host state; PostgreSQL receives an explicit allowlisted projection; conflicts reject rather than silently merge | B3A |
 | ADR-SHP-003 | approved | CLI/browser/Tauri are thin authenticated daemon clients; only daemon code calls `shpherd-service` | PRD §4.2 |
-| ADR-SHP-004 | proposed | Machine-stable error envelope and strongly typed identity/value objects span store, command, and wire boundaries | B3A |
-| ADR-SHP-005 | proposed | Fixed launcher set uses a closed enum; side-effecting launch APIs require an unforgeable `LaunchLeaseGuard` | B3A |
-| ADR-SHP-006 | proposed | ATM import/version mapping and command-only roster mutation use exact plural commands | B3A |
-| ADR-SHP-007 | proposed | hmux capability/version, idempotency, resource identity, and dynamic-spawn result contract | B3A |
+| ADR-SHP-004 | proposed | Machine-stable error envelope and strongly typed identity/value objects span store, command, and wire boundaries | B3A/B3B |
+| ADR-SHP-005 | proposed | Fixed launcher set uses a closed enum; side-effecting launch APIs require an unforgeable `LaunchLeaseGuard` | B3B |
+| ADR-SHP-006 | proposed | ATM import/version mapping and command-only roster mutation use exact plural commands | B3C |
+| ADR-SHP-007 | proposed | hmux capability/version, idempotency, resource identity, and dynamic-spawn result contract | B3C |
 | ADR-SHP-008 | approved | One responsive UI uses the same API in browser, desktop Tauri, and mobile Tauri shells | PRD §4.3 |
-| ADR-SHP-009 | proposed | sc-cron owns scheduling primitives only; Shpherd registers callbacks and owns all job policy | B3A |
-| ADR-SHP-010 | proposed | MCP is disabled for Phase B unless a separately approved authenticated surface is specified | B3A |
+| ADR-SHP-009 | proposed | sc-cron owns scheduling primitives only; Shpherd registers callbacks and owns all job policy | B3C |
+| ADR-SHP-010 | proposed | MCP is disabled for Phase B unless a separately approved authenticated surface is specified | B3C |
 
 ## Required contract signatures
 
-B3A may refine names but not weaken these properties:
+B3A, B3B, and B3C may refine names within their assigned boundaries but may not weaken these properties:
 
 ```rust
 pub struct TeamId(/* validated stable id */);

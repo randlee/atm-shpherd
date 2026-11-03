@@ -4,24 +4,35 @@ bead: shp-phase-b.11
 status: planned
 closure_type: integration
 target_boundary: client-read-experience
+requirements: [ANC-007, REQ-UI-READ]
+adrs: [ADR-SHP-003, ADR-SHP-008]
+owned_paths:
+  - clients/src/features/catalog/**
+  - clients/src/platform/api/**
+  - clients/src/platform/observability/**
+  - clients/tests/catalog/**
+  - clients/tests/performance/**
+relations:
+  must_follow:
+    - sprint: b-10a-daemon-api
+      artifact: authenticated-snapshot-and-event-client
+    - sprint: b-9a-sync-projection
+      artifact: partial-host-snapshot-semantics
+  parallel_safe: [b-9b-launch-leases, b-9c-expand-roster, b-12-scheduling]
 recommended_agent: typescript-ui-developer
 recommended_model: workhorse
 ---
 
 # B10 — Port the dashboard read experience
 
-requirements: ANC-007, REQ-UI, REQ-API, REQ-OPERATE.
-adrs: ADR-SHP-003, ADR-SHP-008.
-
-## Deliverables and owned paths
+## Deliverables
 
 - Replace fixtures with authenticated snapshots/events and port grouped/grid/list, hierarchy, search/filter, host/backend/status badges, team detail, and stale/disconnected states into the shared browser/Tauri app.
 - Preserve icon/window/tray shell, browser independence, pinned observability adapter, redaction, and failure-noninterference.
-- Owned paths: `clients/src/features/catalog/**`, client API/observability adapters, catalog tests and performance fixtures.
 
 ## Relationships
 
-`must_follow` B10A API, B6 observation, and B9A partial-host projection. Parallel-safe with launcher/lease service work through disjoint client paths.
+`must_follow` B10A's authenticated snapshot/event client and B9A's partial-host snapshot semantics. Parallel-safe with B9B, B9C, and B12 through disjoint client paths.
 
 ## This sprint does not close
 

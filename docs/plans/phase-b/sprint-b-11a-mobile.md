@@ -4,24 +4,33 @@ bead: shp-phase-b.21
 status: planned
 closure_type: integration
 target_boundary: tauri-mobile
+requirements: [REQ-UI-MOBILE]
+adrs: [ADR-SHP-003, ADR-SHP-008]
+owned_paths:
+  - clients/src-tauri/gen/apple/**
+  - clients/src-tauri/gen/android/**
+  - clients/src/platform/mobile/**
+  - clients/tests/mobile/**
+  - docs/mobile/**
+relations:
+  must_follow:
+    - sprint: b-11-editor-actions
+      artifact: shared-authenticated-read-command-application
+  parallel_safe: [b-12-scheduling, b-12a-daemon-supervision]
 recommended_agent: tauri-mobile-developer
 recommended_model: workhorse
 ---
 
 # B11A — Deliver native Tauri mobile capabilities
 
-requirements: REQ-UI, REQ-API, REQ-OPERATE.
-adrs: ADR-SHP-003, ADR-SHP-008.
-
-## Deliverables and owned paths
+## Deliverables
 
 - Generate/build iOS and Android projects around the shared application and authenticated API.
 - Implement platform capability adapters for deep links, notifications where supported, observability binding, secure credential use, and signing configuration outside source control.
-- Owned paths: Tauri mobile projects/config, mobile capability adapters, simulator/emulator tests and docs.
 
 ## Relationships
 
-`must_follow` B11 shared command experience and B10A API. Parallel-safe with B12/B12A where paths do not overlap.
+`must_follow` B11's shared authenticated read/command application. Parallel-safe with B12/B12A where paths do not overlap.
 
 ## This sprint does not close
 

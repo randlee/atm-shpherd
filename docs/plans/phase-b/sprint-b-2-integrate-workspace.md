@@ -4,22 +4,36 @@ bead: shp-phase-b.2
 status: planned
 closure_type: contract
 target_boundary: generated-workspace
+requirements: []
+adrs: [ADR-SHP-001, ADR-SHP-003, ADR-SHP-008]
+owned_paths:
+  - Cargo.toml
+  - Cargo.lock
+  - crates/*/Cargo.toml
+  - crates/*/src/lib.rs
+  - boundaries/index.yaml
+  - boundaries/_schema/**
+  - clients/package.json
+  - clients/pnpm-lock.yaml
+  - clients/src/platform/shell/**
+  - .sc-lint/**
+relations:
+  must_follow:
+    - sprint: b-1-generate-baseline
+      artifact: proven-generated-tree-digest
+  parallel_safe: []
 recommended_agent: rust-integration-developer
 recommended_model: workhorse
 ---
 
 # B2 — Integrate the generated workspace
 
-requirements: ANC-002, REQ-BOOTSTRAP, REQ-API, REQ-UI; PRD §§4-5.
-adrs: ADR-SHP-001, ADR-SHP-003, ADR-SHP-008.
-
-## Deliverables and owned paths
+## Deliverables
 
 - Reconcile the proven generated workspace with existing PRD, oracle, browser/Tauri client, tests, and history without wholesale replacement.
 - Establish app-named crates, binaries `shpherd`/`atm-shpherd`, bundle id `com.synapticcanvas.shpherd`, `.shpherd/` runtime paths, and machine-readable boundary manifests.
 - Remove generated widget/general-database production commands; retain only named Shpherd surfaces.
 - Preserve desktop icon/window/tray/deep-link/notification scaffolding and pin `@synaptic-canvas/sc-observability` with a nonthrowing browser/no-op adapter.
-- Owned paths: root Rust manifests, `crates/**` initial skeletons, `boundaries/**`, `clients/package*.json`, generated setup/lint assets, repository configuration.
 
 ## Relationships
 

@@ -4,24 +4,30 @@ bead: shp-phase-b.6
 status: planned
 closure_type: boundary
 target_boundary: shpherd-service-definitions
+requirements: []
+adrs: [ADR-SHP-003, ADR-SHP-004]
+owned_paths:
+  - crates/shpherd-service/src/definitions/**
+  - crates/shpherd-service/tests/definitions/**
+relations:
+  must_follow:
+    - sprint: b-3b-service-launch-api-contract
+      artifact: definition-command-types-error-envelope-and-service-double
+  parallel_safe: [b-6-observation, b-6a-atm-projection, b-7-herdr-launcher, b-8-tmux-launcher, b-10a-daemon-api]
 recommended_agent: rust-domain-developer
 recommended_model: deep-reasoning
 ---
 
 # B5 — Port definition management and command contracts
 
-requirements: REQ-DEFINITION, REQ-API; PRD §6 and scmux oracle.
-adrs: ADR-SHP-003, ADR-SHP-004.
-
-## Deliverables and owned paths
+## Deliverables
 
 - Implement hierarchy and atomic create/edit/move/clone/unlink/import domain behavior in `shpherd-service` with typed command inputs/results.
 - Define transport-independent command contracts and machine errors; do not wire the thin CLI before B10A.
-- Owned paths: definition/domain modules and tests in `shpherd-service`, definition command types in `shpherd-types` as fixed by B3A.
 
 ## Relationships
 
-`must_follow` B3 parity types and B3A clone/error contracts. B6 and B10A consume the definition service API.
+`must_follow` only B3B's definition command types, error envelope, and service double. B5 is parallel-safe with the other layer sprints named in frontmatter.
 
 ## This sprint does not close
 
