@@ -105,8 +105,10 @@ The executable B3C contract resolves the former reference gaps as follows:
    through an explicit fallible binding table; they are never parsed as
    Shpherd ULIDs or domain revisions.
 3. Add/update/remove carry operation, expected ATM revision, and idempotency
-   key but no caller claims. B10A supplies a private `AuthenticatedPrincipal`
-   from verified transport context. Evidence records operation/key/team/member,
+   key but no caller claims. B10A parses/verifies transport credentials and
+   uses the B2 `shpherd-auth` composition issuer to obtain a private
+   `AuthenticatedPrincipal`; ATM receives only a borrow and never imports
+   daemon. Evidence records operation/key/team/member,
    exact plural argv, redacted stdout hash, before/after revision, and replay
    status. Stale revisions, forged claims, scope mismatch, and unauthorized
    principals fail before invocation.

@@ -33,7 +33,7 @@ Close the authenticated daemon/CLI wire boundary against B3B doubles without dep
 
 - Implement the frozen `CommandEnvelope`/`ResponseEnvelope`, complete query surface, named commands, and ordered event/reconnect transport against B3B stateful service/host doubles.
 - Implement enrollment authentication, endpoint/origin/TLS, authorization, version negotiation, tagged completed/accepted/replayed/conflict/rejected outcomes, operation completion events, daemon/stream-bound resume tokens, cursor recovery/resync, stable error mapping, and redacted telemetry.
-- Derive private, non-serializable `AuthenticatedPrincipal` values only after verified transport authentication and inject borrowed dispatch context; ignore/reject every caller/role/scope claim in request JSON.
+- Keep credential parsing and transport/session verification in daemon auth, convert only verified identity through the B2-owned composition `AuthorizationIssuer`, and inject the resulting borrowed, non-serializable `AuthenticatedPrincipal`; ignore/reject every caller/role/scope claim in request JSON. The daemon depends on `shpherd-auth`, while service/auth types never depend on daemon.
 - Wire the thin `shpherd` CLI to this API; no CLI store or in-process service access.
 
 ## Relationships
@@ -46,7 +46,7 @@ No real B5/B6 service composition, feature requirement, browser/Tauri parity, or
 
 ## Acceptance and validation
 
-- `boundary:daemon-api` tests against B3B doubles cover every definition/roster/split-launch/query variant, request/correlation IDs, tagged completed/accepted/replayed/conflict/rejected responses, original replay outcome, exactly-one terminal outcome, typed errors, CLI exit mapping, version mismatch, daemon restart/stream mismatch reconnect-resync, stale cursor, ordering, host enrollment/project checkout validation, origin/TLS, forged-claim/escalation/scope mismatch, credential separation, and redaction.
+- `boundary:daemon-api` tests against B3B doubles cover every definition/roster/split-launch/query variant, request/correlation IDs, tagged completed/accepted/replayed/conflict/rejected responses, original replay outcome, exactly-one terminal outcome, typed errors, CLI exit mapping, version mismatch, daemon restart/stream mismatch reconnect-resync, stale cursor, absent token/genesis zero/first event one/MAX-overflow cursor behavior, ordering, host enrollment/project checkout validation, origin/TLS, forged-claim/escalation/scope mismatch, private-constructor compile failures, credential separation, and redaction.
 - Unauthorized requests fail closed; CLI/API share the frozen command semantics; daemon/CLI tests, lint/build, and boundary validation pass without linking B5 or B6 implementations.
 
 Every deliverable is production-ready for the daemon API boundary.

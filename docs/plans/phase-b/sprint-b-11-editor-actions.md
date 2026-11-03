@@ -56,7 +56,7 @@ No mobile packaging/native capability proof; B11A owns it.
 
 ## Acceptance and validation
 
-- Real B5 hierarchy commands, B9B guarded lifecycle, and B9C add/update/remove mutations compose through B10A; browser/desktop E2E cover Team-bundle validity, aggregate revisions/running constraints/clone policy, completed/accepted/replayed/conflict/rejected outcomes, read-only launch actions during lease outage, mutation guard failures, read-only discovery until import, typed errors, Herdr default, tmux override, host enrollment/project checkout health, remote ownership, roster evidence, member-scoped reconcile, and idempotent recovery.
+- Real B5 hierarchy commands, B9B guarded lifecycle, and B9C add/update/remove mutations compose through B10A; browser/desktop E2E cover Team-bundle validity, aggregate revisions/running constraints/clone policy, completed/accepted/replayed/conflict/rejected outcomes, read-only launch actions during lease outage, mutation guard failures, read-only discovery until import, typed errors, Herdr default, tmux override, host enrollment/project checkout health, remote ownership, roster evidence, member-scoped reconcile, and idempotent recovery. Multi-variant edit/clone/launch fixtures preserve stable member associations, ordered prompts, typed branch refs, and distinct per-variant backend/runtime bindings through API round trip and rendered editor state.
 - Responsive phone layouts pass shared-web tests.
 
 Every deliverable is production-ready for client command integration.

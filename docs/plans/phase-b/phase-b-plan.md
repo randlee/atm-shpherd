@@ -16,7 +16,8 @@ This plan implements `docs/atm-shpherd-prd.md` and the locked anchors in `anchor
 | Boundary | Intended manifest | Contract change | Allowed dependencies | Primary sprints |
 |---|---|---|---|---|
 | runtime workspace | generated root manifests | published 0.1.1 baseline, later 0.2.0 managed update | sc-runtime crates only | B1, B2, interrupt |
-| types/schema | `boundaries/shpherd-schema.yaml` | IDs, rows, errors, store contracts, parity and extension migrations | types | B3, B3A, B4A |
+| foundation/types/auth | root/package manifests | canonical cross-track IDs, revisions/cursors, logical refs, bridge evidence, and verification-independent authorization | generated runtime only | B2 |
+| schema | `boundaries/shpherd-schema.yaml` | rows, errors, store contracts, parity and extension migrations | B2 foundation | B3, B3A, B4A |
 | engine stores/adaptor | engine manifests | separate SQLite, PostgreSQL, and static-adaptor implementations | schema contract | B4A, B4B, B4C, B9A |
 | domain service | `boundaries/shpherd-service.yaml` | definitions, observation, leases, reconciliation, guarded commands | schema/adaptor | B5, B6, B9B, B9C |
 | local launch adapters | daemon manifest | closed Herdr/tmux launcher and hmux capability contract | service/types | B7, B8 |
@@ -63,7 +64,7 @@ Stable track IDs do not change between the registry and wave table. A shared con
 | Wave | Track | Sprint | Target boundary | Authoritative owned paths | Consumes |
 |---|---|---|---|---|---|
 | 0 | T-BOOT | B1 | runtime workspace | `config/generator/*`, `docs/evidence/b-1/**` | none |
-| 1 | T-BOOT | B2 | generated workspace | root manifests, crate skeleton registries/READMEs, boundary index/schema, client shell, platform test matrix, `tools/runtime-release-gate/**`, exact workflow/history/test paths | B1 generated digest |
+| 1 | T-BOOT | B2 | generated workspace | root manifests, crate skeleton registries/READMEs, B2 foundation types/auth/compile fixtures, boundary index/schema, client shell, platform test matrix, `tools/runtime-release-gate/**`, exact workflow/history/test paths | B1 generated digest |
 | 2 | T-STORAGE | B3 | parity schema/SQLite | schema parity modules, parity migrations/tests/evidence | B2 schema/store skeletons |
 | 2 | T-SERVICE | B3B | service/launch/API contract | service/API contract docs, core types, service/daemon/CLI manifests | B2 registry |
 | 2 | T-ATM | B3C | external integrations | ATM/hmux/cron contract docs, external types/manifest | B2 daemon adapter boundary |
@@ -96,9 +97,10 @@ Stable track IDs do not change between the registry and wave table. A shared con
 
 ## Track contracts
 
-- B3A depends on parity and freezes the complete launchable shared definition, typed-key/canonical batch, tombstone, and tagged lease-operation contracts for B4A/B4B/B4C.
-- B3B starts after B2 and freezes the closed hierarchy/atomic Team bundle, service/query, split launcher, registration evidence, guard, tagged response/stream, error, and test-double contracts while consuming B2's private principal seam.
-- B3C starts after B2 and freezes verified-principal ATM, split hmux/registration-evidence, sc-cron, redaction, and MCP-disabled external contracts.
+- B2 first freezes the only canonical cross-track primitives: IDs, nonzero entity revisions, genesis-capable store/event cursors, typed hierarchy/logical refs, launcher/member primitives, registration evidence, and the `shpherd-auth` principal/issuer seam. Its compile matrix builds each contract track at its declared prerequisite and forbids sibling imports.
+- B3A depends on parity and freezes only the complete launchable shared definition, typed-key/canonical batch, tombstone, and tagged lease-operation composites for B4A/B4B/B4C.
+- B3B starts after B2 and freezes only the closed hierarchy/atomic Team bundle, service/query, split launcher, guard, tagged response/stream, error, and test-double composites while consuming B2 foundation/auth.
+- B3C starts after B2 and freezes only ATM, split hmux, sc-cron, redaction, and MCP-disabled external composites while consuming B2 foundation/auth and bridge evidence.
 
 ## Performance and platform budgets
 

@@ -45,6 +45,7 @@ Only local adapter behavior is closed. Cross-host hydration, lease acquisition/f
 
 - `boundary:herdr-hmux-adapter`: read/mutation split, dry-run/start/stop/observe/focus/relaunch/repair/dynamic-spawn/nudge/member-stop/member-reconcile, shell/version negotiation, registration evidence, stable identity, reuse, guard fencing, idempotency, and stable errors pass simulator/contract tests.
 - Compile-fail tests reject every mutation without a guard; read actions succeed with lease authority unavailable. Crash-after-registration, stale/repeated evidence, removal, and unrelated-pane preservation fixtures pass.
+- Multi-variant fixtures select the requested variant's typed branch, Herdr backend, runtime binding, ordered prompts, and only its assigned members; another variant's binding or roster never leaks into the launch.
 - No unguarded spawn API or ATM mutation exists in this adapter; retry/restart cannot duplicate a pane; typed failures preserve definitions.
 
 Every deliverable is production-ready for the Herdr adapter boundary.

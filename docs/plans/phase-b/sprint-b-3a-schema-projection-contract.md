@@ -34,33 +34,26 @@ Freeze the complete storage/projection contract so all three implementation sibl
 ## Required work and deliverables
 
 - Approve the complete minimum launchable cross-host row allowlist, local-only exclusions, typed entity keys, provenance/tombstones, canonical bytes/digest, versions, conflicts, and reconciliation against the parity fingerprint.
-- Fix the row/newtype, static store, canonical projection batch, explicit lease-operation, and adaptor test-double interfaces used by B4A/B4B/B4C.
+- Fix the storage-row composites, static store, canonical projection batch, explicit lease-operation, and adaptor test-double interfaces used by B4A/B4B/B4C while importing every shared primitive from B2.
 
 ## Contract signatures
 
 ```rust
 use serde::{Deserialize, Serialize};
-use shpherd_types::{ArmadaId, DaemonInstanceId, FencingToken, FleetId, FlotillaId,
-    HostId, IdempotencyKey, MemberId, MemberRole, OperationId, ProjectId, StoreRevision,
-    TeamId, ValidParent, VariantId};
+use shpherd_types::foundation::{ArmadaId, DaemonInstanceId, EntityRevision, FencingToken,
+    FleetId, FlotillaId, GitRef, HostId, IdempotencyKey, LogicalConfigRef,
+    LogicalProjectRef, OrderedPromptRefs, MemberId, MemberRole, OperationId, ProjectId,
+    AtmBinding, LauncherPolicy, RuntimeBackend, StoreCursor, TeamId, ValidParent, VariantId};
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct ProjectionVersion(u32);
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
-pub enum LauncherKind { Herdr, Tmux }
-
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
 pub enum RequestedTeamState { Stopped, Running }
 
-pub struct LogicalConfigRef(pub String);
-pub struct LogicalPromptRef(pub String);
-pub struct AtmBindingProvenance { pub atm_team: String, pub source_fingerprint: String,
-    pub bound_at_revision: String }
 pub struct SharedHierarchyRow { pub id: SharedHierarchyId, pub parent: ValidParent,
-    pub name: String, pub revision: StoreRevision }
+    pub name: String, pub revision: EntityRevision }
 pub enum SharedHierarchyId { Armada(ArmadaId), Fleet(FleetId), Flotilla(FlotillaId) }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
@@ -78,12 +71,12 @@ pub struct SharedTeamRow {
     pub team: TeamId,
     pub parent: ValidParent,
     pub name: String,
-    pub revision: StoreRevision,
-    pub project: ProjectId,
-    pub launcher: LauncherKind,
+    pub revision: EntityRevision,
+    pub project: LogicalProjectRef,
+    pub launcher: LauncherPolicy,
     pub config: LogicalConfigRef,
-    pub prompt: LogicalPromptRef,
-    pub atm: Option<AtmBindingProvenance>,
+    pub prompts: OrderedPromptRefs,
+    pub atm: Option<AtmBinding>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
@@ -91,18 +84,22 @@ pub struct SharedTeamRow {
 pub struct SharedVariantRow {
     pub team: TeamId,
     pub variant: VariantId,
-    pub revision: StoreRevision,
+    pub revision: EntityRevision,
     pub name: String,
     pub eligible_host: Option<HostId>,
     pub config_override: Option<LogicalConfigRef>,
+    pub git_ref_override: Option<GitRef>,
+    pub backend: RuntimeBackend,
+    pub runtime_binding: String,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct SharedMemberRow {
     pub team: TeamId,
+    pub variant: VariantId,
     pub member: MemberId,
-    pub revision: StoreRevision,
+    pub revision: EntityRevision,
     pub role: MemberRole,
     pub agent_type: String,
     pub model: Option<String>,
@@ -116,13 +113,13 @@ pub struct SharedAssignmentRow {
     pub team: TeamId,
     pub variant: VariantId,
     pub host: HostId,
-    pub revision: StoreRevision,
+    pub revision: EntityRevision,
     pub requested_state: RequestedTeamState,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub struct SharedHostEnrollmentRow { pub host: HostId, pub daemon: DaemonInstanceId, pub capabilities_hash: String, pub healthy_at_unix_ms: u64, pub revision: StoreRevision }
+pub struct SharedHostEnrollmentRow { pub host: HostId, pub daemon: DaemonInstanceId, pub capabilities_hash: String, pub healthy_at_unix_ms: u64, pub revision: EntityRevision }
 
 pub enum SharedRow {
     Hierarchy(SharedHierarchyRow), Team(SharedTeamRow), Variant(SharedVariantRow),
@@ -131,23 +128,23 @@ pub enum SharedRow {
 
 pub enum SharedEntityKey {
     Armada(ArmadaId), Fleet(FleetId), Flotilla(FlotillaId), Team(TeamId), Variant(VariantId),
-    Member { team: TeamId, member: MemberId },
+    Member { team: TeamId, variant: VariantId, member: MemberId },
     Assignment { team: TeamId, variant: VariantId, host: HostId }, Host(HostId),
 }
 
-pub struct SourceCursor { pub source: HostId, pub revision: StoreRevision }
-pub struct CursorVector { pub cursors: std::collections::BTreeMap<HostId, StoreRevision> }
-pub struct RowProvenance { pub source: HostId, pub source_revision: StoreRevision,
+pub struct SourceCursor { pub source: HostId, pub position: StoreCursor }
+pub struct CursorVector { pub cursors: std::collections::BTreeMap<HostId, StoreCursor> }
+pub struct RowProvenance { pub source: HostId, pub source_cursor: StoreCursor,
     pub projection_version: ProjectionVersion }
-pub struct Tombstone { pub key: SharedEntityKey, pub prior_revision: StoreRevision,
+pub struct Tombstone { pub key: SharedEntityKey, pub prior_revision: EntityRevision,
     pub provenance: RowProvenance, pub deleted_at_unix_ms: u64 }
 pub enum RowMutation { Upsert(SharedRow), Delete(Tombstone) }
-pub struct VersionedMutation { pub revision: StoreRevision, pub mutation: RowMutation }
+pub struct VersionedMutation { pub cursor: StoreCursor, pub mutation: RowMutation }
 pub struct CanonicalDigest([u8; 32]);
 pub struct BatchId(CanonicalDigest);
 
 pub trait ProjectionStore {
-    fn read_projection(&self, source: &HostId, after: StoreRevision, limit: u32) -> Result<Option<ProjectionBatch>, StoreError>;
+    fn read_projection(&self, source: &HostId, after: StoreCursor, limit: u32) -> Result<Option<ProjectionBatch>, StoreError>;
     fn write_projection(&self, batch: ProjectionBatch) -> Result<WriteReceipt, StoreError>;
     fn cursor_vector(&self) -> Result<CursorVector, StoreError>;
     fn acknowledge(&self, consumer: &HostId, cursor: SourceCursor) -> Result<(), StoreError>;
@@ -164,8 +161,8 @@ pub struct ProjectionBatch {
     pub batch_id: BatchId,
     pub version: ProjectionVersion,
     pub source: HostId,
-    pub from_exclusive: StoreRevision,
-    pub through: StoreRevision,
+    pub from_exclusive: StoreCursor,
+    pub through: StoreCursor,
     pub mutations: Vec<VersionedMutation>,
     pub digest: CanonicalDigest,
 }
@@ -174,7 +171,7 @@ pub struct ProjectionBatch {
 #[serde(deny_unknown_fields)]
 pub struct WriteReceipt { pub batch_id: BatchId, pub cursor: SourceCursor, pub rows_written: u64, pub replayed: bool }
 
-pub struct LocalProjectBindingRow { pub project: ProjectId, pub checkout_path: String, pub allowed_root: String, pub verified_revision: StoreRevision }
+pub struct LocalProjectBindingRow { pub project: ProjectId, pub checkout_path: String, pub allowed_root: String, pub verified_revision: EntityRevision }
 pub struct LocalLeaseEvidenceRow { pub team: TeamId, pub variant: VariantId, pub holder_host: HostId, pub holder_daemon: DaemonInstanceId, pub fencing: FencingToken, pub observed_at_unix_ms: u64 }
 pub struct LaunchLeaseAuthorityRow { pub team: TeamId, pub variant: VariantId,
     pub holder_host: HostId, pub holder_daemon: DaemonInstanceId,
@@ -210,8 +207,9 @@ pub enum LeaseError { Absent, Expired { current: LaunchLeaseAuthorityRow },
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum StoreError {
     UnsupportedVersion { received: ProjectionVersion, supported: ProjectionVersion },
-    Conflict { key: SharedEntityKey, source: HostId, expected: StoreRevision, actual: StoreRevision },
-    CursorGap { source: HostId, expected_next: StoreRevision, received: StoreRevision },
+    Conflict { key: SharedEntityKey, source: HostId, expected: EntityRevision, actual: EntityRevision },
+    CursorGap { source: HostId, expected_next: StoreCursor, received: StoreCursor },
+    CursorOverflow { source: HostId },
     InvalidEntityKey,
     NonCanonicalEncoding,
     BatchDigestMismatch,
@@ -220,17 +218,17 @@ pub enum StoreError {
 }
 ```
 
-`SharedRow` is the complete minimum launchable cross-host definition: typed Armada/Fleet/Flotilla placement, Team and Variant identity, logical `ProjectId`, launcher policy, immutable ATM binding/provenance, member role/type/model/host/tab/captain fields, assignment/requested state, sanitized logical config/prompt references, and enrolled-host facts. It cannot represent resolved checkout/config paths, prompt bodies, terminal handles, logs, credentials, mailbox content, or machine observations. `LocalTeamExtensionRow`, `LocalProjectBindingRow`, and `LocalLeaseEvidenceRow` never enter a projection batch. Only PostgreSQL implements `LeaseAuthorityStore`; SQLite persists local evidence but cannot grant a multi-host lease.
+`SharedRow` is the complete minimum launchable cross-host definition: typed Armada/Fleet/Flotilla placement, Team and Variant identity, logical project plus typed branch/tag/commit ref, launcher policy, immutable ATM binding/provenance, an ordered nonempty prompt-ref list, per-variant backend/runtime binding, member-to-variant identity, assignment/requested state, and enrolled-host facts. It cannot represent resolved checkout/config paths, prompt bodies, terminal handles, logs, credentials, mailbox content, or machine observations. `LocalTeamExtensionRow`, `LocalProjectBindingRow`, and `LocalLeaseEvidenceRow` never enter a projection batch. Only PostgreSQL implements `LeaseAuthorityStore`; SQLite persists local evidence but cannot grant a multi-host lease.
 
 `LogicalConfigRef` is a UTF-8-NFC POSIX-relative path with no empty, `.`/`..`, backslash, drive, scheme, or leading-slash segment. `LogicalPromptRef` is `prompt:<lowercase-slug>@<immutable-revision>` and never contains prompt text. The target host resolves both only beneath its validated `ProjectId` checkout and rejects traversal, missing files, or content that fails the local configuration validator.
 
-Hierarchy parents must match their typed child kind, every Team bundle has at least one Variant and exactly one captain member, member/variant rows reference the same Team, and an established ATM binding cannot change through an ordinary projection update. Invalid or incomplete bundles reject atomically rather than hydrating a partially launchable Team.
+Hierarchy parents must match their typed child kind, every Team bundle has at least one Variant, at least one ordered prompt reference, and exactly one captain member. Every member row names an existing variant in the same Team; every variant has a typed backend and nonempty logical runtime binding; an established ATM binding cannot change through an ordinary projection update. Invalid or incomplete bundles reject atomically rather than hydrating a partially launchable Team.
 
-Canonical batch bytes are RFC 8949 deterministic CBOR arrays, never maps. The top-level field order is `[projection_version, source_ulid, from_exclusive, through, mutations]`; each mutation is `[source_revision, mutation_tag, body]`. Mutation tags are `0=upsert`, `1=delete`; row/key tags are `0=armada`, `1=fleet`, `2=flotilla`, `3=team`, `4=variant`, `5=member`, `6=assignment`, `7=host`.
+Canonical batch bytes are RFC 8949 deterministic CBOR arrays, never maps. The top-level field order is `[projection_version, source_ulid, from_exclusive, through, mutations]`; each mutation is `[source_cursor, mutation_tag, body]`. Mutation tags are `0=upsert`, `1=delete`; row/key tags are `0=armada`, `1=fleet`, `2=flotilla`, `3=team`, `4=variant`, `5=member`, `6=assignment`, `7=host`.
 
-Row bodies have these exact orders: hierarchy `[typed_id,parent,name,revision]`; team `[team,parent,name,revision,project,launcher,config_ref,prompt_ref,atm_binding]`; variant `[team,variant,revision,name,eligible_host,config_override]`; member `[team,member,revision,role,agent_type,model,requested_host,target_tab]`; assignment `[team,variant,host,revision,requested_state]`; host `[host,daemon,capabilities_hash,healthy_at,revision]`. Keys are `[tag,id...]`; a delete body is `[key,prior_revision,[source,source_revision,projection_version],deleted_at]`. Parent tags are `0=armada_root`, `1=fleet_in_armada`, `2=flotilla_in_fleet`, `3=team_in_fleet`, `4=team_in_flotilla`; launcher tags are `0=herdr`, `1=tmux`; requested-state tags are `0=stopped`, `1=running`; member-role tags are `0=captain`, `1=named` followed by the role string; ATM binding is null or `[atm_team,source_fingerprint,bound_revision]`. Options use CBOR null/value, IDs use validated canonical text bytes, booleans use CBOR false/true, and strings are UTF-8 NFC. `CanonicalDigest` is SHA-256 over `b"shpherd-projection-v1\0" || canonical_bytes`; `BatchId` is exactly that digest and is rejected if either ID or digest differs. No serializer-specific struct/map ordering is accepted.
+Row bodies have these exact orders: hierarchy `[typed_id,parent,name,entity_revision]`; team `[team,parent,name,entity_revision,[project,git_ref_tag,git_ref_value],launcher,config_ref,prompt_refs,atm_binding]`; variant `[team,variant,entity_revision,name,eligible_host,config_override,git_ref_override,backend,runtime_binding]`; member `[team,variant,member,entity_revision,role,agent_type,model,requested_host,target_tab]`; assignment `[team,variant,host,entity_revision,requested_state]`; host `[host,daemon,capabilities_hash,healthy_at,entity_revision]`. Keys are `[tag,id...]`, with member key `[5,team,variant,member]`; a delete body is `[key,prior_entity_revision,[source,source_cursor,projection_version],deleted_at]`. Git-ref tags are `0=branch`, `1=tag`, `2=commit`; backend tags are `0=herdr`, `1=tmux`. Parent, launcher, requested-state, member-role, and ATM tags retain their fixed values. Prompt refs preserve vector order and duplicates are rejected. Options use CBOR null/value, IDs use validated canonical text bytes, booleans use CBOR false/true, and strings are UTF-8 NFC. `CanonicalDigest` is SHA-256 over `b"shpherd-projection-v1\0" || canonical_bytes`; `BatchId` is exactly that digest and is rejected if either ID or digest differs. No serializer-specific struct/map ordering is accepted.
 
-`ProjectionVersion` is an unsigned integer and unknown tags/fields or unsupported versions fail rather than being ignored. `StoreRevision` is monotonic independently for each source. A batch must start at the stored source cursor plus one, contain contiguous mutations through `through`, and match its bound digest. Apply is one transaction: all upserts, tombstones, audit evidence, and the source cursor commit together or none do. Replaying the same `BatchId` and digest returns the original receipt; reusing an ID with another digest fails. A gap, conflict, noncanonical encoding, invalid typed key, or rejected tombstone advances no cursor.
+`ProjectionVersion` is an unsigned integer and unknown tags/fields or unsupported versions fail rather than being ignored. `EntityRevision` is nonzero and validates optimistic entity state; it is never a stream position. A missing source-vector entry means `StoreCursor::GENESIS` (`0`). An empty read is requested with `from_exclusive=0`; the first accepted mutation is cursor `1`. Batches contain strictly contiguous cursors through `through`; a nonempty batch may not end at genesis, and a producer at `u64::MAX` returns `CursorOverflow` rather than wrapping. Apply is one transaction: all upserts, tombstones, audit evidence, and the source cursor commit together or none do. Replaying the same `BatchId` and digest returns the original receipt; reusing an ID with another digest fails. A gap, conflict, noncanonical encoding, invalid typed key, zero entity revision, cursor overflow, or rejected tombstone advances no cursor.
 
 Deletes are tombstones, never absence inference. Tombstones remain until every enrolled consumer's cursor vector acknowledges them or an approved retention record authorizes compaction. Concurrent incompatible entity revisions reject under the catalog-owner policy; they never last-write-win.
 
@@ -246,9 +244,10 @@ No engine, adaptor, reconciliation loop, timer, lease, or route implementation.
 
 - `boundary:shpherd-schema` and ADR-SHP-002/012/015 enumerate every shared field, local-only exclusion, cursor/tombstone invariant, lease-authority row, and project-binding separation.
 - Contract tests/doubles compile against the open `ProjectionStore`/`LeaseAuthorityStore` traits, closed static-adaptor enum, and parity fingerprint.
-- Exhaustive conversion fixtures round-trip every B3B `ValidParent`, `TeamParent`, `TeamBundle`, member role, variant, launcher, clone result, and hierarchy view through the shared rows without losing aggregate identity or permitting an invalid parent.
-- Cross-store golden fixtures prove exact canonical bytes/digest/`BatchId`, typed-key rejection, noncanonical encoding rejection, digest mismatch, contiguous source cursors, atomic apply/rollback, replay identity, tombstone prior-revision/provenance, delete propagation/retention/compaction gates, and conflict-without-advance.
-- An empty-target second-host fixture hydrates the entire hierarchy/team/variant/member/assignment/project/launcher/ATM/config/prompt-reference definition and proves B9B can determine eligibility, resolve the local checkout, validate configuration, render the roster, and launch without origin-host local data.
+- Storage conversion fixtures use only B2 foundation primitives and round-trip every typed parent, member role, variant binding, launcher, prompt list, and shared row without losing aggregate identity or permitting an invalid parent; full service-to-store composition remains B9A-owned.
+- Cross-store golden fixtures prove exact canonical bytes/digest/`BatchId`, typed-key rejection, noncanonical encoding rejection, digest mismatch, contiguous source cursors, atomic apply/rollback, replay identity, tombstone prior-revision/provenance, delete propagation/retention/compaction gates, and conflict-without-advance. Constructor/serde fixtures cover zero entity revisions, absent vector entries, empty `from_exclusive=0`, first cursor `1`, MAX cursor read, and checked-advance overflow.
+- An empty-target second-host fixture hydrates the entire hierarchy/team/variant/member/assignment/project/launcher/ATM/config/prompt-reference definition and proves B9B can determine eligibility, resolve the local checkout, validate configuration, render the roster, and launch without origin-host local data. Lossless goldens cover two variants, multiple members assigned to distinct variants, multiple ordered prompts, and distinct branch/backend/runtime bindings across hydrate, edit, clone, launch preparation, and UI rendering.
 - Lease fixtures prove every tagged operation/error, database-time duration, concurrent acquire/renew/release/transfer, idempotent unknown-outcome retry, monotonically increasing fencing, and SQLite inability to grant ownership; workspace build and boundary validation pass.
+- The B3A fixture compiles at its declared prerequisite using only the B2 foundation plus the B3 parity fingerprint; imports from B3B/B3C are prohibited.
 
 Every deliverable is production-ready for contract closure.

@@ -48,7 +48,7 @@ No Herdr/tmux transport polling or UI. B7/B8 adapters and B10 UI close those pat
 
 ## Acceptance and validation
 
-- Boundary tests cover aligned typed Armada/Fleet/Flotilla/Team views and Team bundles, every query/result variant, stable pagination, provenance, stopped/starting/running/idle/done/degraded/unknown, stale and partial snapshots with explicit omissions, isolated failures, read-only discovery, import delegation, host/backend capability views, focus, and doctor.
+- Boundary tests cover aligned typed hierarchy and lossless multi-variant Team bundles (member associations, prompt order, branch refs, backend/runtime bindings), every query/result variant, stable pagination, provenance, stopped/starting/running/idle/done/degraded/unknown, stale and partial snapshots with explicit omissions, isolated failures, read-only discovery, import delegation, host/backend capability views, focus, and doctor.
 - Pollers have no definition-write capability. Service lint/test, workspace build, and boundary validation pass.
 
 Every deliverable is production-ready for the observation boundary.

@@ -36,7 +36,7 @@ No SQLite extension, adaptor, cross-store orchestration, conflict policy, or hos
 
 ## Acceptance and validation
 
-- `boundary:postgres-projection-store` passes the B3A complete projection/hydration, canonical bytes/digest, replay, cursor, typed tombstone, enrollment, exclusion, and database-time tagged acquire/renew/release/transfer suites.
+- `boundary:postgres-projection-store` passes the B3A complete lossless multi-variant/member/prompt/branch/backend/runtime projection/hydration, canonical bytes/digest, replay, nonzero entity-revision and genesis/first/MAX/overflow cursor, variant-qualified tombstone, enrollment, exclusion, and database-time tagged acquire/renew/release/transfer suites.
 - Migration/rollback and concurrent operation tests cover every typed lease state/mismatch plus unknown-outcome idempotent retry; local paths/prompt bodies/credentials/terminal state are structurally unrepresentable; lint/test, workspace build, and boundary validation pass.
 
 Every deliverable is production-ready for the PostgreSQL store boundary.

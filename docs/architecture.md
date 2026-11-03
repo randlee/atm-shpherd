@@ -7,10 +7,12 @@ Every Phase B ADR is approved in its individually owned file under `docs/adr/`. 
 The intended package graph is:
 
 ```text
-shpherd-types <- shpherd-schema <- {shpherd-store-sqlite, shpherd-store-postgres}
-       ^                ^                         ^
-       |                +---- shpherd-store-adaptor
-       +--------------------- shpherd-service
+shpherd-types <- shpherd-auth <- {shpherd-service, shpherd-daemon}
+       ^
+       +------ shpherd-schema <- {shpherd-store-sqlite, shpherd-store-postgres}
+                         ^                         ^
+                         +---- shpherd-store-adaptor
+                         +---- shpherd-service
                                       ^
                     shpherd-daemon ---+--- authenticated API
                                       ^
@@ -26,7 +28,7 @@ Clients never access stores or services in-process. External ATM, hmux/Herdr, tm
 | [ADR-SHP-001](adr/ADR-SHP-001.md) | approved | runtime/application boundary | B2 |
 | [ADR-SHP-002](adr/ADR-SHP-002.md) | approved | explicit host-aggregate projection | B3A |
 | [ADR-SHP-003](adr/ADR-SHP-003.md) | approved | thin authenticated clients | B2 |
-| [ADR-SHP-004](adr/ADR-SHP-004.md) | approved | canonical identities and revisions | B3B |
+| [ADR-SHP-004](adr/ADR-SHP-004.md) | approved | canonical identities, revisions, and cursors | B2 |
 | [ADR-SHP-005](adr/ADR-SHP-005.md) | approved | closed guarded launcher lifecycle | B3B |
 | [ADR-SHP-006](adr/ADR-SHP-006.md) | approved | versioned ATM projection/command mutation | B3C |
 | [ADR-SHP-007](adr/ADR-SHP-007.md) | approved | hmux capability-negotiated lifecycle | B3C |
@@ -41,13 +43,13 @@ Clients never access stores or services in-process. External ATM, hmux/Herdr, tm
 
 ## Required contract signatures
 
-B3A owns the complete launchable shared-row, typed-key/canonical-batch, tombstone, and tagged lease-operation contracts in `sprint-b-3a-schema-projection-contract.md`; B3B owns canonical identities, the closed hierarchy/atomic Team bundle, verified-principal dispatch, roster/query, split launcher, tagged response/stream, and enrollment contracts in `sprint-b-3b-service-launch-api-contract.md`; B3C owns verified-principal ATM, split hmux/registration-evidence, and sc-cron contracts in `sprint-b-3c-external-integration-contract.md`. Their executable fixtures may not weaken the linked approved ADRs.
+B2 owns all canonical cross-track primitives and bridge evidence in `shpherd-types::foundation`, plus the verification-independent principal/issuer capability in lower `shpherd-auth`. B3A owns only complete launchable shared-row, typed-key/canonical-batch, tombstone, and tagged lease-operation composites; B3B owns only the closed hierarchy/atomic Team bundle, dispatch, roster/query, split launcher, tagged response/stream, and enrollment composites; B3C owns only ATM, split hmux, and sc-cron composites. Each contract fixture compiles at its declared prerequisite without sibling imports and may not weaken the linked approved ADRs.
 
 No public unguarded spawn method exists. `ProjectionStore` is the one Phase B open trait because the app-owned SQLite and PostgreSQL crates implement it across crate boundaries; ADR-SHP-002 and boundary validation restrict its approved implementations. Service and launcher traits, including `GuardedLauncher`, remain private or sealed unless a later ADR explicitly opens them. CLI exit codes, HTTP status, WebSocket command errors, and adapter failures map deterministically from `ErrorCode`.
 
 ## Ownership rules
 
-- B2 owns the non-serializable verified-principal seam and fail-closed runtime-release detector/history/dispatch/close gate; feature and interrupt sprints cannot replace either.
+- B2 owns the canonical foundation, lower `shpherd-auth` non-serializable principal/issuer seam, and fail-closed runtime-release detector/history/dispatch/close gate; feature and interrupt sprints cannot replace them. Daemon alone parses/verifies credentials; service and adapters consume borrowed principals and never depend on daemon.
 - `shpherd-schema` owns row definitions and static store contracts; engine crates own SQL.
 - `shpherd-store-adaptor` performs allowlisted reads/writes but owns no timer, lease, conflict policy, or route.
 - `shpherd-service` owns validation, state machines, reconciliation, leases, and named mutations.

@@ -20,7 +20,7 @@ owned_paths:
 relations:
   must_follow:
     - sprint: b-2-integrate-workspace
-      artifact: generated-daemon-adapter-boundary
+      artifact: compiled-foundation-types-auth-bridge-and-daemon-adapter-boundary
   parallel_safe: []
 recommended_agent: integration-contract-developer
 recommended_model: deep-reasoning
@@ -41,8 +41,9 @@ Freeze evidence-backed external integration contracts and stateful doubles befor
 
 ```rust
 use serde::{Deserialize, Serialize};
-use crate::auth_contract::AuthenticatedPrincipal;
-use shpherd_types::{IdempotencyKey, MemberId, OperationId, RosterRegistrationEvidence};
+use shpherd_auth::AuthenticatedPrincipal;
+use shpherd_types::foundation::{IdempotencyKey, MemberId, OperationId,
+    RosterRegistrationEvidence};
 
 #[serde(transparent)] pub struct AtmRosterRevision(pub String);
 #[serde(transparent)] pub struct AtmMemberId(pub String);
@@ -141,7 +142,7 @@ pub trait ScheduleRegistry: sealed::Sealed {
 
 Fixtures freeze exact plural ATM commands (`atm teams add-member|update-member|remove-member ... --json` and `atm members --team ... --json`), every hmux lifecycle action, the pinned `ScCronSource`, five-field minute-first cron input, and six-field seconds-first compatibility input. The callback receives only schedule/run metadata and opaque JSON; no ATM team, phase, store trait, or Shpherd row enters the sc-cron boundary.
 
-ATM projection v1 explicitly captures `id/name/role/agent_type/model/host/backend/target/session/alias/target_tab`. `target/session/alias` are sanitized host-local launch references and are excluded from the shared projection and telemetry; credentials, mailbox/inbox data, prompt bodies, absolute checkout paths, process handles, and unknown fields are excluded entirely. The snapshot records source fingerprint and roster revision. Mutation payloads contain no caller claims: B10A derives a non-serializable `AuthenticatedPrincipal` from verified transport context and ATM catalog/mutation methods accept only a borrowed principal plus operation/revision/idempotency data. Successful add/update evidence binds operation/key/team/member, before/after roster revision, exact plural argv, and redacted result digest; `registration_evidence` is the sole conversion to spawn evidence. Foreign ATM IDs/revisions never deserialize as Shpherd IDs/revisions. Forged claims, scope mismatch, unsupported versions/fingerprints, stale revisions, and unauthorized principals fail before process invocation. The stateful ATM double proves replay, escalation rejection, evidence conversion, and redaction.
+ATM projection v1 explicitly captures `id/name/role/agent_type/model/host/backend/target/session/alias/target_tab`. `target/session/alias` are sanitized host-local launch references and are excluded from the shared projection and telemetry; credentials, mailbox/inbox data, prompt bodies, absolute checkout paths, process handles, and unknown fields are excluded entirely. The snapshot records source fingerprint and roster revision. Mutation payloads contain no caller claims: B10A parses/verifies transport credentials and exchanges verified identity through the B2 `shpherd-auth` issuer; ATM catalog/mutation methods accept only a borrowed principal plus operation/revision/idempotency data. Successful add/update evidence binds operation/key/team/member, before/after roster revision, exact plural argv, and redacted result digest; `registration_evidence` produces the B2-owned bridge type and is the sole conversion to spawn evidence. Foreign ATM IDs/revisions never deserialize as Shpherd IDs/revisions. Forged claims, scope mismatch, unsupported versions/fingerprints, stale revisions, and unauthorized principals fail before process invocation. The stateful ATM double proves replay, escalation rejection, evidence conversion, and redaction without importing B3B.
 
 hmux capability negotiation rejects unsupported major versions and any requested capability absent from `supported`. Dry-run/observe/focus use `HmuxReadRequest` with no fencing and remain available when lease authority is unavailable. Start/stop/relaunch/repair/spawn/nudge/member-stop/member-reconcile use `HmuxMutationRequest` with fencing and idempotency. Spawn requires `RosterRegistrationEvidence` matching operation/key, ATM team/member, current roster revision, and redacted digest; stale/missing/mismatched evidence fails before process mutation. Member-scoped stop/reconcile require the stable runtime identity and never stop unrelated panes. The stateful double covers crash-after-registration, stale evidence, repeated spawn, remove/reconcile, unrelated-session preservation, reuse, stale fencing, retries, and injected failures. sc-cron pins source/API version, accepts an injected `Arc<dyn CronHandler + Send + Sync>`, exposes CRUD plus get/list reads, and checks cancellation before and after callback execution; cancellation is terminal and never converted into success.
 
@@ -153,5 +154,6 @@ No ATM import/mutation, hmux process call, scheduler registration, or MCP surfac
 
 - `boundary:external-integrations` and ADR-SHP-006/007/009/010 fix projection/command versions, verified-principal-only ATM calls, split read/mutating hmux requests, roster-registration evidence, stable runtime identity, lifecycle capabilities, callback injection, stable failures, ownership, redaction, and fallbacks.
 - Each owned ADR is approved and contains decision, alternatives, consequences, and executable evidence; fixtures validate, stateful doubles compile, and workspace/boundary validation pass.
+- The B3C fixture compiles at the B2 prerequisite commit using only `shpherd-types::foundation` and `shpherd-auth`; imports from B3A/B3B are prohibited.
 
 Every deliverable is production-ready for contract closure.

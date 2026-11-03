@@ -39,6 +39,6 @@ No PostgreSQL store, adaptor, cross-store sync, conflict policy, or lease state 
 ## Acceptance and validation
 
 - `boundary:local-schema-sqlite` passes the B3A suite; parity rows stay readable and extensions are versioned after parity.
-- Migration/rollback and store tests cover complete shared-definition round trips, validated local checkout/config binding, prompt-body/credential/runtime exclusion from projection, typed keys, canonical batches, cursor/tombstone persistence, lease evidence, and proof that SQLite exposes no lease-grant operation; lint/test, workspace build, and boundary validation pass.
+- Migration/rollback and store tests cover lossless multi-variant/member/prompt/branch/backend/runtime round trips, validated local checkout/config binding, prompt-body/credential/runtime-observation exclusion from projection, variant-qualified member keys, canonical batches, nonzero entity revisions, genesis/first/MAX/overflow cursor behavior, tombstone persistence, lease evidence, and proof that SQLite exposes no lease-grant operation; lint/test, workspace build, and boundary validation pass.
 
 Every deliverable is production-ready for the local schema/SQLite boundary.

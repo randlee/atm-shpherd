@@ -42,7 +42,7 @@ pub trait SynchronizationService: sealed::Sealed {
 }
 ```
 
-Each source stream is contiguous. A target transaction atomically applies rows and tombstones, records the batch hash/audit evidence, and advances only that source cursor. Same-ID/same-hash replay returns the prior receipt; a changed hash, gap, stale base, or conflict rolls back all rows, tombstones, audit, and cursors. Tombstones remain until every enrolled target acknowledges the source revision. Host-local paths, credentials, runtime handles, lease rows, and local action evidence are excluded.
+Each source stream is contiguous. An absent vector entry is cursor zero, `from_exclusive=0` requests the first batch, and the first mutation is cursor one. MAX can be read but checked advance fails with overflow and no mutation; entity revisions remain distinct validated nonzero values. A target transaction atomically applies rows and tombstones, records the batch hash/audit evidence, and advances only that source cursor. Same-ID/same-hash replay returns the prior receipt; a changed hash, gap, stale base, or conflict rolls back all rows, tombstones, audit, and cursors. Tombstones remain until every enrolled target acknowledges the source cursor. Host-local paths, credentials, runtime handles, lease rows, and local action evidence are excluded.
 
 ## Relationships
 
@@ -55,9 +55,9 @@ No lease or launch ownership; B9B owns safe launch after hydration.
 ## Acceptance and validation
 
 - Two-host create/update/delete/tombstone/offline/reconnect/out-of-order/vector-skew/conflict/exclusion/project-binding hydration tests pass with typed entity keys and cross-store canonical digest goldens.
-- Transaction-fault tests prove batch atomicity and no cursor advance; duplicate-same-hash replay is idempotent, duplicate-different-hash fails, gaps fail, and independent source cursors advance without overwriting one another.
+- Transaction-fault tests prove batch atomicity and no cursor advance; duplicate-same-hash replay is idempotent, duplicate-different-hash fails, gaps fail, and independent source cursors advance without overwriting one another. Goldens cover missing vector entry, empty target at zero, first batch/event at one, MAX cursor read, overflow rejection, zero entity-revision rejection, and serde round trips.
 - Every applied/rejected batch has deterministic source/target/vector audit evidence; tombstone retention and enrolled-host acknowledgement are proven.
-- Starting from an empty target, the hydrated typed hierarchy, Team/Variant/member/assignment bundle, logical project/config/prompt refs, launcher policy, and ATM provenance are sufficient for B9B eligibility, checkout resolution/config validation, roster rendering, and launch; no resolved path, prompt body, credential, terminal handle, or origin observation is present.
+- Starting from an empty target, the hydrated typed hierarchy, Team/Variant/member/assignment bundle, ordered prompts, typed project branch/ref, per-variant backend/runtime bindings, launcher policy, and ATM provenance are sufficient for B9B eligibility, checkout resolution/config validation, roster rendering, and launch; a multi-variant/multi-member fixture proves no member association or field is lost, and no resolved path, prompt body, credential, terminal handle, or origin observation is present.
 - Adaptor has no timer, route, merge, or lease policy; secrets/local handles never synchronize or log.
 
 Every deliverable is production-ready for the synchronization boundary.

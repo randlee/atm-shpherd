@@ -42,5 +42,6 @@ No Herdr fallback policy, remote ownership transfer, or UI launcher action; inte
 
 - `boundary:tmux-adapter`: every shared lifecycle action, including member stop/reconcile and registration-evidence validation, is implemented or returns `CapabilityMissing`; read actions work without lease authority and guarded/idempotent mutations pass the shared stateful double without duplicate sessions.
 - Unsupported capabilities return actionable stable errors; adapter tests, lint/build, and boundary validation pass.
+- Multi-variant fixtures select the explicit tmux variant's branch/runtime binding, ordered prompts, and assigned members without defaulting to or merging another variant.
 
 Every deliverable is production-ready for the tmux adapter boundary.
