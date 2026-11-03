@@ -17,11 +17,15 @@
       "scope": "The first Phase B bead that installs or generates the Shpherd runtime workspace.",
       "deterministic_check": "Cargo metadata and the generation record identify sc-runtime 0.1.1 for the initial Shpherd scaffold.",
       "fixtures": {
-        "pass": [],
-        "fail": []
+        "pass": [
+          "B1 generates Shpherd from the sc-runtime v0.1.1 tag in release mode and resolves published 0.1.1 runtime crates."
+        ],
+        "fail": [
+          "B1 generates Shpherd from an unreleased sc-runtime checkout or any template version other than 0.1.1."
+        ]
       },
       "question_overrides": {},
-      "version": 1,
+      "version": 2,
       "status": "locked",
       "promoted_to": null,
       "beads": {
@@ -43,6 +47,13 @@
             "plan_questions": "shp-shk.1",
             "dev_questions": "shp-shk.2"
           }
+        },
+        {
+          "at": "2026-11-03T00:22:52+00:00",
+          "event": "updated",
+          "fields": [
+            "fixtures"
+          ]
         }
       ]
     },
@@ -60,11 +71,15 @@
       "scope": "The dependency order among Phase B implementation beads.",
       "deterministic_check": "Every scmux migration bead depends transitively on the completed sc-runtime installation-and-test bead.",
       "fixtures": {
-        "pass": [],
-        "fail": []
+        "pass": [
+          "Every scmux schema, behavior, and UI migration bead depends transitively on the completed B1 template installation and test gates."
+        ],
+        "fail": [
+          "A scmux schema, behavior, or UI migration starts before B1 template installation and testing pass."
+        ]
       },
       "question_overrides": {},
-      "version": 1,
+      "version": 2,
       "status": "locked",
       "promoted_to": null,
       "beads": {
@@ -86,6 +101,13 @@
             "plan_questions": "shp-vvt.1",
             "dev_questions": "shp-vvt.2"
           }
+        },
+        {
+          "at": "2026-11-03T00:22:53+00:00",
+          "event": "updated",
+          "fields": [
+            "fixtures"
+          ]
         }
       ]
     },
@@ -103,11 +125,15 @@
       "scope": "Phase B work started after the sc-runtime 0.2.0 release becomes available.",
       "deterministic_check": "The tracker history shows no new feature bead started between the sc-runtime 0.2.0 release and the Shpherd 0.2.0 upgrade bead.",
       "fixtures": {
-        "pass": [],
-        "fail": []
+        "pass": [
+          "After the sc-runtime v0.2.0 tag appears, the 0.2.0 interrupt is the next newly started Shpherd bead."
+        ],
+        "fail": [
+          "After the sc-runtime v0.2.0 tag appears, a different ready feature bead starts before the upgrade interrupt."
+        ]
       },
       "question_overrides": {},
-      "version": 1,
+      "version": 2,
       "status": "locked",
       "promoted_to": null,
       "beads": {
@@ -129,6 +155,13 @@
             "plan_questions": "shp-czn.1",
             "dev_questions": "shp-czn.2"
           }
+        },
+        {
+          "at": "2026-11-03T00:22:53+00:00",
+          "event": "updated",
+          "fields": [
+            "fixtures"
+          ]
         }
       ]
     },
@@ -146,11 +179,15 @@
       "scope": "The Phase B bead that upgrades Shpherd from sc-runtime 0.1.1 to 0.2.0.",
       "deterministic_check": "Shpherd's dependency manifests match a fresh sc-runtime 0.2.0 generation for managed dependency versions.",
       "fixtures": {
-        "pass": [],
-        "fail": []
+        "pass": [
+          "The 0.2.0 upgrade applies every managed dependency-version change shown by an equivalent fresh v0.2.0 generation."
+        ],
+        "fail": [
+          "The upgrade leaves a managed dependency at its 0.1.1 version despite the fresh v0.2.0 generation changing it."
+        ]
       },
       "question_overrides": {},
-      "version": 1,
+      "version": 2,
       "status": "locked",
       "promoted_to": null,
       "beads": {
@@ -172,6 +209,13 @@
             "plan_questions": "shp-des.1",
             "dev_questions": "shp-des.2"
           }
+        },
+        {
+          "at": "2026-11-03T00:22:53+00:00",
+          "event": "updated",
+          "fields": [
+            "fixtures"
+          ]
         }
       ]
     },
@@ -189,11 +233,15 @@
       "scope": "The Phase B bead that upgrades Shpherd from sc-runtime 0.1.1 to 0.2.0.",
       "deterministic_check": "The consumer repository contains the complete sc-lint installation and its version check reports 0.8.4 or newer.",
       "fixtures": {
-        "pass": [],
-        "fail": []
+        "pass": [
+          "The consumer repository contains all v0.2.0-managed .sc-lint assets, requires sc-lint 0.8.4 or newer, and passes setup and lint compatibility checks."
+        ],
+        "fail": [
+          "The repository reports an sc-lint binary version but omits managed .sc-lint assets or permits a version older than 0.8.4."
+        ]
       },
       "question_overrides": {},
-      "version": 1,
+      "version": 2,
       "status": "locked",
       "promoted_to": null,
       "beads": {
@@ -215,6 +263,13 @@
             "plan_questions": "shp-sb9.1",
             "dev_questions": "shp-sb9.2"
           }
+        },
+        {
+          "at": "2026-11-03T00:22:53+00:00",
+          "event": "updated",
+          "fields": [
+            "fixtures"
+          ]
         }
       ]
     },
@@ -232,11 +287,15 @@
       "scope": "Every Phase B bead that creates or migrates Shpherd database schema objects.",
       "deterministic_check": "A schema parity test compares Shpherd migrations with the pinned scmux schema and explains every intentional difference.",
       "fixtures": {
-        "pass": [],
-        "fail": []
+        "pass": [
+          "B3 ports and fingerprints the pinned scmux SQLite schema, with every difference explicitly excluded before target extensions begin."
+        ],
+        "fail": [
+          "B3 replaces the scmux schema with a newly designed Shpherd schema without first establishing parity."
+        ]
       },
       "question_overrides": {},
-      "version": 1,
+      "version": 2,
       "status": "locked",
       "promoted_to": null,
       "beads": {
@@ -258,6 +317,13 @@
             "plan_questions": "shp-n20.1",
             "dev_questions": "shp-n20.2"
           }
+        },
+        {
+          "at": "2026-11-03T00:22:53+00:00",
+          "event": "updated",
+          "fields": [
+            "fixtures"
+          ]
         }
       ]
     },
@@ -275,11 +341,15 @@
       "scope": "Every Phase B bead that creates or migrates dashboard or editor UI logic.",
       "deterministic_check": "UI parity tests map each retained scmux dashboard and editor behavior to a Shpherd implementation and test.",
       "fixtures": {
-        "pass": [],
-        "fail": []
+        "pass": [
+          "UI migration beads map each retained scmux dashboard and editor behavior to a Shpherd implementation and parity test."
+        ],
+        "fail": [
+          "The Shpherd UI is rebuilt without identifying or testing the retained scmux UI behavior it replaces."
+        ]
       },
       "question_overrides": {},
-      "version": 1,
+      "version": 2,
       "status": "locked",
       "promoted_to": null,
       "beads": {
@@ -301,6 +371,13 @@
             "plan_questions": "shp-2rr.1",
             "dev_questions": "shp-2rr.2"
           }
+        },
+        {
+          "at": "2026-11-03T00:22:53+00:00",
+          "event": "updated",
+          "fields": [
+            "fixtures"
+          ]
         }
       ]
     },
@@ -318,11 +395,15 @@
       "scope": "Any Phase B bead that defines or implements launch backend selection.",
       "deterministic_check": "A launcher selection test proves an unset launcher chooses Herdr.",
       "fixtures": {
-        "pass": [],
-        "fail": []
+        "pass": [
+          "A team launch with no launcher setting selects the Herdr adapter."
+        ],
+        "fail": [
+          "A team launch with no launcher setting selects tmux or requires the operator to choose a backend."
+        ]
       },
       "question_overrides": {},
-      "version": 1,
+      "version": 2,
       "status": "locked",
       "promoted_to": null,
       "beads": {
@@ -344,6 +425,13 @@
             "plan_questions": "shp-vn1.1",
             "dev_questions": "shp-vn1.2"
           }
+        },
+        {
+          "at": "2026-11-03T00:22:53+00:00",
+          "event": "updated",
+          "fields": [
+            "fixtures"
+          ]
         }
       ]
     },
@@ -361,11 +449,15 @@
       "scope": "Any Phase B bead that defines team launcher configuration or implements tmux launch support.",
       "deterministic_check": "A launcher integration test proves an explicitly selected tmux backend can launch, observe, focus, and stop a team.",
       "fixtures": {
-        "pass": [],
-        "fail": []
+        "pass": [
+          "A team configured for tmux can start, observe, focus, and stop through the tmux adapter."
+        ],
+        "fail": [
+          "Shpherd provides no selectable tmux launcher or exposes a tmux option that cannot complete the retained lifecycle."
+        ]
       },
       "question_overrides": {},
-      "version": 1,
+      "version": 2,
       "status": "locked",
       "promoted_to": null,
       "beads": {
@@ -387,6 +479,13 @@
             "plan_questions": "shp-tar.1",
             "dev_questions": "shp-tar.2"
           }
+        },
+        {
+          "at": "2026-11-03T00:22:53+00:00",
+          "event": "updated",
+          "fields": [
+            "fixtures"
+          ]
         }
       ]
     },
@@ -404,11 +503,15 @@
       "scope": "The database parity sprint and any later sprint adding Herdr-specific schema fields.",
       "deterministic_check": "The schema-parity commit and tests precede any migration that adds Herdr-specific columns or tables.",
       "fixtures": {
-        "pass": [],
-        "fail": []
+        "pass": [
+          "The SQLite parity commit and tests land before a later migration introduces Herdr-specific fields."
+        ],
+        "fail": [
+          "Herdr-specific columns or tables are introduced in the initial schema-parity commit."
+        ]
       },
       "question_overrides": {},
-      "version": 1,
+      "version": 2,
       "status": "locked",
       "promoted_to": null,
       "beads": {
@@ -430,6 +533,13 @@
             "plan_questions": "shp-4st.1",
             "dev_questions": "shp-4st.2"
           }
+        },
+        {
+          "at": "2026-11-03T00:22:53+00:00",
+          "event": "updated",
+          "fields": [
+            "fixtures"
+          ]
         }
       ]
     }

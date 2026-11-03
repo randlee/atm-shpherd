@@ -1,4 +1,7 @@
-# Phase B anchor fixture proposal
+# Phase B approved anchor fixtures
+
+Approved by the user on 2026-11-03. The canonical fixture records live in
+`anchors.json`; this table is the human-readable review copy.
 
 These pass/fail examples calibrate the plan and development gates. They do not add requirements; each pair demonstrates how the corresponding approved anchor should be judged.
 
