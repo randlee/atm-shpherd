@@ -31,6 +31,11 @@ Scope: The first Phase B bead that installs or generates the Shpherd runtime wor
 
 Deterministic check to pair with the development gate: Cargo metadata and the generation record identify sc-runtime 0.1.1 for the initial Shpherd scaffold.
 
+Excluded from (not judged; the cell passes as `excluded`):
+- `sprint-b-12-scheduling`: B12 depends on an existing runtime baseline and does not install or generate the initial Shpherd workspace.
+- `sprint-b-12a-daemon-supervision`: B12A adds daemon lifecycle supervision and does not install or generate Shpherd's initial runtime workspace.
+- `sprint-b-13-release-certification`: B13 certifies existing implementation evidence and does not install or generate the initial Shpherd runtime workspace.
+
 Beads: anchor `shp-shk`, plan questions `shp-shk.1`, dev questions `shp-shk.2`
 
 Fixtures:
@@ -50,6 +55,9 @@ Summary: Install and test before migration
 Scope: The dependency order among Phase B implementation beads.
 
 Deterministic check to pair with the development gate: Every scmux migration bead depends transitively on the completed sc-runtime installation-and-test bead.
+
+Excluded from (not judged; the cell passes as `excluded`):
+- `sprint-b-13-release-certification`: B13 certifies existing implementation evidence and does not implement template installation or scmux migration.
 
 Beads: anchor `shp-vvt`, plan questions `shp-vvt.1`, dev questions `shp-vvt.2`
 
@@ -91,6 +99,11 @@ Scope: The Phase B bead that upgrades Shpherd from sc-runtime 0.1.1 to 0.2.0.
 
 Deterministic check to pair with the development gate: Shpherd's dependency manifests match a fresh sc-runtime 0.2.0 generation for managed dependency versions.
 
+Excluded from (not judged; the cell passes as `excluded`):
+- `sprint-b-10-dashboard`: B10 extends the generated client baseline and does not perform the sc-runtime 0.2.0 dependency upgrade.
+- `sprint-b-11-editor-actions`: B11 implements editor and launch actions and does not perform the sc-runtime 0.2.0 dependency upgrade.
+- `sprint-b-12a-daemon-supervision`: B12A adds daemon lifecycle supervision and does not perform the sc-runtime 0.2.0 dependency upgrade.
+
 Beads: anchor `shp-des`, plan questions `shp-des.1`, dev questions `shp-des.2`
 
 Fixtures:
@@ -111,6 +124,12 @@ Scope: The Phase B bead that upgrades Shpherd from sc-runtime 0.1.1 to 0.2.0.
 
 Deterministic check to pair with the development gate: The consumer repository contains the complete sc-lint installation and its version check reports 0.8.4 or newer.
 
+Excluded from (not judged; the cell passes as `excluded`):
+- `sprint-b-10-dashboard`: B10 extends the generated client baseline and does not perform the sc-runtime 0.2.0 upgrade or install sc-lint.
+- `sprint-b-11-editor-actions`: B11 implements editor and launch actions and does not perform the sc-runtime 0.2.0 upgrade or install sc-lint.
+- `sprint-b-12-scheduling`: B12 integrates scheduled operations and does not perform the sc-runtime 0.2.0 upgrade or install sc-lint.
+- `sprint-b-12a-daemon-supervision`: B12A adds daemon lifecycle supervision and does not perform the sc-runtime 0.2.0 upgrade or install sc-lint.
+
 Beads: anchor `shp-sb9`, plan questions `shp-sb9.1`, dev questions `shp-sb9.2`
 
 Fixtures:
@@ -130,6 +149,9 @@ Summary: Port the scmux database schema
 Scope: Every Phase B bead that creates or migrates Shpherd database schema objects.
 
 Deterministic check to pair with the development gate: A schema parity test compares Shpherd migrations with the pinned scmux schema and explains every intentional difference.
+
+Excluded from (not judged; the cell passes as `excluded`):
+- `sprint-b-12-scheduling`: B12 integrates schedules through sc-cron and does not create or migrate Shpherd database schema objects.
 
 Beads: anchor `shp-n20`, plan questions `shp-n20.1`, dev questions `shp-n20.2`
 
@@ -171,6 +193,10 @@ Scope: Any Phase B bead that defines or implements launch backend selection.
 
 Deterministic check to pair with the development gate: A launcher selection test proves an unset launcher chooses Herdr.
 
+Excluded from (not judged; the cell passes as `excluded`):
+- `sprint-b-10a-daemon-api`: Default launcher selection belongs to launcher integration work; this sprint implements the daemon API and thin CLI boundary.
+- `sprint-b-12a-daemon-supervision`: B12A installs and supervises the Shpherd daemon service and does not select a launch backend.
+
 Beads: anchor `shp-vn1`, plan questions `shp-vn1.1`, dev questions `shp-vn1.2`
 
 Fixtures:
@@ -210,6 +236,10 @@ Summary: Establish parity before Herdr fields
 Scope: The database parity sprint and any later sprint adding Herdr-specific schema fields.
 
 Deterministic check to pair with the development gate: The schema-parity commit and tests precede any migration that adds Herdr-specific columns or tables.
+
+Excluded from (not judged; the cell passes as `excluded`):
+- `sprint-b-10-dashboard`: B10 ports the client read experience and does not change the initial database schema or add Herdr-specific fields.
+- `sprint-b-12-scheduling`: B12 integrates scheduled operations through sc-cron and does not port the initial database schema or add Herdr-specific fields.
 
 Beads: anchor `shp-4st`, plan questions `shp-4st.1`, dev questions `shp-4st.2`
 

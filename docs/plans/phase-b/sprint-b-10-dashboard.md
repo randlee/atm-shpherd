@@ -36,6 +36,8 @@ Close the real read composition and shared browser/desktop dashboard with measur
 
 ## Required work and deliverables
 
+- Begin this scmux UI migration only after B1 has installed and tested the sc-runtime 0.1.1 templates and B2 has integrated that generated workspace baseline; this sprint extends that proven baseline rather than creating a parallel client scaffold.
+- B10 may start while sc-runtime 0.2.0 is unavailable, but if 0.2.0 is released first, the B2-installed release gate must make the Shpherd 0.2.0 upgrade the next work started and that upgrade must finish before B10 begins or resumes.
 - Replace fixtures with authenticated snapshots/events and port grouped/grid/list, hierarchy, search/filter, host/backend/status badges, team detail, and stale/disconnected states into the shared browser/Tauri app.
 - Preserve icon/window/tray shell, browser independence, pinned observability adapter, redaction, and failure-noninterference.
 

@@ -30,6 +30,7 @@ Close recurring guarded operations through the pinned sc-cron contract with dete
 
 ## Required work and deliverables
 
+- B12 may start while sc-runtime 0.2.0 is unavailable, but if 0.2.0 is released first, the B2-installed release gate must make the Shpherd 0.2.0 upgrade the next work started; that upgrade, including every dependency update supplied by the release, must finish before B12 begins or resumes.
 - Register Shpherd jobs through the approved sc-cron public API while keeping rows, traits, timers, and policy on their correct side of the boundary.
 - Integrate and contract-test sc-cron CRUD plus get/list reads, five-field minute-first grammar, six-field compatibility parsing, injected `Arc<dyn CronHandler + Send + Sync>`, cancellation, JSON callback payload, `CronError`, missed-run/restart policy, eligible-host/lease guarded execution, and aggregate failure isolation without reimplementing its parser.
 
@@ -57,6 +58,6 @@ No OS service lifecycle; B12A owns supervision/reboot/upgrade behavior.
 
 - Source/version prerequisite and parser/callback fixtures are recorded; sc-cron imports no Shpherd type.
 - Schedule create/get/list/update/delete, revision conflict, invalid-expression, handler failure, and cancellation behavior pass through the pinned sc-cron API; Shpherd contains no duplicate cron parser.
-- Manual and scheduled launch share one command path; Herdr default/tmux override, restart/missed runs, and isolated aggregate failures pass.
+- Manual and scheduled launch share one command path; an unset launcher selects Herdr, an explicitly selected tmux backend remains available, and restart/missed-run plus isolated aggregate-failure fixtures pass.
 
 Every deliverable is production-ready for scheduled-operation integration.

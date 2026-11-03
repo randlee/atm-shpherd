@@ -46,6 +46,8 @@ No new feature or deferred redesign; AI/context graph work remains out of scope.
 
 - `req:REQ-RELEASE-EVIDENCE`: every feature criterion has one prior integration owner and a passing artifact; this sprint only verifies completeness, hashes, platform identity, and approved exclusions.
 - Every Phase B anchor development report is present and passing; no open P0/P1 defect remains. Any defect creates a separate fix owner and blocks this evidence close.
-- B2 release-history validation proves every dispatch check was recorded and either the release was absent at cutoff or the digest-bound 0.2.0 interrupt passed; direct/tampered/ambiguous certification or epic close fails closed.
+- B2 release-history validation proves every dispatch check was recorded and either the release was absent at cutoff or the digest-bound 0.2.0 interrupt passed; when 0.2.0 was available, the evidence proves its upgrade was the next Shpherd work started before any other Phase B work. Direct, tampered, or ambiguous certification or epic close fails closed.
+- Upgrade evidence proves that the sc-runtime 0.2.0 upgrade applied every dependency update supplied by the release and left sc-lint 0.8.4 or newer fully installed in the consumer repository.
+- Launcher evidence proves that an unset launcher selects Herdr by default and that an explicitly selected tmux backend can launch, observe, focus, and stop a team.
 
 Every deliverable is production-ready for release-evidence closure.

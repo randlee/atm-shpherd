@@ -54,6 +54,41 @@
           "fields": [
             "fixtures"
           ]
+        },
+        {
+          "at": "2026-11-03T03:56:00+00:00",
+          "event": "excluded",
+          "item": "sprint-b-12-scheduling",
+          "reason": "B12 depends on an existing runtime baseline and does not install or generate the initial Shpherd workspace.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T03:58:43+00:00",
+          "event": "excluded",
+          "item": "sprint-b-12a-daemon-supervision",
+          "reason": "B12A adds daemon lifecycle supervision and does not install or generate Shpherd's initial runtime workspace.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T03:59:02+00:00",
+          "event": "excluded",
+          "item": "sprint-b-13-release-certification",
+          "reason": "B13 certifies existing implementation evidence and does not install or generate the initial Shpherd runtime workspace.",
+          "replaced": false
+        }
+      ],
+      "exclude": [
+        {
+          "item": "sprint-b-12-scheduling",
+          "reason": "B12 depends on an existing runtime baseline and does not install or generate the initial Shpherd workspace."
+        },
+        {
+          "item": "sprint-b-12a-daemon-supervision",
+          "reason": "B12A adds daemon lifecycle supervision and does not install or generate Shpherd's initial runtime workspace."
+        },
+        {
+          "item": "sprint-b-13-release-certification",
+          "reason": "B13 certifies existing implementation evidence and does not install or generate the initial Shpherd runtime workspace."
         }
       ]
     },
@@ -108,6 +143,19 @@
           "fields": [
             "fixtures"
           ]
+        },
+        {
+          "at": "2026-11-03T03:58:10+00:00",
+          "event": "excluded",
+          "item": "sprint-b-13-release-certification",
+          "reason": "B13 certifies existing implementation evidence and does not implement template installation or scmux migration.",
+          "replaced": false
+        }
+      ],
+      "exclude": [
+        {
+          "item": "sprint-b-13-release-certification",
+          "reason": "B13 certifies existing implementation evidence and does not implement template installation or scmux migration."
         }
       ]
     },
@@ -216,6 +264,41 @@
           "fields": [
             "fixtures"
           ]
+        },
+        {
+          "at": "2026-11-03T03:51:48+00:00",
+          "event": "excluded",
+          "item": "sprint-b-10-dashboard",
+          "reason": "B10 extends the generated client baseline and does not perform the sc-runtime 0.2.0 dependency upgrade.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T03:54:23+00:00",
+          "event": "excluded",
+          "item": "sprint-b-11-editor-actions",
+          "reason": "B11 implements editor and launch actions and does not perform the sc-runtime 0.2.0 dependency upgrade.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T03:58:43+00:00",
+          "event": "excluded",
+          "item": "sprint-b-12a-daemon-supervision",
+          "reason": "B12A adds daemon lifecycle supervision and does not perform the sc-runtime 0.2.0 dependency upgrade.",
+          "replaced": false
+        }
+      ],
+      "exclude": [
+        {
+          "item": "sprint-b-10-dashboard",
+          "reason": "B10 extends the generated client baseline and does not perform the sc-runtime 0.2.0 dependency upgrade."
+        },
+        {
+          "item": "sprint-b-11-editor-actions",
+          "reason": "B11 implements editor and launch actions and does not perform the sc-runtime 0.2.0 dependency upgrade."
+        },
+        {
+          "item": "sprint-b-12a-daemon-supervision",
+          "reason": "B12A adds daemon lifecycle supervision and does not perform the sc-runtime 0.2.0 dependency upgrade."
         }
       ]
     },
@@ -270,6 +353,52 @@
           "fields": [
             "fixtures"
           ]
+        },
+        {
+          "at": "2026-11-03T03:51:48+00:00",
+          "event": "excluded",
+          "item": "sprint-b-10-dashboard",
+          "reason": "B10 extends the generated client baseline and does not perform the sc-runtime 0.2.0 upgrade or install sc-lint.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T03:54:23+00:00",
+          "event": "excluded",
+          "item": "sprint-b-11-editor-actions",
+          "reason": "B11 implements editor and launch actions and does not perform the sc-runtime 0.2.0 upgrade or install sc-lint.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T03:54:35+00:00",
+          "event": "excluded",
+          "item": "sprint-b-12-scheduling",
+          "reason": "B12 integrates scheduled operations and does not perform the sc-runtime 0.2.0 upgrade or install sc-lint.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T03:58:44+00:00",
+          "event": "excluded",
+          "item": "sprint-b-12a-daemon-supervision",
+          "reason": "B12A adds daemon lifecycle supervision and does not perform the sc-runtime 0.2.0 upgrade or install sc-lint.",
+          "replaced": false
+        }
+      ],
+      "exclude": [
+        {
+          "item": "sprint-b-10-dashboard",
+          "reason": "B10 extends the generated client baseline and does not perform the sc-runtime 0.2.0 upgrade or install sc-lint."
+        },
+        {
+          "item": "sprint-b-11-editor-actions",
+          "reason": "B11 implements editor and launch actions and does not perform the sc-runtime 0.2.0 upgrade or install sc-lint."
+        },
+        {
+          "item": "sprint-b-12-scheduling",
+          "reason": "B12 integrates scheduled operations and does not perform the sc-runtime 0.2.0 upgrade or install sc-lint."
+        },
+        {
+          "item": "sprint-b-12a-daemon-supervision",
+          "reason": "B12A adds daemon lifecycle supervision and does not perform the sc-runtime 0.2.0 upgrade or install sc-lint."
         }
       ]
     },
@@ -324,6 +453,19 @@
           "fields": [
             "fixtures"
           ]
+        },
+        {
+          "at": "2026-11-03T03:54:35+00:00",
+          "event": "excluded",
+          "item": "sprint-b-12-scheduling",
+          "reason": "B12 integrates schedules through sc-cron and does not create or migrate Shpherd database schema objects.",
+          "replaced": false
+        }
+      ],
+      "exclude": [
+        {
+          "item": "sprint-b-12-scheduling",
+          "reason": "B12 integrates schedules through sc-cron and does not create or migrate Shpherd database schema objects."
         }
       ]
     },
@@ -432,6 +574,30 @@
           "fields": [
             "fixtures"
           ]
+        },
+        {
+          "at": "2026-11-03T03:49:50+00:00",
+          "event": "excluded",
+          "item": "sprint-b-10a-daemon-api",
+          "reason": "Default launcher selection belongs to launcher integration work; this sprint implements the daemon API and thin CLI boundary.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T03:56:23+00:00",
+          "event": "excluded",
+          "item": "sprint-b-12a-daemon-supervision",
+          "reason": "B12A installs and supervises the Shpherd daemon service and does not select a launch backend.",
+          "replaced": false
+        }
+      ],
+      "exclude": [
+        {
+          "item": "sprint-b-10a-daemon-api",
+          "reason": "Default launcher selection belongs to launcher integration work; this sprint implements the daemon API and thin CLI boundary."
+        },
+        {
+          "item": "sprint-b-12a-daemon-supervision",
+          "reason": "B12A installs and supervises the Shpherd daemon service and does not select a launch backend."
         }
       ]
     },
@@ -540,6 +706,30 @@
           "fields": [
             "fixtures"
           ]
+        },
+        {
+          "at": "2026-11-03T03:49:50+00:00",
+          "event": "excluded",
+          "item": "sprint-b-10-dashboard",
+          "reason": "B10 ports the client read experience and does not change the initial database schema or add Herdr-specific fields.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T03:54:35+00:00",
+          "event": "excluded",
+          "item": "sprint-b-12-scheduling",
+          "reason": "B12 integrates scheduled operations through sc-cron and does not port the initial database schema or add Herdr-specific fields.",
+          "replaced": false
+        }
+      ],
+      "exclude": [
+        {
+          "item": "sprint-b-10-dashboard",
+          "reason": "B10 ports the client read experience and does not change the initial database schema or add Herdr-specific fields."
+        },
+        {
+          "item": "sprint-b-12-scheduling",
+          "reason": "B12 integrates scheduled operations through sc-cron and does not port the initial database schema or add Herdr-specific fields."
         }
       ]
     }

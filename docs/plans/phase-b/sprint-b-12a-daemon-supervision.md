@@ -34,6 +34,7 @@ Close cross-platform per-user daemon lifecycle behavior so schedules and synchro
 
 ## Required work and deliverables
 
+- B12A may start while sc-runtime 0.2.0 is unavailable, but if 0.2.0 is released first, the B2-installed release gate must make the Shpherd 0.2.0 upgrade the next work started and that upgrade must finish before B12A begins or resumes.
 - Provide upgrade-safe per-user launchd, systemd, and approved Windows supervision with structured logs/health, configuration migration, graceful lease release/fencing, and data-preserving uninstall.
 - Prove synchronized teams and B12 schedules survive logout, reboot, crash, and binary upgrade.
 

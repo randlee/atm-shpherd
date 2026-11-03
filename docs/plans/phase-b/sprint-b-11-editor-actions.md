@@ -35,7 +35,9 @@ Close the real authenticated command composition and equivalent browser/desktop 
 
 ## Required work and deliverables
 
-- Port atomic Team-bundle create/edit plus move/clone/unlink/import, discovery, the split read/guarded launcher lifecycle, host enrollment/project binding selection, tagged outcome confirmations/errors, and add/update/remove roster workflows through authenticated daemon commands.
+- Begin this scmux feature/UI migration only after B1 has installed and tested the sc-runtime 0.1.1 templates and B2 has integrated that generated workspace baseline.
+- B11 may start while sc-runtime 0.2.0 is unavailable, but if 0.2.0 is released first, the B2-installed release gate must make the Shpherd 0.2.0 upgrade the next work started and that upgrade must finish before B11 begins or resumes.
+- Port atomic Team-bundle create/edit plus move/clone/unlink/import, discovery, the split read/guarded launcher lifecycle, host enrollment/project binding selection, tagged outcome confirmations/errors, and add/update/remove roster workflows through authenticated daemon commands, following the corresponding editor/action behaviors and parity mappings recorded in `docs/porting/scmux-behavior-oracle.md`.
 - Keep browser and desktop Tauri command capability equivalent with Herdr preselected and tmux explicit.
 
 ```ts
