@@ -14,7 +14,7 @@ relations:
   must_follow:
     - sprint: b-3a-schema-projection-contract
       artifact: shared-row-and-projection-store-contract
-  parallel_safe: [b-4a-local-schema-sqlite, b-4c-static-adaptor]
+  parallel_safe: [b-4c-static-adaptor]
 recommended_agent: rust-storage-developer
 recommended_model: deep-reasoning
 ---

@@ -13,7 +13,7 @@ relations:
   must_follow:
     - sprint: b-3a-schema-projection-contract
       artifact: projection-batch-and-store-test-doubles
-  parallel_safe: [b-4a-local-schema-sqlite, b-4b-postgres-projection-store]
+  parallel_safe: []
 recommended_agent: rust-storage-developer
 recommended_model: workhorse
 ---

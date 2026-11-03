@@ -18,7 +18,7 @@ relations:
       artifact: postgres-projection-store
     - sprint: b-4c-static-adaptor
       artifact: static-projection-adaptor
-  parallel_safe: [b-9b-launch-leases, b-10a-daemon-api]
+  parallel_safe: [b-10a-daemon-api]
 recommended_agent: rust-distributed-systems-developer
 recommended_model: deep-reasoning
 ---

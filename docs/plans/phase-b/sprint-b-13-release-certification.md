@@ -43,4 +43,4 @@ No new feature or deferred redesign; AI/context graph work remains out of scope.
 - `req:REQ-RELEASE-EVIDENCE`: every feature criterion has one prior integration owner and a passing artifact; this sprint only verifies completeness, hashes, platform identity, and approved exclusions.
 - Every Phase B anchor development report is present and passing; no open P0/P1 defect remains. Any defect creates a separate fix owner and blocks this evidence close.
 
-Every deliverable is production-ready for phase release integration.
+Every deliverable is production-ready for release-evidence closure.

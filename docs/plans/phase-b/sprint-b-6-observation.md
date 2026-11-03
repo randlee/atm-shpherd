@@ -13,7 +13,7 @@ relations:
   must_follow:
     - sprint: b-3b-service-launch-api-contract
       artifact: observation-types-and-definition-reader-double
-  parallel_safe: [b-5-definition-service, b-6a-atm-projection, b-7-herdr-launcher, b-8-tmux-launcher, b-10a-daemon-api]
+  parallel_safe: [b-6a-atm-projection, b-7-herdr-launcher, b-8-tmux-launcher, b-10a-daemon-api]
 recommended_agent: rust-domain-developer
 recommended_model: workhorse
 ---

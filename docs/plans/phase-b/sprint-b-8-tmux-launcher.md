@@ -14,7 +14,7 @@ relations:
   must_follow:
     - sprint: b-3b-service-launch-api-contract
       artifact: guarded-launcher-interface-and-observation-double
-  parallel_safe: [b-5-definition-service, b-6-observation, b-6a-atm-projection, b-7-herdr-launcher, b-10a-daemon-api]
+  parallel_safe: [b-10a-daemon-api]
 recommended_agent: rust-integration-developer
 recommended_model: workhorse
 ---

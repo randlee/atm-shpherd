@@ -20,7 +20,7 @@ relations:
       artifact: synchronized-roster-projection
     - sprint: b-9b-launch-leases
       artifact: verified-launch-lease-guard
-  parallel_safe: [b-10-dashboard, b-12-scheduling]
+  parallel_safe: [b-12-scheduling]
 recommended_agent: rust-integration-developer
 recommended_model: deep-reasoning
 ---

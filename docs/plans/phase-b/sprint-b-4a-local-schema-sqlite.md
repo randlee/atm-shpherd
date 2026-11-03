@@ -4,6 +4,7 @@ bead: shp-phase-b.5
 status: planned
 closure_type: boundary
 target_boundary: local-schema-sqlite
+vertical_rationale: "Each local extension migration changes its SQLite reader and writer contract; schema, migration, reader, and writer therefore land atomically so every committed revision remains readable and writable."
 requirements: []
 adrs: [ADR-SHP-002, ADR-SHP-004]
 owned_paths:

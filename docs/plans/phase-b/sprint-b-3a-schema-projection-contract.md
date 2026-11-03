@@ -32,10 +32,34 @@ recommended_model: deep-reasoning
 ## Contract signatures
 
 ```rust
+use serde::{Deserialize, Serialize};
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(transparent)]
 pub struct TeamKey(String);
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(transparent)]
+pub struct MemberKey(String);
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(transparent)]
 pub struct HostKey(String);
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
+#[serde(transparent)]
 pub struct StoreRevision(u64);
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(transparent)]
 pub struct ProjectionVersion(u32);
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum LauncherKind { Herdr, Tmux }
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum RequestedTeamState { Stopped, Running }
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct LocalTeamExtensionRow {
     pub team: TeamKey,
     pub launcher: LauncherKind,
@@ -43,17 +67,51 @@ pub struct LocalTeamExtensionRow {
     pub atm_team: Option<String>,
     pub eligible_host: Option<HostKey>,
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct SharedTeamRow {
     pub team: TeamKey,
     pub revision: StoreRevision,
     pub requested_state: RequestedTeamState,
     pub eligible_host: Option<HostKey>,
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SharedMemberRow {
+    pub team: TeamKey,
+    pub member: MemberKey,
+    pub revision: StoreRevision,
+    pub role: String,
+    pub model: Option<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SharedAssignmentRow {
+    pub team: TeamKey,
+    pub host: HostKey,
+    pub revision: StoreRevision,
+    pub requested_state: RequestedTeamState,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "row_type", content = "row", rename_all = "snake_case")]
 pub enum SharedRow { Team(SharedTeamRow), Member(SharedMemberRow), Assignment(SharedAssignmentRow) }
-pub trait ProjectionStore: sealed::Sealed {
+
+pub trait ProjectionStore {
     fn read_projection(&self, since: StoreRevision) -> Result<ProjectionBatch, StoreError>;
     fn write_projection(&self, batch: ProjectionBatch) -> Result<WriteReceipt, StoreError>;
 }
+
+pub enum ProjectionStoreAdapter<Sqlite, Postgres> {
+    Sqlite(Sqlite),
+    Postgres(Postgres),
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct ProjectionBatch {
     pub version: ProjectionVersion,
     pub source: HostKey,
@@ -61,11 +119,24 @@ pub struct ProjectionBatch {
     pub through: StoreRevision,
     pub rows: Vec<SharedRow>,
 }
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct WriteReceipt { pub through: StoreRevision, pub rows_written: u64 }
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum StoreError {
+    UnsupportedVersion { received: ProjectionVersion, supported: ProjectionVersion },
+    Conflict { expected: StoreRevision, actual: StoreRevision },
+    InvalidBatch { message: String },
+    Unavailable { retryable: bool, message: String },
+}
 ```
 
 `SharedRow` is allowlisted and cannot represent paths, terminal handles, logs, credentials, prompts, or mailbox content.
-`ProjectionStore` is intentionally sealed because Phase B supports exactly the SQLite and PostgreSQL engines plus the static adaptor; adding an engine requires a later ADR.
+`ProjectionVersion` is serialized as an unsigned integer and every row enum uses an explicit snake-case tag; unknown fields and unsupported versions fail rather than being ignored. `StoreRevision` is monotonic per source host, batches are ordered by `(source, through)`, and conflicts return `StoreError::Conflict` without partial writes.
+
+`ProjectionStore` is intentionally open because the app-owned SQLite and PostgreSQL crates implement it across crate boundaries. `GuardedLauncher` remains sealed in B3B; opening any launcher implementation point requires a later ADR.
 
 ## This sprint does not close
 
@@ -74,6 +145,6 @@ No engine, adaptor, reconciliation loop, timer, lease, or route implementation.
 ## Acceptance and validation
 
 - `boundary:shpherd-schema` and ADR-SHP-002 enumerate every shared field and local-only exclusion.
-- Contract tests/doubles compile against sealed static interfaces and the parity fingerprint; workspace build and boundary validation pass.
+- Contract tests/doubles compile against the open `ProjectionStore` trait, closed static-adaptor enum, and parity fingerprint; workspace build and boundary validation pass.
 
 Every deliverable is production-ready for contract closure.

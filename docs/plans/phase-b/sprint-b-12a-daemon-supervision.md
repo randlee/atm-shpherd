@@ -21,7 +21,7 @@ relations:
       artifact: lease-release-and-fencing-contract
     - sprint: b-12-scheduling
       artifact: schedule-restart-and-missed-run-policy
-  parallel_safe: [b-11-editor-actions, b-11a-mobile]
+  parallel_safe: []
 recommended_agent: platform-integration-developer
 recommended_model: workhorse
 ---

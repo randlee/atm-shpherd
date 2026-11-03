@@ -4,6 +4,7 @@ bead: shp-phase-b.4
 status: planned
 closure_type: boundary
 target_boundary: shpherd-schema-and-sqlite
+vertical_rationale: "The retained scmux schema migration, SQLite reader, and SQLite writer must land atomically in one commit so no revision can expose a migrated schema to an incompatible reader or writer."
 requirements: []
 adrs: [ADR-SHP-001]
 owned_paths:

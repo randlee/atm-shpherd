@@ -4,7 +4,7 @@ bead: shp-phase-b.11
 status: planned
 closure_type: integration
 target_boundary: client-read-experience
-requirements: [ANC-007, REQ-UI-READ]
+requirements: [ANC-007, REQ-API, REQ-UI-READ]
 adrs: [ADR-SHP-003, ADR-SHP-008]
 owned_paths:
   - clients/src/features/catalog/**
@@ -12,13 +12,18 @@ owned_paths:
   - clients/src/platform/observability/**
   - clients/tests/catalog/**
   - clients/tests/performance/**
+  - tests/integration/api-read/**
 relations:
   must_follow:
     - sprint: b-10a-daemon-api
       artifact: authenticated-snapshot-and-event-client
+    - sprint: b-5-definition-service
+      artifact: real-definition-query-service
+    - sprint: b-6-observation
+      artifact: real-observation-projection-service
     - sprint: b-9a-sync-projection
       artifact: partial-host-snapshot-semantics
-  parallel_safe: [b-9b-launch-leases, b-9c-expand-roster, b-12-scheduling]
+  parallel_safe: [b-9c-expand-roster, b-12-scheduling]
 recommended_agent: typescript-ui-developer
 recommended_model: workhorse
 ---
@@ -32,7 +37,7 @@ recommended_model: workhorse
 
 ## Relationships
 
-`must_follow` B10A's authenticated snapshot/event client and B9A's partial-host snapshot semantics. Parallel-safe with B9B, B9C, and B12 through disjoint client paths.
+`must_follow` B10A's authenticated snapshot/event boundary, the real B5 definition and B6 observation services, and B9A's partial-host snapshot semantics. Parallel-safe with B9B, B9C, and B12 through disjoint client paths.
 
 ## This sprint does not close
 
@@ -40,6 +45,7 @@ No mutations/editor/native mobile capabilities; B11/B11A own them.
 
 ## Acceptance and validation
 
+- Real B5/B6 services compose through B10A without alternate in-process client access; authenticated definition/observation and error/reconnect flows pass in the daemon/client integration harness.
 - scmux oracle read workflows pass in browser and desktop. A deterministic 100-team/1,500-member fixture meets: initial interactive ≤2.0 s, search/filter p95 <100 ms, event reflection p95 <250 ms/1,000 events on recorded macOS arm64 reference hardware or equivalent.
 - Browser import graph contains no required Tauri API; telemetry faults do not alter actions.
 

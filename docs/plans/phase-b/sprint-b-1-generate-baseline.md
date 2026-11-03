@@ -38,4 +38,4 @@ No generated code is integrated and no scmux schema, UI, or feature migration be
 - No generated manifest contains a local `[patch.crates-io]` sc-runtime path.
 - Run the generated `just setup --check`, lint, tests, CLI build, daemon build, and `cargo metadata`.
 
-Every deliverable lands production-ready for a contract baseline: reproducible inputs and complete evidence, with no product implementation hidden in staging.
+Every deliverable is production-ready integration evidence for the released generator baseline: reproducible inputs and complete evidence, with no product implementation hidden in staging.

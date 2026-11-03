@@ -17,7 +17,7 @@ relations:
       artifact: sc-cron-callback-schema-and-double
     - sprint: b-9b-launch-leases
       artifact: guarded-launch-command
-  parallel_safe: [b-9c-expand-roster, b-10-dashboard, b-11-editor-actions]
+  parallel_safe: [b-11-editor-actions]
 recommended_agent: rust-service-developer
 recommended_model: deep-reasoning
 ---

@@ -16,7 +16,7 @@ relations:
       artifact: guarded-launcher-interface-and-lease-guard-double
     - sprint: b-3c-external-integration-contract
       artifact: hmux-capability-schema-and-simulator
-  parallel_safe: [b-5-definition-service, b-6-observation, b-6a-atm-projection, b-8-tmux-launcher, b-10a-daemon-api]
+  parallel_safe: [b-8-tmux-launcher, b-10a-daemon-api]
 recommended_agent: rust-integration-developer
 recommended_model: deep-reasoning
 ---

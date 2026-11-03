@@ -16,7 +16,7 @@ relations:
   must_follow:
     - sprint: b-2-integrate-workspace
       artifact: generated-daemon-adapter-boundary
-  parallel_safe: [b-3a-schema-projection-contract, b-3b-service-launch-api-contract]
+  parallel_safe: []
 recommended_agent: integration-contract-developer
 recommended_model: deep-reasoning
 ---
@@ -31,17 +31,47 @@ recommended_model: deep-reasoning
 ## Contract schemas
 
 ```rust
+use serde::{Deserialize, Serialize};
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(transparent)]
 pub struct AtmRosterRevision(String);
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(transparent)]
+pub struct MemberId(String);
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct MemberSpec { pub id: MemberId, pub role: String, pub agent_type: String, pub model: Option<String>, pub host: Option<String> }
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "operation", rename_all = "snake_case")]
 pub enum AtmMutation { Add(MemberSpec), Update(MemberSpec), Remove(MemberId) }
+
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SemVer { pub major: u64, pub minor: u64, pub patch: u64 }
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum Shell { Bash, PowerShell }
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct HmuxCapabilities { pub version: SemVer, pub dry_run: bool, pub relaunch: bool, pub shells: Vec<Shell>, pub dynamic_spawn: bool, pub nudge: bool }
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct HmuxSpawnResult { pub reused: bool, pub workspace: String, pub tab: String, pub pane: String, pub agent: String }
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct ScCronSource { pub repository: String, pub revision_or_version: String, pub api_version: String }
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CronCallbackPayload { pub schedule_name: String, pub row: serde_json::Value }
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum CronError { InvalidExpression, CallbackFailed { retryable: bool }, Canceled }
 pub type CronCallback = fn(CronCallbackPayload) -> Result<(), CronError>;
 ```
 
 Fixtures freeze exact plural ATM commands (`atm teams add-member|update-member|remove-member ... --json` and `atm members --team ... --json`), hmux discovery/dry-run/spawn, the pinned `ScCronSource`, five-field minute-first cron input, and six-field seconds-first compatibility input. The callback receives only `schedule_name` and `row`; no ATM team, phase, store trait, or Shpherd row enters the sc-cron boundary.
+
+ATM JSON fixtures require a command/API version and roster revision; unknown fields, unsupported versions, and revision mismatches fail with stable typed adapter errors before mutation. hmux capability negotiation rejects unsupported major versions and any requested capability reported false. sc-cron pins both source and API version; callback failures preserve `retryable`, while cancellation is terminal and never converted into a successful run.
 
 ## This sprint does not close
 

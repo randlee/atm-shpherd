@@ -66,7 +66,7 @@ pub struct ErrorEnvelope {
 }
 ```
 
-No public unguarded spawn method exists. Public traits are private or sealed unless an ADR explicitly approves third-party implementation. CLI exit codes, HTTP status, WebSocket command errors, and adapter failures map deterministically from `ErrorCode`.
+No public unguarded spawn method exists. `ProjectionStore` is the one Phase B open trait because the app-owned SQLite and PostgreSQL crates implement it across crate boundaries; ADR-SHP-002 and boundary validation restrict its approved implementations. Service and launcher traits, including `GuardedLauncher`, remain private or sealed unless a later ADR explicitly opens them. CLI exit codes, HTTP status, WebSocket command errors, and adapter failures map deterministically from `ErrorCode`.
 
 ## Ownership rules
 

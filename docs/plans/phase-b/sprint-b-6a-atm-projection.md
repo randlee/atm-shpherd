@@ -14,7 +14,7 @@ relations:
   must_follow:
     - sprint: b-3c-external-integration-contract
       artifact: atm-versioned-fixtures-and-adapter-double
-  parallel_safe: [b-5-definition-service, b-6-observation, b-7-herdr-launcher, b-8-tmux-launcher, b-10a-daemon-api]
+  parallel_safe: [b-7-herdr-launcher, b-8-tmux-launcher, b-10a-daemon-api]
 recommended_agent: rust-integration-developer
 recommended_model: deep-reasoning
 ---
