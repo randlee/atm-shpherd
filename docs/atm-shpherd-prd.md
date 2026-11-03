@@ -4,7 +4,7 @@
 - **Repository:** `randlee/atm-shpherd`
 - **Binaries:** `shpherd` (CLI) and `atm-shpherd` (daemon)
 - **Behavior source:** scmux
-- **Runtime foundation:** sc-runtime Phase B `sqlite-postgres` generated layout, after Phase B generation and scheduler work are available
+- **Runtime foundation:** released sc-runtime `v0.1.1` `sqlite-postgres` generated layout, upgraded to `v0.2.0` as the next work started once that release is available
 
 ## 1. Product decision
 
@@ -42,7 +42,7 @@ The app owns all team semantics: the schema, host-aggregate sync policy, ATM cat
 | `sc-runtime` | daemon builder, lock, listener, shutdown, fixture | application stores or team runtime workers |
 | `sc-cron` | optional in-process scheduler primitive | shpherd store traits, shpherd rows, or adapter logic |
 
-Phase B is used from its source/generation work after its relevant work lands; this application does not pin, retag, or wait for publication of `v0.1.0`. The v0.1 generator is SQLite-only and is not sufficient for this product.
+Phase B starts from the released sc-runtime `v0.1.1` `sqlite-postgres` template. The generated baseline is installed and proven before any scmux migration. When sc-runtime `v0.2.0` is released, its dependency refresh and complete sc-lint `0.8.4`-or-newer consumer installation are the next Shpherd work started, subject only to completing an already-running safe checkpoint.
 
 ### 4.2 Generated application workspace
 
@@ -57,11 +57,11 @@ All Rust application packages use a `shpherd-` prefix for crates.io coexistence.
 | `shpherd-store-sqlite` | SQLite-only migrations, sqlx queries, WAL/read-pool/write-connection behavior, and `EngineStore` implementation. |
 | `shpherd-store-postgres` | Postgres-only migrations, sqlx queries, and `EngineStore` implementation. |
 | `shpherd-store-adaptor` | Consumer-owned host-aggregate row movement. It depends on schema and calls `read_rows`/`write_rows`; it starts no timer. |
-| `shpherd-service` | Domain rules and service functions called by routes, CLI, and MCP; it depends on the adaptor, not directly on engine SQL. |
+| `shpherd-service` | Domain rules and transport-independent command handlers called inside the daemon; it depends on the adaptor, not directly on engine SQL. |
 | `shpherd-daemon` | Axum routes, optional MCP, static UI hosting, local adapters, and application-scheduled workers; produces `atm-shpherd`. |
 | `shpherd-cli` | Thin HTTP client; produces `shpherd`; never opens either store. |
 
-Routes, CLI, MCP, dashboard, and pollers call service functions and contain no SQL. The adaptor is the one exception to “service is the writer”: it writes rows through the paired `EngineStore` implementations as the consumer-owned sync mechanism. `dyn EngineStore`, a generic `StorageBackend`, and cross-engine SQL are prohibited.
+Daemon routes and workers call service functions and contain no SQL. The `shpherd` CLI, browser, and Tauri clients call the authenticated daemon API and never invoke `shpherd-service` in-process. The adaptor is the one exception to “service is the writer”: it writes rows through the paired `EngineStore` implementations as the consumer-owned sync mechanism. `dyn EngineStore`, a generic `StorageBackend`, and cross-engine SQL are prohibited.
 
 ### 4.3 Shared UI and Tauri clients
 
@@ -197,14 +197,13 @@ If roster registration succeeds but launch fails, the durable state is `register
 
 | Milestone | Deliverable | Dependency |
 | --- | --- | --- |
-| M0 | Generate `sqlite-postgres` workspace after Phase B b-8; wire all `shpherd-*` package boundaries | Phase B generation layout |
-| M1 | Define `shpherd-schema`; implement both engine stores, migrations, and host-aggregate adaptor | Phase B b-4/b-5/b-7 |
-| M2 | Register scheduled adaptor sync using Phase B `sc-cron`; prove adaptor has no timer | Phase B b-3 and its beads-cache b-8 prerequisite |
-| M3 | Port scmux definitions, writer service, read projection, and API behavior | M0-M2 |
-| M4 | Build `shpherd-ui`; package it through Tauri for desktop and iOS/Android while retaining browser parity | M3 |
-| M5 | Port hmux/Herdr and compatible tmux launch/observe/doctor vertical slice | M3 |
-| M6 | Add ATM catalog importer and cross-host launch binding/reconciliation | M1-M5 |
-| M7 | Add idempotent roster expansion and ATM/Herdr runtime evidence | M6 |
+| M0 | Generate and prove the released sc-runtime 0.1.1 `sqlite-postgres` workspace | B1 |
+| M1 | Integrate the generated workspace and machine-readable package boundaries | B2 |
+| M2 | Establish scmux SQLite parity and approve the Shpherd application contracts | B3, B3A |
+| M3 | Implement schema extensions, definition/observation services, ATM projection, and both launch adapters | B4-B8 |
+| M4 | Implement synchronization, lease/fencing, roster expansion, and authenticated daemon/CLI transport | B9A-B10A |
+| M5 | Port the shared browser/Tauri UI and command experience | B10-B11A |
+| M6 | Add scheduled operations, daemon supervision, and cross-platform release certification | B12-B13 |
 
 ## 13. Acceptance criteria
 
@@ -213,7 +212,7 @@ If roster registration succeeds but launch fails, the durable state is `register
 3. The adaptor moves only the application-defined host-aggregate rows, starts no timer, and has no dependency on hmux, Herdr, ATM, or sc-cron.
 4. The daemon registers an sc-cron job that calls adaptor sync; sc-cron has no dependency on shpherd application storage/types and no HTTP/MCP request contract is invented.
 5. A scmux fixture imports into the new schema and renders equivalent catalog/editor behavior through daemon routes.
-6. CLI, dashboard, MCP, and pollers contain no SQL and use service functions; only the adaptor moves paired-store rows.
+6. Daemon routes and pollers contain no SQL and use service functions; CLI/dashboard clients use the authenticated API; only the adaptor moves paired-store rows. MCP is disabled in Phase B unless separately approved.
 7. ATM catalog import is read-only; roster changes use `atm teams` commands and are visible after re-import.
 8. A second enrolled host receives the required aggregate rows, resolves its local repository binding, and can launch exactly one eligible team variant under the app's lease policy.
 9. Retried roster expansion creates neither a duplicate ATM member nor a duplicate hmux/Herdr pane.
@@ -229,4 +228,4 @@ If roster registration succeeds but launch fails, the durable state is `register
 3. Project-to-local-repository binding and host enrollment/authentication.
 4. ATM catalog projection/table-version contract and supported roster field mapping.
 5. Exact hmux capability/version negotiation and fallback behavior.
-6. Whether optional MCP is enabled for the application.
+6. MCP is disabled for Phase B; enabling it later requires a separate authenticated-surface ADR and plan.

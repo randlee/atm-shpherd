@@ -6,6 +6,8 @@ Written 2026-11-02 by randlee and Codex.
 
 Phase B turns the existing atm-shpherd product definition and client prototype into a working sc-runtime application. It begins with an untouched, tested sc-runtime 0.1.1 `sqlite-postgres` generation, then ports the current scmux schema, business behavior, and web UI into the Shpherd architecture.
 
+The execution-ready boundary map, wave table, and sprint documents are indexed by `phase-b-plan.md`. The locked anchor record remains `anchors.json`; hardening may reorganize sprint ownership but may not weaken or replace those anchors.
+
 Shpherd manages teams across computers through a local SQLite database synchronized with shared PostgreSQL state. Herdr is the default launcher; tmux remains an explicitly supported backend. The plan preserves scmux behavior first, then adds the minimum app-owned fields and adapters needed for Herdr, ATM roster management, multi-host operation, and later scheduling.
 
 ## What success looks like
