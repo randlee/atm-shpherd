@@ -6,7 +6,7 @@ closure_type: boundary
 target_boundary: local-schema-sqlite
 vertical_rationale: "Each local extension migration changes its SQLite reader and writer contract; schema, migration, reader, and writer therefore land atomically so every committed revision remains readable and writable."
 requirements: []
-adrs: [ADR-SHP-002, ADR-SHP-004]
+adrs: [ADR-SHP-002, ADR-SHP-004, ADR-SHP-015]
 owned_paths:
   - crates/shpherd-schema/src/extensions/**
   - crates/shpherd-store-sqlite/src/extensions/**
@@ -29,7 +29,7 @@ Close the local extension schema and SQLite implementation side of the B3A contr
 
 ## Required work and deliverables
 
-- Implement local launcher, binding, ATM identity, eligibility, sync/version, and ownership rows/migrations after parity.
+- Implement local launcher, logical-project checkout binding, ATM identity, eligibility, per-source cursor/tombstone evidence, and non-authoritative lease-evidence rows/migrations after parity.
 - Implement the SQLite side of the fixed projection-store contract.
 
 ## This sprint does not close
@@ -39,6 +39,6 @@ No PostgreSQL store, adaptor, cross-store sync, conflict policy, or lease state 
 ## Acceptance and validation
 
 - `boundary:local-schema-sqlite` passes the B3A suite; parity rows stay readable and extensions are versioned after parity.
-- Migration/rollback, store tests, lint/test, workspace build, and boundary validation pass.
+- Migration/rollback and store tests cover validated local checkout binding, cursor/tombstone persistence, lease evidence, and proof that SQLite exposes no lease-grant CAS; lint/test, workspace build, and boundary validation pass.
 
 Every deliverable is production-ready for the local schema/SQLite boundary.

@@ -27,7 +27,7 @@ Close explicit tmux compatibility behind the same guarded launcher contract whil
 
 ## Required work and deliverables
 
-- Port retained tmux/tmuxp construction, discovery, attach/focus, stop, guards, and session semantics behind the same closed launcher result/error contracts.
+- Port retained tmux/tmuxp dry-run/start/stop/observe/focus/relaunch/repair/dynamic-spawn/nudge, construction, discovery, guards, idempotency, evidence, and session semantics behind the same closed launcher result/error contracts; unsupported capabilities fail explicitly.
 - Require `LaunchLeaseGuard` for side effects. Owned paths: tmux daemon adapter and simulator fixtures/tests.
 
 ## Relationships
@@ -40,7 +40,7 @@ No Herdr fallback policy, remote ownership transfer, or UI launcher action; inte
 
 ## Acceptance and validation
 
-- `boundary:tmux-adapter`: guarded start/observe/focus/stop mappings pass the shared contract without duplicate sessions.
+- `boundary:tmux-adapter`: every shared lifecycle action is implemented or returns `CapabilityMissing`; guarded/idempotent mappings pass the shared stateful double without duplicate sessions.
 - Unsupported capabilities return actionable stable errors; adapter tests, lint/build, and boundary validation pass.
 
 Every deliverable is production-ready for the tmux adapter boundary.

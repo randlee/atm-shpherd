@@ -35,12 +35,12 @@ Close the real authenticated command composition and equivalent browser/desktop 
 
 ## Required work and deliverables
 
-- Port definition editor, discovery/import, start/stop/focus, launcher/host selection, confirmations/errors, and roster expansion through authenticated daemon commands.
+- Port create/edit/move/clone/unlink/import, discovery, the complete launcher lifecycle, host enrollment/project binding selection, confirmations/errors, and add/update/remove roster workflows through authenticated daemon commands.
 - Keep browser and desktop Tauri command capability equivalent with Herdr preselected and tmux explicit.
 
 ```ts
 export interface ShpherdCommandClient {
-  execute(command: CommandEnvelope): Promise<{ requestId: string; revision?: number }>;
+  execute(command: CommandEnvelope): Promise<ResponseEnvelope>;
 }
 ```
 
@@ -56,7 +56,7 @@ No mobile packaging/native capability proof; B11A owns it.
 
 ## Acceptance and validation
 
-- Real B5 definition commands, B9B guarded launches, and B9C roster mutations compose through the B10A boundary; browser and desktop E2E cover atomic edits, read-only discovery until import, typed confirmations/errors, Herdr default, tmux override, remote ownership, and idempotent expansion.
+- Real B5 hierarchy commands, B9B guarded lifecycle, and B9C add/update/remove mutations compose through B10A; browser/desktop E2E cover revisions/running constraints/clone policy, completed/accepted/replayed/conflict outcomes, read-only discovery until import, typed errors, Herdr default, tmux override, host enrollment/project checkout health, remote ownership, and idempotent reconciliation.
 - Responsive phone layouts pass shared-web tests.
 
 Every deliverable is production-ready for client command integration.

@@ -43,7 +43,7 @@ Only local adapter behavior is closed. Cross-host hydration, lease acquisition/f
 
 ## Acceptance and validation
 
-- `boundary:herdr-hmux-adapter`: every hmux capability and guarded start/stop/observe/focus mapping passes simulator/contract tests.
+- `boundary:herdr-hmux-adapter`: dry-run/start/stop/observe/focus/relaunch/repair/dynamic-spawn/nudge, shell/version negotiation, reuse, guard fencing, idempotency, evidence, and stable errors pass simulator/contract tests.
 - No unguarded spawn API or ATM mutation exists in this adapter; retry/restart cannot duplicate a pane; typed failures preserve definitions.
 
 Every deliverable is production-ready for the Herdr adapter boundary.

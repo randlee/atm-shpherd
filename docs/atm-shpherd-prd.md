@@ -58,7 +58,7 @@ All Rust application packages use a `shpherd-` prefix for crates.io coexistence.
 | `shpherd-store-postgres` | Postgres-only migrations, sqlx queries, and `EngineStore` implementation. |
 | `shpherd-store-adaptor` | Consumer-owned host-aggregate row movement. It depends on schema and calls `read_rows`/`write_rows`; it starts no timer. |
 | `shpherd-service` | Domain rules and transport-independent command handlers called inside the daemon; it depends on the adaptor, not directly on engine SQL. |
-| `shpherd-daemon` | Axum routes, optional MCP, static UI hosting, local adapters, and application-scheduled workers; produces `atm-shpherd`. |
+| `shpherd-daemon` | Axum routes, static UI hosting, local adapters, and application-scheduled workers; produces `atm-shpherd`. MCP is disabled in Phase B. |
 | `shpherd-cli` | Thin HTTP client; produces `shpherd`; never opens either store. |
 
 Daemon routes and workers call service functions and contain no SQL. The `shpherd` CLI, browser, and Tauri clients call the authenticated daemon API and never invoke `shpherd-service` in-process. The adaptor is the one exception to “service is the writer”: it writes rows through the paired `EngineStore` implementations as the consumer-owned sync mechanism. `dyn EngineStore`, a generic `StorageBackend`, and cross-engine SQL are prohibited.
@@ -119,7 +119,7 @@ Runtime pollers/adapters cannot mutate definitions. An error for one team cannot
 
 ## 7. Host-aggregate synchronization
 
-`shpherd-store-adaptor` implements the consumer-owned **host-aggregate** policy. It is neither framework replication nor a generic outbox/inbox feature.
+`shpherd-service` owns the consumer-specific **host-aggregate** policy; `shpherd-store-adaptor` is its statically dispatched row-I/O seam. Neither is framework replication nor a generic outbox/inbox feature.
 
 ```text
 ATM SQLite (source catalog on origin host)
@@ -133,9 +133,11 @@ ATM SQLite (source catalog on origin host)
 
 The application defines which rows aggregate and which remain host-local. Shared definitions, launch catalog snapshots, assignments, and requested state may move to PostgreSQL. Local process observations, machine-specific paths, terminal handles, logs, and credentials do not. Same-or-similar schemas use Phase B generation flags for columns that exist on only one side.
 
-The adaptor uses `EngineStore::read_rows` and `EngineStore::write_rows` with static dispatch. It does not create an outbox, inbox, timer, routing policy, lease protocol, or conflict-merging mechanism. Team conflict, launch ownership, and reconciliation policy are shpherd service/domain code. The initial catalog-owner policy rejects incompatible roster/launch revisions with a typed domain conflict rather than silently merging them.
+The adaptor uses `EngineStore::read_rows` and `EngineStore::write_rows` with static dispatch. It does not create an outbox, inbox, timer, routing policy, lease protocol, or conflict-merging mechanism. Synchronization uses source-qualified cursor vectors, contiguous revisions, explicit tombstones, and content-addressed batches; rows, tombstones, audit, and one source cursor commit atomically or not at all. Replay requires the same batch hash, while gaps and conflicts advance no cursor. Team conflict, launch ownership, and reconciliation policy are shpherd service/domain code. The initial catalog-owner policy rejects incompatible roster/launch revisions with a typed domain conflict rather than silently merging them.
 
 An eligible target host resolves a logical project/repository binding to its local checkout and validates local prompt/config references before a launch. PostgreSQL distributes definition and requested-state rows; it never receives secrets, raw ATM mailbox data, or a live terminal handle.
+
+PostgreSQL is also the sole multi-host launch-lease authority. Acquire, renew, release, expiry, and transfer use transactional compare-and-swap, PostgreSQL transaction time, daemon-holder identity, and a monotonically increasing fencing token. SQLite retains local observation evidence only and cannot issue a valid launch guard.
 
 ## 8. Scheduled synchronization with sc-cron
 
@@ -143,7 +145,7 @@ Cloud sync is scheduled by `atm-shpherd`, not by sc-runtime. At application comp
 
 `sc-cron` stays independent of application storage traits and application rows. It has its own SQLite configuration table in its own file. The application creates/updates its schedule record through sc-cron's public API; this is not a shpherd-store write and does not use any rusqlite `SqliteWriter` building block. Registering the callback does not create a dependency in the opposite direction: `sc-cron` never imports shpherd traits, rows, or business logic.
 
-The normal schedule expression has five minute-first fields: minute, hour, day-of-month, month, day-of-week. Six-field seconds-first input remains compatibility parsing only. The registered job is either an in-process Rust hook or the documented `python3 <module> cron.tick` / `python3 <module> cron.stop` hook. It receives one JSON object containing the schedule name and row payload only—never ATM team or phase fields—and returns fallible public results as `CronError`.
+The normal schedule expression has five minute-first fields: minute, hour, day-of-month, month, day-of-week. Six-field seconds-first input remains compatibility parsing only. The daemon injects an `Arc<dyn CronHandler + Send + Sync>` through the pinned public API. The handler receives schedule/run metadata, opaque JSON, and a cancellation token—never ATM team, phase, store traits, or Shpherd rows—and returns a fallible public `CronRunResult`/`CronError`. The registry exposes versioned create/get/list/update/delete operations; cancellation is terminal and never reported as success.
 
 B3C must pin the exact `sc-cron` repository revision or published package version and capture its public grammar/callback fixtures before B12 begins. The integration uses that public in-process API; it does not wait for or invent a future HTTP/MCP scheduler surface.
 
@@ -172,7 +174,7 @@ The required hmux capability set is:
 - create/reuse a Herdr workspace keyed by `ATM_TEAM`, mapping windows to tabs and panes to labelled Herdr panes;
 - dry-run validation, named-pane relaunch, and post-restart Herdr agent-name repair;
 - bash and pwsh launch support;
-- dynamic agent spawn into a selected/spare tab, ATM identity/team setup, ATM roster registration, and supported type/model launch; and
+- dynamic agent spawn into a selected/spare tab using Shpherd-supplied roster-registration evidence, ATM identity/team setup, and supported type/model launch; and
 - ATM nudge routing to the Herdr pane surface.
 
 tmux remains a compatibility adapter for the initial scmux port. It is not the permanent domain model. Herdr/Ovis are viewer and interaction surfaces; shpherd remains authoritative for team policy, data movement, launch validation, and reconciliation.

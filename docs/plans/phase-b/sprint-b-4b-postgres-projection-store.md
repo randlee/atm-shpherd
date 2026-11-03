@@ -5,7 +5,7 @@ status: planned
 closure_type: boundary
 target_boundary: postgres-projection-store
 requirements: []
-adrs: [ADR-SHP-002, ADR-SHP-004]
+adrs: [ADR-SHP-002, ADR-SHP-004, ADR-SHP-012, ADR-SHP-015]
 owned_paths:
   - crates/shpherd-store-postgres/src/projection/**
   - crates/shpherd-store-postgres/migrations/projection/**
@@ -27,7 +27,7 @@ Close the allowlisted PostgreSQL projection-store side of B3A without importing 
 
 ## Required work and deliverables
 
-- Implement only allowlisted shared rows/migrations and the PostgreSQL side of the static store contract.
+- Implement only allowlisted shared rows, per-source cursors, tombstones, enrolled-host facts, and the PostgreSQL `LeaseAuthorityStore` CAS/migrations.
 - Prove excluded local fields cannot be encoded or persisted.
 
 ## This sprint does not close
@@ -36,7 +36,7 @@ No SQLite extension, adaptor, cross-store orchestration, conflict policy, or hos
 
 ## Acceptance and validation
 
-- `boundary:postgres-projection-store` passes the B3A suite and exclusion tests.
-- Migration/rollback, store tests, lint/test, workspace build, and boundary validation pass.
+- `boundary:postgres-projection-store` passes the B3A projection, replay, cursor, tombstone, enrollment, exclusion, database-time lease CAS, holder/expiry/fencing/transfer suites.
+- Migration/rollback and concurrent CAS tests pass; local paths/credentials are structurally unrepresentable; lint/test, workspace build, and boundary validation pass.
 
 Every deliverable is production-ready for the PostgreSQL store boundary.

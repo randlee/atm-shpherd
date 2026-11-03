@@ -6,7 +6,7 @@ closure_type: boundary
 target_boundary: daemon-api
 vertical_rationale: "The generated shpherd CLI is the thin first-party consumer used to prove the daemon wire boundary; it adds no policy or in-process service path, so API and CLI mapping close atomically with one implementer and one consumer."
 requirements: []
-adrs: [ADR-SHP-003, ADR-SHP-004]
+adrs: [ADR-SHP-003, ADR-SHP-004, ADR-SHP-011, ADR-SHP-013]
 owned_paths:
   - crates/shpherd-daemon/src/api/**
   - crates/shpherd-daemon/src/auth/**
@@ -31,8 +31,8 @@ Close the authenticated daemon/CLI wire boundary against B3B doubles without dep
 
 ## Required work and deliverables
 
-- Implement versioned authenticated snapshots, named commands, and ordered event/reconnect transport against the B3B service doubles.
-- Define enrollment, endpoint/origin/TLS, authorization, version negotiation, cursor recovery, stable error mapping, and redacted telemetry.
+- Implement the frozen `CommandEnvelope`/`ResponseEnvelope`, complete query surface, named commands, and ordered event/reconnect transport against B3B stateful service/host doubles.
+- Implement enrollment authentication, endpoint/origin/TLS, authorization, version negotiation, completed/accepted/replayed/conflict result unions, operation completion events, cursor recovery/resync, stable error mapping, and redacted telemetry.
 - Wire the thin `shpherd` CLI to this API; no CLI store or in-process service access.
 
 ## Relationships
@@ -45,7 +45,7 @@ No real B5/B6 service composition, feature requirement, browser/Tauri parity, or
 
 ## Acceptance and validation
 
-- `boundary:daemon-api` contract tests against B3B doubles cover authenticated definition/observation command mapping, typed errors, CLI exit mapping, version mismatch, reconnect/resume, stale cursor, ordering, origin/TLS, and redaction.
+- `boundary:daemon-api` tests against B3B doubles cover every definition/roster/launch/query variant, request/correlation IDs, completed/accepted/replayed/conflict responses, exactly-one terminal outcome, typed errors, CLI exit mapping, version mismatch, reconnect/resume/resync, stale cursor, ordering, host enrollment/project checkout validation, origin/TLS, credential separation, and redaction.
 - Unauthorized requests fail closed; CLI/API share the frozen command semantics; daemon/CLI tests, lint/build, and boundary validation pass without linking B5 or B6 implementations.
 
 Every deliverable is production-ready for the daemon API boundary.

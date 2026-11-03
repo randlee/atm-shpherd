@@ -5,7 +5,7 @@ status: planned
 closure_type: boundary
 target_boundary: static-store-adaptor
 requirements: []
-adrs: [ADR-SHP-002, ADR-SHP-004]
+adrs: [ADR-SHP-002, ADR-SHP-004, ADR-SHP-015]
 owned_paths:
   - crates/shpherd-store-adaptor/src/**
   - crates/shpherd-store-adaptor/tests/**
@@ -26,7 +26,7 @@ Close static engine dispatch and row movement against B3A doubles while keeping 
 
 ## Required work and deliverables
 
-- Implement statically dispatched projection reads/writes against B3A test doubles.
+- Implement statically dispatched projection reads/writes, atomic batch receipts, and typed cursor/tombstone failures against B3A test doubles; lease-authority calls remain a distinct PostgreSQL-only seam.
 - Keep selection, timer, route, merge, conflict, lease, and reconciliation policy out.
 
 ## This sprint does not close

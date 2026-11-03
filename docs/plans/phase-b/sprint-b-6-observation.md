@@ -26,13 +26,13 @@ Close the read-side service boundary without granting pollers or discovery any d
 
 ## Required work and deliverables
 
-- Implement backend-neutral observation projections, lifecycle states, stale/degraded semantics, per-team error isolation, read-only discovery, explicit import request, focus resolution, and doctor diagnostics.
+- Implement the complete versioned B3B query surface for hierarchy, catalog, team, member, variant, discovery, host, backend, and diagnostics with pagination, provenance, stale/partial semantics, per-team error isolation, read-only discovery, explicit import request, focus resolution, and doctor diagnostics.
 
 The production read side implements the frozen B3B seam:
 
 ```rust
 pub trait ObservationService: sealed::Sealed {
-    fn snapshot(&self, query: ObservationQuery) -> Result<Vec<ObservationSnapshot>, DomainError>;
+    fn query(&self, query: Query, page: PageRequest) -> Result<(QueryResult, ReadMeta), DomainError>;
 }
 ```
 
@@ -48,7 +48,7 @@ No Herdr/tmux transport polling or UI. B7/B8 adapters and B10 UI close those pat
 
 ## Acceptance and validation
 
-- Boundary tests cover stopped/starting/running/idle/done/degraded/unknown, stale snapshots, isolated failures, read-only discovery, import delegation, focus, and doctor.
+- Boundary tests cover every query/result variant, stable pagination, provenance, stopped/starting/running/idle/done/degraded/unknown, stale and partial snapshots with explicit omissions, isolated failures, read-only discovery, import delegation, host/backend capability views, focus, and doctor.
 - Pollers have no definition-write capability. Service lint/test, workspace build, and boundary validation pass.
 
 Every deliverable is production-ready for the observation boundary.

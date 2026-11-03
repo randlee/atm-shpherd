@@ -28,7 +28,7 @@ Close the versioned ATM read/mutation adapter against frozen fixtures without un
 ## Required work and deliverables
 
 - Implement versioned read-only ATM SQLite catalog import and exact command adapters for `atm teams add-member|update-member|remove-member ... --json` plus `atm members --team ... --json` reconciliation.
-- Record help/version and sanitized JSON fixtures, source identity/revision, normalized mapping, and typed unsupported-version diagnostics.
+- Enforce the B3C projection version/source fingerprint, exact field mapping/exclusion list, explicit ATM-to-Shpherd binding conversion, caller authorization, expected revision, idempotency, redacted command evidence, and typed version/fingerprint/revision diagnostics.
 
 ## Relationships
 
@@ -40,7 +40,7 @@ No hmux spawn, sync, lease, or user-facing roster workflow.
 
 ## Acceptance and validation
 
-- Fixtures deterministically import; singular `atm team` never appears; undocumented ATM tables are never queried or written.
-- Adapter contract tests cover import plus mutation/reconciliation request/result mapping against the B3C double; composed mutation ownership closes in B9C.
+- Fixtures deterministically import the documented fields and prove credentials, paths, process handles, prompts, and unknown fields are excluded; singular `atm team` never appears; undocumented ATM tables are never queried or written.
+- Adapter contract tests cover source fingerprint/version rejection, caller auth, explicit foreign-ID binding, add/update/remove expected revisions, idempotent replay, redaction, command evidence, and reconciliation mapping against the B3C double; composed mutation ownership closes in B9C.
 
 Every deliverable is production-ready for the ATM adapter boundary.

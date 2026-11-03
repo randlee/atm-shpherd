@@ -1,6 +1,6 @@
 # atm-shpherd architecture and ADR index
 
-Status values are `proposed`, `approved`, and `superseded`. B3A, B3B, and B3C convert their assigned proposed contracts below to approved text with executable contract fixtures before dependent implementation begins.
+Every Phase B ADR is approved in its individually owned file under `docs/adr/`. This index is stable and B2-owned; contract sprints own only their disjoint ADR files and executable fixtures.
 
 ## Boundary map
 
@@ -23,48 +23,25 @@ Clients never access stores or services in-process. External ATM, hmux/Herdr, tm
 
 | ADR | Status | Decision | Finalized by |
 |---|---|---|---|
-| ADR-SHP-001 | approved | sc-runtime remains generic; all product policy lives in app-named packages | PRD §§1, 4 |
-| ADR-SHP-002 | proposed | SQLite is complete host state; PostgreSQL receives an explicit allowlisted projection; conflicts reject rather than silently merge | B3A |
-| ADR-SHP-003 | approved | CLI/browser/Tauri are thin authenticated daemon clients; only daemon code calls `shpherd-service` | PRD §4.2 |
-| ADR-SHP-004 | proposed | Machine-stable error envelope and strongly typed identity/value objects span store, command, and wire boundaries | B3A/B3B |
-| ADR-SHP-005 | proposed | Fixed launcher set uses a closed enum; side-effecting launch APIs require an unforgeable `LaunchLeaseGuard` | B3B |
-| ADR-SHP-006 | proposed | ATM import/version mapping and command-only roster mutation use exact plural commands | B3C |
-| ADR-SHP-007 | proposed | hmux capability/version, idempotency, resource identity, and dynamic-spawn result contract | B3C |
-| ADR-SHP-008 | approved | One responsive UI uses the same API in browser, desktop Tauri, and mobile Tauri shells | PRD §4.3 |
-| ADR-SHP-009 | proposed | sc-cron owns scheduling primitives only; Shpherd registers callbacks and owns all job policy | B3C |
-| ADR-SHP-010 | proposed | MCP is disabled for Phase B unless a separately approved authenticated surface is specified | B3C |
+| [ADR-SHP-001](adr/ADR-SHP-001.md) | approved | runtime/application boundary | B2 |
+| [ADR-SHP-002](adr/ADR-SHP-002.md) | approved | explicit host-aggregate projection | B3A |
+| [ADR-SHP-003](adr/ADR-SHP-003.md) | approved | thin authenticated clients | B2 |
+| [ADR-SHP-004](adr/ADR-SHP-004.md) | approved | canonical identities and revisions | B3B |
+| [ADR-SHP-005](adr/ADR-SHP-005.md) | approved | closed guarded launcher lifecycle | B3B |
+| [ADR-SHP-006](adr/ADR-SHP-006.md) | approved | versioned ATM projection/command mutation | B3C |
+| [ADR-SHP-007](adr/ADR-SHP-007.md) | approved | hmux capability-negotiated lifecycle | B3C |
+| [ADR-SHP-008](adr/ADR-SHP-008.md) | approved | shared responsive UI/native shells | B2 |
+| [ADR-SHP-009](adr/ADR-SHP-009.md) | approved | injectable sc-cron handler | B3C |
+| [ADR-SHP-010](adr/ADR-SHP-010.md) | approved | MCP disabled in Phase B | B3C |
+| [ADR-SHP-011](adr/ADR-SHP-011.md) | approved | versioned response/event envelope | B3B |
+| [ADR-SHP-012](adr/ADR-SHP-012.md) | approved | PostgreSQL lease authority | B3A |
+| [ADR-SHP-013](adr/ADR-SHP-013.md) | approved | enrolled hosts/local project bindings | B3B |
+| [ADR-SHP-014](adr/ADR-SHP-014.md) | approved | clone identity/reference policy | B3B |
+| [ADR-SHP-015](adr/ADR-SHP-015.md) | approved | source-qualified synchronization protocol | B3A |
 
 ## Required contract signatures
 
-B3A, B3B, and B3C may refine names within their assigned boundaries but may not weaken these properties:
-
-```rust
-pub struct TeamId(/* validated stable id */);
-pub struct HostId(/* enrolled host id */);
-pub struct FencingToken(/* monotonic opaque token */);
-pub struct IdempotencyKey(/* validated operation key */);
-
-pub struct LaunchLeaseGuard {
-    team: TeamId,
-    host: HostId,
-    fencing: FencingToken,
-    /* private fields: only lease validation can construct */
-}
-
-pub enum Launcher {
-    Herdr(HerdrLauncher),
-    Tmux(TmuxLauncher),
-}
-
-pub struct ErrorEnvelope {
-    pub code: ErrorCode,
-    pub message: String,
-    pub operation: String,
-    pub retryable: bool,
-    pub recovery: Vec<RecoveryAction>,
-    pub docs: Option<String>,
-}
-```
+B3A owns the complete store/cursor/tombstone/lease-row contracts in `sprint-b-3a-schema-projection-contract.md`; B3B owns canonical identities, hierarchy/roster/query/launcher/response/enrollment contracts in `sprint-b-3b-service-launch-api-contract.md`; B3C owns complete ATM/hmux/sc-cron contracts in `sprint-b-3c-external-integration-contract.md`. Their executable fixtures may not weaken the linked approved ADRs.
 
 No public unguarded spawn method exists. `ProjectionStore` is the one Phase B open trait because the app-owned SQLite and PostgreSQL crates implement it across crate boundaries; ADR-SHP-002 and boundary validation restrict its approved implementations. Service and launcher traits, including `GuardedLauncher`, remain private or sealed unless a later ADR explicitly opens them. CLI exit codes, HTTP status, WebSocket command errors, and adapter failures map deterministically from `ErrorCode`.
 

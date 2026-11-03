@@ -86,21 +86,37 @@ The exact command names, JSON envelopes, version range, dry-run semantics,
 resource identity, failure codes, and fallback to tmux are not yet evidenced.
 They are product decisions, not permission to invent a second launch protocol.
 
-## Gaps that require an explicit decision
+## Frozen Phase B projection and command contract
 
-1. Which ATM SQLite catalog projection/table version is supported and how its
-   source revision/fingerprint is derived.
-2. Which fields map between Shpherd member definitions and ATM `agent_type`,
-   `model`, `backend`, `target`, `session`, `alias`, and `host` without leaking
-   paths, mail, or credentials to PostgreSQL or telemetry.
-3. The Shpherd idempotency-key format, durable action state machine, lease
-   fencing rules, and crash recovery/retry policy.
-4. Whether hmux itself calls `atm teams add-member` or receives proof that
-   Shpherd already did. Exactly one component must own registration for an
-   expansion intent.
-5. The hmux capability discovery/version negotiation command and its structured
-   response, including how dry-run proves spawn feasibility without mutation.
-6. How Shpherd recognizes an already-created Herdr pane across a restart and
-   prevents a duplicate when ATM registration succeeded first.
-7. The authorization identity presented to ATM commands when Shpherd acts on
-   behalf of an operator, and audit/redaction requirements for command output.
+The executable B3C contract resolves the former reference gaps as follows:
+
+1. ATM projection v1 records CLI version, help/schema/fixture hashes, and the
+   opaque roster revision. A fingerprint mismatch is an unsupported source,
+   not permission to guess a mapping.
+2. Projection v1 captures ATM `id`, `name`, `role`, `agent_type`, `model`,
+   `host`, `backend`, `target`, `session`, `alias`, and `target_tab`.
+   `target`/`session`/`alias` remain sanitized host-local launch references;
+   credentials, mail/inbox data, prompt bodies, absolute checkout paths,
+   process handles, raw command output, and unknown fields are excluded from
+   PostgreSQL and telemetry. ATM foreign IDs/revisions enter Shpherd only
+   through an explicit fallible binding table; they are never parsed as
+   Shpherd ULIDs or domain revisions.
+3. Add/update/remove carry an operator caller, expected ATM revision, and
+   idempotency key. Evidence records the exact plural command argv, redacted
+   stdout hash, before/after revision, and replay status. Stale revisions and
+   unauthorized callers fail before invocation.
+4. Shpherd alone calls the plural ATM mutation commands. hmux receives proof of
+   roster registration plus a lease fencing token and never mutates ATM.
+5. hmux reports a semantic version, shells, and explicit support for dry-run,
+   start, stop, observe, focus, relaunch, repair, dynamic spawn, and nudge. Each
+   request/result/error is the versioned B3C schema; absent capability is a
+   typed failure.
+6. All mutating hmux requests include the durable operation key. Results expose
+   stable workspace/tab/pane identity and reuse evidence so restart recovery
+   reconciles instead of duplicating a pane.
+7. Caller authorization evidence is separate from command argv/output; secrets
+   are never included in evidence, logs, PostgreSQL rows, or sync batches.
+
+The B3C stateful doubles and `tests/fixtures/atm/**`/`tests/fixtures/hmux/**`
+are the executable authority. Any source change requires a new projection or
+protocol version and a reviewed contract update before adapter code changes.

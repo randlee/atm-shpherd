@@ -36,8 +36,11 @@ Close the idempotent operator workflow that registers, synchronizes, launches, o
 - Implement durable idempotent expansion state across ATM mutation, re-import, synchronization, lease guard, hmux spawn, observation, retry, update, and removal reconciliation.
 
 ```rust
-pub enum ExpansionState { IntentPersisted, RosterRegistered, RegisteredNotRunning, Launching, Running, Reconciled, Failed }
-pub struct ExpansionRequest { pub team: TeamId, pub agent: AgentId, pub key: IdempotencyKey }
+pub enum ExpansionState { IntentPersisted, RosterRegistered, RegisteredNotRunning, Launching,
+    Running, RemovalPending, ReconciliationRequired, Reconciled, Failed }
+pub enum ExpansionIntent { Add(MemberSpec), Update(MemberSpec), Remove { team: TeamId, member: MemberId } }
+pub struct ExpansionRequest { pub intent: ExpansionIntent, pub expected: DomainRevision,
+    pub caller: CallerIdentity, pub key: IdempotencyKey }
 pub struct ExpansionResult { pub state: ExpansionState, pub runtime: Option<RuntimeIdentity>, pub evidence: ActionEvidence }
 pub trait RosterExpansionService: sealed::Sealed {
     fn expand(&self, request: ExpansionRequest) -> Result<ExpansionResult, DomainError>;
@@ -56,7 +59,7 @@ No general UI editor or scheduled launch; B11/B12 own those surfaces.
 
 ## Acceptance and validation
 
-- Authorized `shpherd team add-agent` creates one member and one pane; every crash boundary converges without duplication and preserves existing sessions.
-- `registered_not_running`, update/remove, audit/redaction, and retry behavior pass end-to-end.
+- Authorized `shpherd team add-agent` with variant/host/tab placement creates one member and one pane; every crash boundary converges without duplication and preserves existing sessions.
+- Add/update/remove expected-revision conflicts, authorization, idempotent replay, `registered_not_running`, removal pending, reconciliation required, ATM evidence/redaction, sync, spawn/stop, and retry behavior pass end-to-end.
 
 Every deliverable is production-ready for the roster-expansion feature.

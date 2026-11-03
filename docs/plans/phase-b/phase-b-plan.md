@@ -38,7 +38,7 @@ B2 creates these manifests from the generated workspace. Until then this table i
 | ADRs | `docs/architecture.md` ADR index; B3A/B3B/B3C approve the remaining proposed decisions with executable fixtures |
 | Protocol/schema/interface contracts | `docs/integrations/atm-hmux-contract.md`, `docs/porting/scmux-behavior-oracle.md`, and B3A/B3B/B3C-owned `docs/contracts/**` |
 | Machine-readable boundaries | intentionally absent before generation; B2 alone creates and validates the `boundaries/**` registry rather than pretending manifests already exist |
-| Issues inventory | Dolt-backed Beads epic `shp-phase-b` and its 25 direct children; sprint frontmatter records the exact child ID |
+| Issues inventory | `docs/issues-inventory.md` plus Dolt-backed Beads epic `shp-phase-b` and its 25 direct children; sprint frontmatter records the exact child ID |
 | Testing/cross-platform guidance | `docs/testing-and-platforms.md`, plus sprint-local acceptance and evidence ownership |
 | Process/QA/triage | no shared ATM routing or QA workflow changes in Phase B; product-side ATM command behavior is owned by B3C/B6A/B9C and release defects receive separate fix beads |
 
@@ -92,7 +92,7 @@ Stable track IDs do not change between the registry and wave table. A shared con
 - Maximum usable width: 7 (wave 3).
 - Longest `must_follow` chain: 11 including bootstrap and evidence-only certification. Feature tracks close at their own integration sprint; B13 adds no product integration.
 - Structured relations in sprint frontmatter contain 44 named-artifact `must_follow` edges and 33 unique `parallel_safe` pairs. Validation rejects duplicate pairs, any must-follow/parallel-safe contradiction, and same-wave owned-path intersections.
-- The 0.2.0 interrupt runs immediately after B2 when released and before newly started feature work, per ANC-003.
+- The 0.2.0 interrupt runs immediately after B2 when released and before newly started feature work, per ANC-003. Release detection is recorded in `docs/evidence/runtime-upgrade/release-trigger.json`; B13 and epic closure are rejected when the release existed before certification but passing interrupt evidence is absent.
 
 ## Track contracts
 
@@ -110,4 +110,4 @@ Every sprint has one structured `requirements`, `adrs`, `owned_paths`, and `rela
 
 ## Process artifacts
 
-The boundary manifests are consumed by compilation/boundary validation and remain permanent. Contract fixtures are consumed by independent layer implementations and retained as regression tests. The parity fingerprint is consumed by B3A/B9A to prevent premature target-specific drift. B13 only assembles immutable evidence; defects receive separate fix ownership.
+The boundary manifests are consumed by compilation/boundary validation and remain permanent. Contract fixtures are consumed by independent layer implementations and retained as regression tests. The parity fingerprint is consumed by B3A/B9A to prevent premature target-specific drift. B13 only assembles immutable evidence; defects receive separate fix ownership. The release validator audits tag-detection history and refuses B13/epic closure if an applicable 0.2.0 trigger was ignored.

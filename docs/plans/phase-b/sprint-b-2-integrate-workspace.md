@@ -19,6 +19,12 @@ owned_paths:
   - .sc-lint/**
   - crates/*/README.md
   - docs/testing-and-platforms.md
+  - docs/issues-inventory.md
+  - docs/architecture.md
+  - docs/adr/README.md
+  - docs/adr/ADR-SHP-001.md
+  - docs/adr/ADR-SHP-003.md
+  - docs/adr/ADR-SHP-008.md
 relations:
   must_follow:
     - sprint: b-1-generate-baseline
@@ -41,6 +47,7 @@ Establish one buildable generated Shpherd workspace without losing the recovered
 - Remove generated widget/general-database production commands; retain only named Shpherd surfaces.
 - Preserve desktop icon/window/tray/deep-link/notification scaffolding and pin `@synaptic-canvas/sc-observability` with a nonthrowing browser/no-op adapter.
 - Seed each app crate README with its responsibility, allowed dependencies, prohibited policy, and boundary-manifest link; retain the shared Phase B platform/test matrix.
+- Maintain the deterministic Phase B child/sprint inventory classification and bijection check in `docs/issues-inventory.md`.
 
 ## Relationships
 
@@ -57,5 +64,6 @@ Crate skeletons contain no migrated domain behavior. B3/B3A and later boundary s
 - No production raw-row command, local sc-runtime patch, scmux config path, or committed secret remains.
 - Desktop identity and observability package/no-op browser adapter have smoke tests; telemetry failure cannot fail an action.
 - Every generated app crate has ownership/dependency documentation, and the platform matrix names a concrete owner and evidence gate for every supported surface.
+- The issue-inventory check proves exactly 25 unique current implementation children and separately classifies historical titles and plan-anchor governance records.
 
 Every deliverable is production-ready for contract closure: skeletons compile, manifests validate, and retained product assets remain usable.
