@@ -63,7 +63,7 @@ Stable track IDs do not change between the registry and wave table. A shared con
 | Wave | Track | Sprint | Target boundary | Authoritative owned paths | Consumes |
 |---|---|---|---|---|---|
 | 0 | T-BOOT | B1 | runtime workspace | `config/generator/*`, `docs/evidence/b-1/**` | none |
-| 1 | T-BOOT | B2 | generated workspace | root manifests, crate skeleton registries/READMEs, boundary index/schema, client shell, platform test matrix | B1 generated digest |
+| 1 | T-BOOT | B2 | generated workspace | root manifests, crate skeleton registries/READMEs, boundary index/schema, client shell, platform test matrix, `tools/runtime-release-gate/**`, exact workflow/history/test paths | B1 generated digest |
 | 2 | T-STORAGE | B3 | parity schema/SQLite | schema parity modules, parity migrations/tests/evidence | B2 schema/store skeletons |
 | 2 | T-SERVICE | B3B | service/launch/API contract | service/API contract docs, core types, service/daemon/CLI manifests | B2 registry |
 | 2 | T-ATM | B3C | external integrations | ATM/hmux/cron contract docs, external types/manifest | B2 daemon adapter boundary |
@@ -86,19 +86,19 @@ Stable track IDs do not change between the registry and wave table. A shared con
 | 8 | T-OPS | B12A | supervision | supervision source/tests, platform packaging, operations docs | B10A/B9B/B12 |
 | 9 | T-API-CLIENT | B11A | Tauri mobile | generated mobile projects, mobile adapters/tests/docs | B11 |
 | 10 | T-RELEASE | B13 | release evidence | `docs/evidence/phase-b/**`, release note | B9C/B11A/B12A evidence |
-| interrupt | T-BOOT | 0.2.0 upgrade | runtime workspace | runtime-managed manifests/lint/CI/evidence | B2 + released tag |
+| interrupt | T-BOOT | 0.2.0 upgrade | runtime workspace | runtime-managed manifests/lint, exact upgrade workflow/evidence paths | B2 gate trigger + released tag |
 
 - Sprint count: 25 including three independent contract sprints, three storage boundary siblings, and the 0.2.0 interrupt.
 - Maximum usable width: 7 (wave 3).
 - Longest `must_follow` chain: 11 including bootstrap and evidence-only certification. Feature tracks close at their own integration sprint; B13 adds no product integration.
 - Structured relations in sprint frontmatter contain 44 named-artifact `must_follow` edges and 33 unique `parallel_safe` pairs. Validation rejects duplicate pairs, any must-follow/parallel-safe contradiction, and same-wave owned-path intersections.
-- The 0.2.0 interrupt runs immediately after B2 when released and before newly started feature work, per ANC-003. Release detection is recorded in `docs/evidence/runtime-upgrade/release-trigger.json`; B13 and epic closure are rejected when the release existed before certification but passing interrupt evidence is absent.
+- B2 installs the always-executed release detector, hash-chained history, serialized dispatch hook, and B13/epic close validator before any feature dispatch. The 0.2.0 interrupt runs when that gate fires and owns only the upgrade. Tampered/ambiguous history, concurrent dispatch, or detector failure fails closed; B13 and epic closure require B2 validator success.
 
 ## Track contracts
 
-- B3A depends on parity and freezes storage/projection contracts for B4A/B4B/B4C.
-- B3B starts after B2 and freezes service, launcher, guard, error, daemon command/event, and test-double contracts.
-- B3C starts after B2 and freezes ATM, hmux, sc-cron, redaction, and MCP-disabled external contracts.
+- B3A depends on parity and freezes the complete launchable shared definition, typed-key/canonical batch, tombstone, and tagged lease-operation contracts for B4A/B4B/B4C.
+- B3B starts after B2 and freezes the closed hierarchy/atomic Team bundle, service/query, split launcher, registration evidence, guard, tagged response/stream, error, and test-double contracts while consuming B2's private principal seam.
+- B3C starts after B2 and freezes verified-principal ATM, split hmux/registration-evidence, sc-cron, redaction, and MCP-disabled external contracts.
 
 ## Performance and platform budgets
 

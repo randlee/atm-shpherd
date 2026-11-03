@@ -42,7 +42,7 @@ Close the real read composition and shared browser/desktop dashboard with measur
 ```ts
 export interface ShpherdReadClient {
   query(request: Query & { page?: PageRequest }): Promise<{ result: QueryResult; meta: ReadMeta }>;
-  events(cursor?: number): AsyncIterable<EventEnvelope>;
+  events(resume?: ResumeToken): AsyncIterable<EventEnvelope>;
 }
 ```
 
@@ -58,7 +58,7 @@ No mutations/editor/native mobile capabilities; B11/B11A own them.
 
 ## Acceptance and validation
 
-- Real B5/B6 services compose through B10A without alternate in-process client access; every hierarchy/catalog/team/member/variant/discovery/host/backend/diagnostic read, pagination, provenance, stale/partial state, authenticated error, version, and reconnect/resync flow passes in the daemon/client integration harness.
+- Real B5/B6 services compose through B10A without alternate in-process client access; typed hierarchy/Team bundles, every catalog/team/member/variant/discovery/host/backend/diagnostic read, pagination, provenance, stale/partial state, authenticated error, version, daemon/stream resume, restart mismatch, and reconnect/resync flow passes in the daemon/client integration harness.
 - scmux oracle read workflows pass in browser and desktop. A deterministic 100-team/1,500-member fixture meets: initial interactive ≤2.0 s, search/filter p95 <100 ms, event reflection p95 <250 ms/1,000 events on recorded macOS arm64 reference hardware or equivalent.
 - Browser import graph contains no required Tauri API; telemetry faults do not alter actions.
 

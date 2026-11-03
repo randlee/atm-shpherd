@@ -33,17 +33,18 @@ Close the idempotent operator workflow that registers, synchronizes, launches, o
 
 ## Required work and deliverables
 
-- Implement durable idempotent expansion state across ATM mutation, re-import, synchronization, lease guard, hmux spawn, observation, retry, update, and removal reconciliation.
+- Implement durable idempotent expansion state across verified dispatch authorization, ATM mutation, typed roster-registration evidence, re-import, synchronization, lease guard, hmux spawn, observation, retry, update, member-scoped stop/reconcile, and removal reconciliation. Caller claims never enter wire/domain payloads.
 
 ```rust
 pub enum ExpansionState { IntentPersisted, RosterRegistered, RegisteredNotRunning, Launching,
     Running, RemovalPending, ReconciliationRequired, Reconciled, Failed }
 pub enum ExpansionIntent { Add(MemberSpec), Update(MemberSpec), Remove { team: TeamId, member: MemberId } }
 pub struct ExpansionRequest { pub intent: ExpansionIntent, pub expected: DomainRevision,
-    pub caller: CallerIdentity, pub key: IdempotencyKey }
-pub struct ExpansionResult { pub state: ExpansionState, pub runtime: Option<RuntimeIdentity>, pub evidence: ActionEvidence }
+    pub key: IdempotencyKey }
+pub struct ExpansionResult { pub state: ExpansionState, pub runtime: Option<RuntimeIdentity>,
+    pub registration: Option<RosterRegistrationEvidence>, pub evidence: ActionEvidence }
 pub trait RosterExpansionService: sealed::Sealed {
-    fn expand(&self, request: ExpansionRequest) -> Result<ExpansionResult, DomainError>;
+    fn expand(&self, context: &DispatchContext<'_>, request: ExpansionRequest) -> Result<ExpansionResult, DomainError>;
 }
 ```
 
@@ -60,6 +61,6 @@ No general UI editor or scheduled launch; B11/B12 own those surfaces.
 ## Acceptance and validation
 
 - Authorized `shpherd team add-agent` with variant/host/tab placement creates one member and one pane; every crash boundary converges without duplication and preserves existing sessions.
-- Add/update/remove expected-revision conflicts, authorization, idempotent replay, `registered_not_running`, removal pending, reconciliation required, ATM evidence/redaction, sync, spawn/stop, and retry behavior pass end-to-end.
+- Add/update/remove expected-revision conflicts, verified-principal authorization and scope mismatch, idempotent replay, `registered_not_running`, crash-after-registration, stale/digest-mismatched evidence, repeated spawn, member-scoped removal/reconcile, unrelated-session preservation, ATM evidence/redaction, sync, and retry behavior pass end-to-end.
 
 Every deliverable is production-ready for the roster-expansion feature.

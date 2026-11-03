@@ -25,6 +25,11 @@ owned_paths:
   - docs/adr/ADR-SHP-001.md
   - docs/adr/ADR-SHP-003.md
   - docs/adr/ADR-SHP-008.md
+  - tools/runtime-release-gate/**
+  - tests/governance/runtime-release-gate/**
+  - .github/workflows/runtime-release-gate.yml
+  - docs/evidence/runtime-release-gate/history.jsonl
+  - crates/shpherd-daemon/src/auth_contract.rs
 relations:
   must_follow:
     - sprint: b-1-generate-baseline
@@ -48,6 +53,23 @@ Establish one buildable generated Shpherd workspace without losing the recovered
 - Preserve desktop icon/window/tray/deep-link/notification scaffolding and pin `@synaptic-canvas/sc-observability` with a nonthrowing browser/no-op adapter.
 - Seed each app crate README with its responsibility, allowed dependencies, prohibited policy, and boundary-manifest link; retain the shared Phase B platform/test matrix.
 - Maintain the deterministic Phase B child/sprint inventory classification and bijection check in `docs/issues-inventory.md`.
+- Install the always-executed sc-runtime release governance boundary before feature dispatch: authoritative detector, append-only hash-chained history, serialized dispatch hook, and B13/epic-close validator under the exact owned paths above.
+- Freeze the transport-derived principal seam used by later API/domain/ATM contracts; it is deliberately non-serializable and constructible only by the daemon verifier.
+
+`tools/runtime-release-gate/check` queries the authoritative sc-runtime release/tag source and records checked timestamp, tag/absence, immutable release/asset digest, repository commit, previous-entry hash, and decision. `tools/runtime-release-gate/dispatch <bead>` takes one repository lock, rechecks, atomically appends history, and refuses non-interrupt feature dispatch after 0.2.0 appears. `tools/runtime-release-gate/validate-close` rechecks and refuses B13 or epic closure unless history is intact and either the release is absent at cutoff or the interrupt evidence binds the observed release digest. Detection/network/parse/history/lock failures fail closed.
+
+```rust
+// No Serialize/Deserialize; fields and constructor remain crate-private.
+pub struct AuthenticatedPrincipal { subject: String, roles: Vec<String>,
+    resource_scopes: Vec<String>, verified_transport: String,
+    expires_at_unix_ms: u64, _private: () }
+pub(crate) fn principal_from_verified_transport(subject: String, roles: Vec<String>,
+    resource_scopes: Vec<String>, verified_transport: String,
+    expires_at_unix_ms: u64) -> AuthenticatedPrincipal;
+impl AuthenticatedPrincipal {
+    pub fn permits(&self, action: &str, canonical_resource: &str, now_unix_ms: u64) -> bool;
+}
+```
 
 ## Relationships
 
@@ -55,7 +77,7 @@ Establish one buildable generated Shpherd workspace without losing the recovered
 
 ## This sprint does not close
 
-Crate skeletons contain no migrated domain behavior. B3/B3A and later boundary sprints own implementations.
+Crate skeletons contain no migrated domain behavior. B3/B3A and later boundary sprints own implementations. B2 closes governance enforcement and the transport-derived principal seam only; the interrupt owns the actual runtime upgrade.
 
 ## Acceptance and validation
 
@@ -65,5 +87,7 @@ Crate skeletons contain no migrated domain behavior. B3/B3A and later boundary s
 - Desktop identity and observability package/no-op browser adapter have smoke tests; telemetry failure cannot fail an action.
 - Every generated app crate has ownership/dependency documentation, and the platform matrix names a concrete owner and evidence gate for every supported surface.
 - The issue-inventory check proves exactly 25 unique current implementation children and separately classifies historical titles and plan-anchor governance records.
+- Release-gate fixtures cover absent release, newly published release between checks, matching upgrade evidence, tampered/truncated/reordered history, digest substitution, two concurrent dispatches, stale lock recovery, detector/network failure, and direct B13/epic close attempts; only one dispatch wins and every ambiguous case fails closed.
+- Auth-contract compile-fail/serde fixtures prove JSON cannot construct a principal, only verified transport can mint one, expiration is enforced, and action/resource scopes cannot be elevated by request data.
 
 Every deliverable is production-ready for contract closure: skeletons compile, manifests validate, and retained product assets remain usable.

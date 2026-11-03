@@ -29,7 +29,7 @@ Close the local extension schema and SQLite implementation side of the B3A contr
 
 ## Required work and deliverables
 
-- Implement local launcher, logical-project checkout binding, ATM identity, eligibility, per-source cursor/tombstone evidence, and non-authoritative lease-evidence rows/migrations after parity.
+- Implement resolved checkout/config paths, local prompt bodies, runtime handles/observations, logical-project checkout binding, per-source cursor/tombstone evidence, and non-authoritative lease-evidence rows/migrations after parity while persisting the complete B3A shared definition subset.
 - Implement the SQLite side of the fixed projection-store contract.
 
 ## This sprint does not close
@@ -39,6 +39,6 @@ No PostgreSQL store, adaptor, cross-store sync, conflict policy, or lease state 
 ## Acceptance and validation
 
 - `boundary:local-schema-sqlite` passes the B3A suite; parity rows stay readable and extensions are versioned after parity.
-- Migration/rollback and store tests cover validated local checkout binding, cursor/tombstone persistence, lease evidence, and proof that SQLite exposes no lease-grant CAS; lint/test, workspace build, and boundary validation pass.
+- Migration/rollback and store tests cover complete shared-definition round trips, validated local checkout/config binding, prompt-body/credential/runtime exclusion from projection, typed keys, canonical batches, cursor/tombstone persistence, lease evidence, and proof that SQLite exposes no lease-grant operation; lint/test, workspace build, and boundary validation pass.
 
 Every deliverable is production-ready for the local schema/SQLite boundary.

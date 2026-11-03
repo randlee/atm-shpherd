@@ -26,7 +26,7 @@ Close static engine dispatch and row movement against B3A doubles while keeping 
 
 ## Required work and deliverables
 
-- Implement statically dispatched projection reads/writes, atomic batch receipts, and typed cursor/tombstone failures against B3A test doubles; lease-authority calls remain a distinct PostgreSQL-only seam.
+- Implement statically dispatched projection reads/writes, exact canonical batch/digest receipts, and typed key/cursor/tombstone failures against B3A test doubles; tagged lease-authority operations remain a distinct PostgreSQL-only seam.
 - Keep selection, timer, route, merge, conflict, lease, and reconciliation policy out.
 
 ## This sprint does not close
@@ -35,7 +35,7 @@ No engine SQL, schema migration, scheduling, cross-store integration, or policy.
 
 ## Acceptance and validation
 
-- `boundary:static-store-adaptor` passes B3A batch/receipt tests against both doubles.
+- `boundary:static-store-adaptor` passes B3A cross-store canonical-byte/digest, typed-key, batch/receipt, replay, and invalid-canonicalization tests against both doubles.
 - Dependency checks prove no scheduler/launcher/route/policy import; lint/test, build, and boundary validation pass.
 
 Every deliverable is production-ready for the adaptor boundary.

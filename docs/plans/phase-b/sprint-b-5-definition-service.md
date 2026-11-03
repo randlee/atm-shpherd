@@ -26,14 +26,15 @@ Close the sole durable definition-writer boundary with atomic hierarchy behavior
 
 ## Required work and deliverables
 
-- Implement hierarchy and atomic create/edit/move/clone/unlink/import domain behavior, expected-revision checks, running constraints, and ADR-SHP-014 clone identity/reference policy in `shpherd-service` with typed command inputs/results.
+- Implement the closed Armada/Fleet/optional-Flotilla/Team hierarchy and atomic create/edit/move/clone/unlink/import behavior, aggregate revision checks, running constraints, and ADR-SHP-014 clone identity/reference policy in `shpherd-service` with typed command inputs/results.
+- Validate a Team draft/patch as one bundle: parent placement, logical project/config/prompt refs, launcher policy, immutable ATM binding, members/roles with exactly one Captain, and variants.
 - Implement the frozen B3B transport-independent commands/results and machine-error mapping; do not wire the thin CLI before B10A.
 
 The production implementation closes the frozen B3B seam without adding a second writer:
 
 ```rust
 pub trait DefinitionService: sealed::Sealed {
-    fn execute(&self, command: DefinitionCommand) -> Result<DefinitionResult, DomainError>;
+    fn execute(&self, context: &DispatchContext<'_>, command: DefinitionCommand) -> Result<DefinitionResult, DomainError>;
 }
 ```
 
@@ -49,7 +50,7 @@ No HTTP route, CLI transport, dashboard editor, PostgreSQL sync, or runtime laun
 
 ## Acceptance and validation
 
-- Golden tests cover every hierarchy command/result, exactly one Captain, concrete prompts, variants, canonical identity, stale revisions, running-edit/move/clone/unlink guards, atomic rollback, ADR-SHP-014 clone identity/reference policy, and reference-counted unlink.
+- Golden tests cover every valid/invalid parent combination, atomic Team bundle, exactly one Captain, logical config/prompt references, variants, canonical identity, target/parent/descendant aggregate conflicts, running-edit/move/clone/unlink guards, atomic rollback, aligned hierarchy views/projections, ADR-SHP-014 clone identity/reference policy, and reference-counted unlink.
 - Contract tests cover every B3B definition command/result and stable validation/conflict/not-found error mapping; clone fixtures record the per-object shared-reference or copy policy before clone code lands.
 - Definition writer is the sole durable mutation capability; poller test doubles cannot obtain it.
 - Service crate lint/test, workspace build, and boundary validation pass.

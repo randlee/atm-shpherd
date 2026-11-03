@@ -36,7 +36,7 @@ Close one-owner multi-host launch behavior so hydrated teams cannot be launched 
 
 ## Required work and deliverables
 
-- Implement enrolled-host/project eligibility, PostgreSQL-authoritative acquire/renew/release/expiry/recovery/transfer CAS using database time, monotonic fencing, guarded action evidence, and ownership transfer through the real service/store composition.
+- Implement enrolled-host/project eligibility plus the tagged PostgreSQL-authoritative acquire/renew/release/expiry/recovery/transfer protocol using database time, exact holder/daemon/fencing expectations, duration, operation/idempotency binding, monotonic fencing, guarded action evidence, and ownership transfer through the real service/store composition.
 
 ```rust
 pub enum LeaseState { Active, Released, Expired, Fenced }
@@ -49,14 +49,19 @@ pub struct LaunchLease {
     pub state: LeaseState,
     pub expires_at_unix_ms: u64,
 }
+pub struct LeaseGrant { pub guard: LaunchLeaseGuard, pub receipt: LeaseReceipt }
 pub trait LaunchLeaseService: sealed::Sealed {
-    fn acquire(&self, team: TeamId, variant: VariantId, host: HostId, holder: DaemonInstanceId, key: IdempotencyKey) -> Result<LaunchLeaseGuard, DomainError>;
-    fn renew(&self, guard: &LaunchLeaseGuard) -> Result<LaunchLease, DomainError>;
-    fn release(&self, guard: LaunchLeaseGuard) -> Result<LaunchLease, DomainError>;
+    fn acquire(&self, team: TeamId, variant: VariantId, host: HostId,
+        holder: DaemonInstanceId, duration_ms: u64, key: IdempotencyKey) -> Result<LeaseGrant, DomainError>;
+    fn renew(&self, guard: LaunchLeaseGuard, duration_ms: u64,
+        key: IdempotencyKey) -> Result<LeaseGrant, DomainError>;
+    fn release(&self, guard: LaunchLeaseGuard, key: IdempotencyKey) -> Result<LeaseReceipt, DomainError>;
+    fn transfer(&self, guard: LaunchLeaseGuard, new_host: HostId,
+        new_holder: DaemonInstanceId, duration_ms: u64, key: IdempotencyKey) -> Result<LeaseGrant, DomainError>;
 }
 ```
 
-Only successful authoritative CAS returns the unforgeable guard. Every renewal, transfer, and side effect compares team, host, holder, expiry, and monotonic fencing token; expiry uses PostgreSQL transaction time, never a caller clock. SQLite stores observation evidence only and cannot grant authority.
+Only a successful authoritative `LeaseReceipt` returns the unforgeable guard. Every renewal/release/transfer compares team, variant, host, daemon, expiry, and fencing; expiry uses PostgreSQL transaction time, never a caller clock. The receipt records replay/operation, authoritative now/expiry, prior/new fencing, holder, and state. Unknown-outcome retries reuse the same idempotency key and resolve to the committed receipt or one safe execution. SQLite stores observation evidence only and cannot grant authority.
 
 ## Relationships
 
@@ -68,7 +73,8 @@ No roster mutation workflow or UI action; B9C/B11 own those integrations.
 
 ## Acceptance and validation
 
-- Enrollment/project-binding eligibility, CAS contention, holder mismatch, expiry, stale-owner fencing, crashes, partitions, skewed caller clocks, retries, stale evidence, and transfer pass; no scenario yields two valid owners or duplicate runtime sessions and fencing never decreases.
+- Empty-target hydration eligibility, checkout/config validation, acquire/renew/release/transfer contention, absent/expired/released/fenced/holder-mismatch/stale-fencing/replay-mismatch/unavailable errors, unknown-outcome retry, crashes, partitions, skewed caller clocks, stale evidence, and transfer pass; no scenario yields two valid owners or duplicate runtime sessions and fencing never decreases.
+- Read-only dry-run/observe/focus remain available during lease-store outage; every mutation compile-fails without the private guard.
 - `req:ANC-008,ANC-009`: unset selection launches through Herdr and explicit tmux launches through tmux across the real guarded composition; aggregate failures remain isolated.
 - Public APIs cannot call side effects without `LaunchLeaseGuard`.
 

@@ -37,13 +37,14 @@ Freeze the service, guarded-launch, command, event, and error contracts consumed
 
 ## Required work and deliverables
 
-- Fix canonical validated identities/revisions, stable errors, sealed/open traits, the complete hierarchy/read/roster/launcher surfaces, host enrollment and project binding, private lease guards, command/response/event envelopes, and stateful test doubles.
+- Fix canonical validated identities/revisions, stable errors, the closed Armada/Fleet/Flotilla/Team and atomic Team-bundle model, sealed/open traits, complete read/roster/split-launcher surfaces, host enrollment/project binding, private lease guards, verified dispatch context, tagged command/response/event/resume envelopes, and stateful test doubles.
 - Approve deterministic CLI exit, HTTP status, event/reconnect behavior, clone policy, guarded-launch semantics, and host enrollment decisions in the ADRs owned by this sprint; consume B3A's independent lease-authority decision only at B9B composition.
 
 ## Contract signatures
 
 ```rust
 use serde::{Deserialize, Serialize};
+use crate::auth_contract::AuthenticatedPrincipal;
 
 // All persistent application IDs are canonical 26-character uppercase ULIDs.
 macro_rules! id_newtype { ($name:ident) => {
@@ -87,9 +88,9 @@ fn validate_uuid_v7(value: &str) -> Result<(), IdentityError> {
     if parsed.get_version_num() == 7 && parsed.hyphenated().to_string() == value { return Ok(()); }
     Err(IdentityError { value: value.into(), reason: "expected canonical lowercase UUIDv7".into() })
 }
-id_newtype!(OrganizationId); id_newtype!(FlotillaId); id_newtype!(TeamId);
+id_newtype!(ArmadaId); id_newtype!(FleetId); id_newtype!(FlotillaId); id_newtype!(TeamId);
 id_newtype!(MemberId); id_newtype!(VariantId); id_newtype!(HostId);
-id_newtype!(ProjectId); id_newtype!(DaemonInstanceId);
+id_newtype!(ProjectId); id_newtype!(DaemonInstanceId); id_newtype!(StreamId);
 // RequestId, CorrelationId, and OperationId are canonical lowercase UUIDv7 strings.
 request_newtype!(RequestId); request_newtype!(CorrelationId); request_newtype!(OperationId);
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)] #[serde(transparent)] pub struct ApiVersion(pub u16);
@@ -108,34 +109,79 @@ pub struct ErrorEnvelope { pub api_version: ApiVersion, pub request_id: RequestI
     pub correlation_id: CorrelationId, pub code: ErrorCode, pub message: String,
     pub retryable: bool, pub recovery: Vec<RecoveryAction>, pub docs: Option<String> }
 
-pub enum DefinitionId { Organization(OrganizationId), Flotilla(FlotillaId), Team(TeamId) }
-pub enum DefinitionParent { Root, Organization(OrganizationId), Flotilla(FlotillaId) }
-pub struct DefinitionDraft { pub name: String, pub kind: String, pub project: Option<ProjectId> }
-pub struct DefinitionPatch { pub name: Option<String>, pub project: Option<ProjectId> }
+pub struct DispatchContext<'a> { pub principal: &'a AuthenticatedPrincipal,
+    pub request_id: &'a RequestId, pub correlation_id: &'a CorrelationId }
+
+pub enum DefinitionId { Armada(ArmadaId), Fleet(FleetId), Flotilla(FlotillaId), Team(TeamId) }
+pub enum ContainerId { Armada(ArmadaId), Fleet(FleetId), Flotilla(FlotillaId) }
+pub enum ValidParent { ArmadaRoot, FleetInArmada(ArmadaId), FlotillaInFleet(FleetId),
+    TeamInFleet(FleetId), TeamInFlotilla(FlotillaId) }
+pub enum TeamParent { Fleet(FleetId), Flotilla(FlotillaId) }
+pub enum MemberRole { Captain, Named(String) }
+pub enum LauncherPolicy { HerdrDefault, TmuxExplicit }
+pub struct LogicalConfigRef(pub String);
+pub struct LogicalPromptRef(pub String);
+pub struct AtmBinding { pub team: String, pub source_fingerprint: String, pub bound_revision: String }
+pub struct MemberDraft { pub name: String, pub role: MemberRole, pub agent_type: String,
+    pub model: Option<String>, pub requested_host: Option<HostId>, pub target_tab: Option<String> }
+pub struct VariantDraft { pub name: String, pub requested_host: Option<HostId>,
+    pub config_override: Option<LogicalConfigRef> }
+pub struct TeamDraft { pub name: String, pub project: ProjectId,
+    pub config: LogicalConfigRef, pub prompt: LogicalPromptRef, pub launcher: LauncherPolicy,
+    pub atm: Option<AtmBinding>, pub members: Vec<MemberDraft>, pub variants: Vec<VariantDraft> }
+pub struct TeamBundle { pub team: TeamId, pub name: String, pub parent: TeamParent,
+    pub project: ProjectId, pub config: LogicalConfigRef, pub prompt: LogicalPromptRef,
+    pub launcher: LauncherPolicy, pub atm: Option<AtmBinding>, pub members: Vec<MemberSpec>,
+    pub variants: Vec<VariantSpec> }
+pub struct TeamPatch { pub name: String, pub project: ProjectId,
+    pub config: LogicalConfigRef, pub prompt: LogicalPromptRef, pub launcher: LauncherPolicy,
+    pub members: Vec<MemberSpec>, pub variants: Vec<VariantSpec> }
+pub struct VariantSpec { pub id: VariantId, pub team: TeamId, pub name: String,
+    pub requested_host: Option<HostId>, pub config_override: Option<LogicalConfigRef> }
+pub struct ContainerPatch { pub name: String }
+pub struct AggregateRevision { pub target: DomainRevision, pub parent: DomainRevision,
+    pub descendants_digest: String }
 id_newtype!(DiscoveryId);
-pub struct CallerIdentity { pub subject: String, pub roles: Vec<String>, pub authenticated_at_unix_ms: u64 }
 
 pub enum DefinitionCommand {
-    Create { parent: DefinitionParent, definition: DefinitionDraft, key: IdempotencyKey },
-    Edit { target: DefinitionId, expected: DomainRevision, constraint: RunningConstraint, patch: DefinitionPatch, key: IdempotencyKey },
-    Move { target: DefinitionId, new_parent: DefinitionParent, expected: DomainRevision, constraint: RunningConstraint, key: IdempotencyKey },
-    Clone { target: DefinitionId, destination: DefinitionParent, expected: DomainRevision, constraint: RunningConstraint, key: IdempotencyKey },
-    Unlink { target: DefinitionId, expected: DomainRevision, constraint: RunningConstraint, key: IdempotencyKey },
-    Import { source: DiscoveryId, destination: DefinitionParent, key: IdempotencyKey },
+    CreateArmada { name: String, key: IdempotencyKey },
+    CreateFleet { parent: ArmadaId, expected_parent: DomainRevision, name: String, key: IdempotencyKey },
+    CreateFlotilla { parent: FleetId, expected_parent: DomainRevision, name: String, key: IdempotencyKey },
+    CreateTeam { parent: TeamParent, expected_parent: DomainRevision, draft: TeamDraft, key: IdempotencyKey },
+    EditContainer { target: ContainerId, expected: AggregateRevision,
+        constraint: RunningConstraint, patch: ContainerPatch, key: IdempotencyKey },
+    EditTeam { team: TeamId, expected: AggregateRevision,
+        constraint: RunningConstraint, patch: TeamPatch, key: IdempotencyKey },
+    MoveFleet { fleet: FleetId, new_parent: ArmadaId, expected: AggregateRevision,
+        expected_destination: DomainRevision, constraint: RunningConstraint, key: IdempotencyKey },
+    MoveFlotilla { flotilla: FlotillaId, new_parent: FleetId, expected: AggregateRevision,
+        expected_destination: DomainRevision, constraint: RunningConstraint, key: IdempotencyKey },
+    MoveTeam { team: TeamId, new_parent: TeamParent, expected: AggregateRevision,
+        expected_destination: DomainRevision, constraint: RunningConstraint, key: IdempotencyKey },
+    CloneArmada { armada: ArmadaId, expected: AggregateRevision, key: IdempotencyKey },
+    CloneFleet { fleet: FleetId, destination: ArmadaId, expected: AggregateRevision,
+        expected_destination: DomainRevision, key: IdempotencyKey },
+    CloneFlotilla { flotilla: FlotillaId, destination: FleetId, expected: AggregateRevision,
+        expected_destination: DomainRevision, key: IdempotencyKey },
+    CloneTeam { team: TeamId, destination: TeamParent, expected: AggregateRevision,
+        expected_destination: DomainRevision, constraint: RunningConstraint, key: IdempotencyKey },
+    Unlink { target: DefinitionId, expected: AggregateRevision, constraint: RunningConstraint, key: IdempotencyKey },
+    ImportTeam { source: DiscoveryId, destination: TeamParent,
+        expected_destination: DomainRevision, key: IdempotencyKey },
 }
-pub enum DefinitionResult { Created { id: DefinitionId, revision: DomainRevision },
-    Edited { id: DefinitionId, revision: DomainRevision }, Moved { id: DefinitionId, revision: DomainRevision },
-    Cloned { source: DefinitionId, clone: DefinitionId, revision: DomainRevision },
-    Unlinked { id: DefinitionId, revision: DomainRevision }, Imported { team: TeamId, revision: DomainRevision } }
+pub enum DefinitionResult { Created { id: DefinitionId, revision: AggregateRevision },
+    Edited { id: DefinitionId, revision: AggregateRevision }, Moved { id: DefinitionId, revision: AggregateRevision },
+    Cloned { source: DefinitionId, clone: DefinitionId, revision: AggregateRevision },
+    Unlinked { id: DefinitionId, revision: AggregateRevision }, Imported { team: TeamId, revision: AggregateRevision } }
 pub enum RunningConstraint { MustBeStopped, PreserveRuntimeIdentity, RejectIfDescendantRunning }
 
 pub struct MemberSpec { pub id: MemberId, pub team: TeamId, pub variant: VariantId,
-    pub role: String, pub agent_type: String, pub model: Option<String>,
+    pub role: MemberRole, pub agent_type: String, pub model: Option<String>,
     pub requested_host: Option<HostId>, pub target_tab: Option<String> }
 pub enum RosterCommand {
-    Add { member: MemberSpec, expected: DomainRevision, caller: CallerIdentity, key: IdempotencyKey },
-    Update { member: MemberSpec, expected: DomainRevision, caller: CallerIdentity, key: IdempotencyKey },
-    Remove { team: TeamId, member: MemberId, expected: DomainRevision, caller: CallerIdentity, key: IdempotencyKey },
+    Add { member: MemberSpec, expected: DomainRevision, key: IdempotencyKey },
+    Update { member: MemberSpec, expected: DomainRevision, key: IdempotencyKey },
+    Remove { team: TeamId, member: MemberId, expected: DomainRevision, key: IdempotencyKey },
 }
 pub enum RosterResult { Added { member: MemberSpec, revision: DomainRevision },
     Updated { member: MemberSpec, revision: DomainRevision }, Removed { member: MemberId, revision: DomainRevision },
@@ -157,9 +203,10 @@ pub struct DiscoveryQuery { pub host: Option<HostId> }
 pub struct HostQuery { pub host: Option<HostId> }
 pub struct BackendQuery { pub backend: Option<RuntimeBackend> }
 pub struct DiagnosticsQuery { pub host: Option<HostId>, pub team: Option<TeamId> }
-pub struct HierarchyView { pub id: DefinitionId, pub parent: DefinitionParent, pub name: String }
+pub struct HierarchyView { pub id: DefinitionId, pub parent: ValidParent, pub name: String,
+    pub aggregate_revision: AggregateRevision }
 pub struct CatalogEntry { pub team: TeamId, pub name: String, pub members: u32 }
-pub struct TeamView { pub team: TeamId, pub revision: DomainRevision, pub state: ObservationState }
+pub struct TeamView { pub definition: TeamBundle, pub revision: DomainRevision, pub state: ObservationState }
 pub struct MemberView { pub member: MemberSpec, pub runtime: Option<RuntimeIdentity> }
 pub struct VariantView { pub variant: VariantId, pub team: TeamId, pub requested_host: Option<HostId> }
 pub struct DiscoveryView { pub discovery: DiscoveryId, pub host: HostId, pub importable: bool }
@@ -172,7 +219,8 @@ pub enum QueryResult { Hierarchy(Page<HierarchyView>), Catalog(Page<CatalogEntry
 
 pub enum RuntimeBackend { Herdr, Tmux }
 pub enum ObservationState { Stopped, Starting, Running, Idle, Done, Degraded, Unknown }
-pub enum LauncherCapability { DryRun, Start, Stop, Observe, Focus, Relaunch, Repair, DynamicSpawn, Nudge }
+pub enum LauncherCapability { DryRun, Start, Stop, Observe, Focus, Relaunch, Repair,
+    DynamicSpawn, Nudge, StopMember, ReconcileMember }
 pub struct RuntimeIdentity { pub backend: RuntimeBackend, pub host: HostId, pub workspace: String,
     pub tab: Option<String>, pub pane: String }
 pub struct ActionEvidence { pub operation: OperationId, pub request: RequestId,
@@ -181,19 +229,31 @@ pub struct LaunchLeaseGuard { team: TeamId, variant: VariantId, host: HostId, ho
     fencing: FencingToken, expires_at_unix_ms: u64, _private: () }
 pub(crate) struct ValidatedLeaseGrant { pub team: TeamId, pub variant: VariantId,
     pub host: HostId, pub holder: DaemonInstanceId, pub fencing: FencingToken, pub expires_at_unix_ms: u64 }
-pub enum LaunchAction { DryRun, Start, Stop, Observe, Focus, Relaunch, Repair,
-    SpawnAgent { member: MemberSpec }, Nudge { member: MemberId, message: String } }
-pub struct LaunchRequest { pub team: TeamId, pub variant: VariantId, pub host: HostId, pub action: LaunchAction,
-    pub key: IdempotencyKey }
+pub struct RosterRegistrationEvidence { pub operation: OperationId, pub key: IdempotencyKey,
+    pub atm_team: String, pub atm_member: String, pub roster_revision: String,
+    pub redacted_result_digest: String }
+pub enum LaunchReadAction { DryRun, Observe, Focus }
+pub enum LaunchMutation { Start, StopTeam, Relaunch, Repair,
+    SpawnAgent { member: MemberSpec, registration: RosterRegistrationEvidence },
+    Nudge { member: MemberId, message: String },
+    StopMember { member: MemberId, runtime: RuntimeIdentity },
+    ReconcileMember { member: MemberId, runtime: RuntimeIdentity } }
+pub struct LaunchReadRequest { pub team: TeamId, pub variant: VariantId, pub host: HostId,
+    pub action: LaunchReadAction }
+pub struct LaunchMutationRequest { pub team: TeamId, pub variant: VariantId, pub host: HostId,
+    pub mutation: LaunchMutation, pub key: IdempotencyKey }
 pub struct LaunchResult { pub reused: bool, pub runtime: Option<RuntimeIdentity>,
     pub state: ObservationState, pub evidence: ActionEvidence }
 pub struct HerdrLauncher { /* crate-owned adapter */ }
 pub struct TmuxLauncher { /* crate-owned adapter */ }
 pub enum Launcher { Herdr(HerdrLauncher), Tmux(TmuxLauncher) }
 mod sealed { pub trait Sealed {} }
-pub trait GuardedLauncher: sealed::Sealed {
+pub trait LauncherReader: sealed::Sealed {
     fn capabilities(&self) -> &[LauncherCapability];
-    fn execute(&self, guard: &LaunchLeaseGuard, request: LaunchRequest) -> Result<LaunchResult, DomainError>;
+    fn read(&self, request: LaunchReadRequest) -> Result<LaunchResult, DomainError>;
+}
+pub trait GuardedLauncher: sealed::Sealed {
+    fn mutate(&self, guard: &LaunchLeaseGuard, request: LaunchMutationRequest) -> Result<LaunchResult, DomainError>;
 }
 
 pub struct HostEnrollment { pub host: HostId, pub daemon: DaemonInstanceId,
@@ -211,39 +271,51 @@ pub trait HostProjectResolver: sealed::Sealed {
     fn validate_checkout(&self, binding: &ProjectBinding) -> Result<HostHealth, DomainError>;
 }
 
-pub enum LaunchCommand { Execute(LaunchRequest) }
+pub enum LaunchCommand { Read(LaunchReadRequest), Mutate(LaunchMutationRequest) }
 pub enum DaemonCommand { Definition(DefinitionCommand), Query(Query), Launch(LaunchCommand), Roster(RosterCommand) }
 pub enum CommandResult { Definition(DefinitionResult), Query { result: QueryResult, meta: ReadMeta },
-    Launch(LaunchResult), Roster(RosterResult), Accepted { operation: OperationId } }
-pub enum ResponseStatus { Completed, Accepted, Replayed, Conflict }
+    Launch(LaunchResult), Roster(RosterResult) }
+pub enum TerminalOutcome { Completed { result: CommandResult },
+    Conflict { error: ErrorEnvelope }, Rejected { error: ErrorEnvelope } }
+pub enum OriginalOutcome { Accepted { operation: OperationId }, Terminal(TerminalOutcome) }
+#[serde(tag = "status", rename_all = "snake_case")]
+pub enum ResponseOutcome { Completed { result: CommandResult }, Accepted { operation: OperationId },
+    Replayed { original_request: RequestId, original: Box<OriginalOutcome> },
+    Conflict { error: ErrorEnvelope }, Rejected { error: ErrorEnvelope } }
 pub struct CommandEnvelope { pub api_version: ApiVersion, pub request_id: RequestId,
-    pub correlation_id: CorrelationId, pub caller: CallerIdentity, pub command: DaemonCommand }
+    pub correlation_id: CorrelationId, pub command: DaemonCommand }
 pub struct ResponseEnvelope { pub api_version: ApiVersion, pub request_id: RequestId,
-    pub correlation_id: CorrelationId, pub status: ResponseStatus,
-    pub result: Option<CommandResult>, pub error: Option<ErrorEnvelope> }
+    pub correlation_id: CorrelationId, pub outcome: ResponseOutcome }
 pub enum DaemonEvent { DefinitionChanged { id: DefinitionId, revision: DomainRevision },
     RuntimeChanged { team: TeamId, runtime: Option<RuntimeIdentity> },
-    OperationCompleted { operation: OperationId, result: CommandResult },
-    CommandRejected { request_id: RequestId, error: ErrorEnvelope },
-    ResyncRequired { oldest_available: EventCursor } }
-pub struct EventEnvelope { pub api_version: ApiVersion, pub cursor: EventCursor,
-    pub correlation_id: CorrelationId, pub event: DaemonEvent }
+    OperationCompleted { operation: OperationId, outcome: TerminalOutcome },
+    ResyncRequired { expected_daemon: DaemonInstanceId, expected_stream: StreamId,
+        oldest_available: EventCursor } }
+pub struct ResumeToken { pub daemon: DaemonInstanceId, pub stream: StreamId, pub after: EventCursor }
+pub struct EventEnvelope { pub api_version: ApiVersion, pub daemon: DaemonInstanceId,
+    pub stream: StreamId, pub cursor: EventCursor, pub correlation_id: CorrelationId,
+    pub event: DaemonEvent }
 
 pub trait DefinitionService: sealed::Sealed {
-    fn execute(&self, command: DefinitionCommand) -> Result<DefinitionResult, DomainError>;
+    fn execute(&self, context: &DispatchContext<'_>, command: DefinitionCommand) -> Result<DefinitionResult, DomainError>;
 }
 pub trait ObservationService: sealed::Sealed {
-    fn query(&self, query: Query, page: PageRequest) -> Result<(QueryResult, ReadMeta), DomainError>;
+    fn query(&self, context: &DispatchContext<'_>, query: Query, page: PageRequest) -> Result<(QueryResult, ReadMeta), DomainError>;
+}
+pub trait RosterService: sealed::Sealed {
+    fn execute(&self, context: &DispatchContext<'_>, command: RosterCommand) -> Result<RosterResult, DomainError>;
 }
 ```
 
 The macros above expand to private fields plus `TryFrom<&str>`, `FromStr`, `Display`, and custom serde. Persistent IDs accept only canonical uppercase ULID text; request IDs accept only canonical lowercase UUIDv7 text; revisions are nonzero unsigned decimal integers. ATM IDs and revisions remain foreign strings and cross the application boundary only through explicit, fallible binding/conversion functions. There is no `From<String>` or lossy conversion.
 
-All definition mutations apply ADR-SHP-014: Armada-view clones share referenced flotillas, organization clones preserve contained team IDs, and explicit team clones mint new team/member IDs and drop ATM bindings. Move, clone, unlink, and import enforce expected revisions and the declared `RunningConstraint` before one atomic commit.
+The closed hierarchy is Armada → Fleet → optional Flotilla → Team; `ValidParent` makes every other placement unrepresentable. Creating or replacing a Team validates its entire bundle in one transaction: logical project/config/prompt references, launcher policy, at least one variant, unique members, and exactly one `MemberRole::Captain`. Create/import may establish the immutable ATM binding; `TeamPatch` deliberately cannot alter it. Every create/edit/move/clone/unlink/import checks the target, source-parent, destination-parent, and descendants aggregate revisions it can invalidate; no partial member/variant commit or revision advance is allowed. ADR-SHP-014 makes Armada-view clones share references, Fleet/Flotilla clones preserve referenced Team IDs, and explicit Team clones mint new Team/member/variant IDs and drop ATM binding.
 
-Only the private lease-validation module exposes `pub(crate) fn issue_launch_guard(validated: ValidatedLeaseGrant) -> LaunchLeaseGuard`; B9B alone creates that crate-private grant after validating B3A's authoritative CAS receipt. External code cannot construct, clone, deserialize, or renew the guard. Every mutating launcher action requires the guard and an idempotency key; dry-run/observe still validate host/project eligibility. The stateful launcher double supports every capability, replay, injected failure, and evidence assertion. Phase B service and launcher traits are sealed; opening implementations requires a later ADR.
+Only the private lease-validation module exposes `pub(crate) fn issue_launch_guard(validated: ValidatedLeaseGrant) -> LaunchLeaseGuard`; B9B alone creates that crate-private grant after validating B3A's authoritative receipt. External code cannot construct, clone, deserialize, or renew the guard. `LauncherReader` exposes only dry-run/observe/focus and remains usable when lease authority is unavailable; `GuardedLauncher` exposes only start/stop/relaunch/repair/spawn/nudge/member-stop/member-reconcile and requires both the guard and idempotency key. Compile-fail fixtures prove no mutation can be expressed through the read trait or without a guard. The stateful launcher double supports every capability, replay, injected failure, and evidence assertion.
 
-Every wire enum uses explicit serde tags, `deny_unknown_fields`, and stable snake-case names. Unsupported versions fail before dispatch. A completed synchronous command returns `Completed`; durable queued work returns `Accepted` plus one eventual `OperationCompleted`; a repeated request returns the byte-equivalent prior result as `Replayed`; stale expected revisions return `Conflict` and the current revision. Event cursors increase per daemon instance, reconnect resumes strictly after a cursor, and an expired cursor yields `ResyncRequired` followed by a snapshot. Exactly one terminal response/event exists per request. `DomainError` maps deterministically to the envelope, CLI exit, and HTTP status.
+Authentication claims never cross the wire in `CommandEnvelope`, `RosterCommand`, or ATM payloads. B10A verifies transport credentials and creates the non-serializable, private-constructor `AuthenticatedPrincipal`; the daemon injects a borrowed `DispatchContext` after checking request identity and scope. Domain/ATM authorization consume only that verified context. Fixtures reject forged JSON claims, expired principals, team-scope mismatch, confused-deputy ATM calls, and principal/request substitution.
+
+Every wire enum uses explicit serde tags, `deny_unknown_fields`, and stable snake-case names. `ResponseOutcome` makes invalid result/error/status combinations unrepresentable. A synchronous request returns exactly one completed/conflict/rejected terminal outcome; durable queued work returns one accepted outcome and exactly one eventual terminal `OperationCompleted`. Replay names the original request and embeds either the same accepted operation or its original terminal outcome; it never reports work as newly executed. Events and resume tokens carry both `DaemonInstanceId` and `StreamId`; a daemon restart, stream mismatch, expired cursor, or cursor from another stream yields `ResyncRequired` and a fresh snapshot rather than cross-stream continuation. Unsupported versions fail before dispatch. `DomainError` maps deterministically to the envelope, CLI exit, and HTTP status.
 
 ## This sprint does not close
 
@@ -251,8 +323,8 @@ No service behavior, launcher adapter, API route, client, host persistence, or l
 
 ## Acceptance and validation
 
-- Named boundary manifests and ADR-SHP-004/005/011/013/014 fix every identity, hierarchy, roster, query, host, launcher, guard, envelope, error, and double consumed by B5/B6/B7/B8/B9B/B9C/B10A.
+- Named boundary manifests and ADR-SHP-004/005/011/013/014 fix every identity, full hierarchy/team bundle, roster, query, host, split launcher, registration evidence, guard, authenticated dispatch context, tagged envelope, stream/resume token, error, and double consumed by B5/B6/B7/B8/B9B/B9C/B10A.
 - Each owned ADR is approved and contains decision, alternatives, consequences, and executable evidence; the architecture index links it to this sole owner.
-- Compile-fail tests prove sealed traits and unconstructible guards; serialization/version/replay/reconnect and stateful-double contract tests, workspace build, and boundary validation pass.
+- Compile-fail tests prove sealed traits, unconstructible guards/principals, and mutation unavailable on the read launcher; serialization/version/terminal-outcome/replay/restart-resync/auth-escalation and stateful-double contract tests, workspace build, and boundary validation pass.
 
 Every deliverable is production-ready for contract closure.

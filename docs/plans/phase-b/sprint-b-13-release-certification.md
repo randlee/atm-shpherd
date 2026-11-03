@@ -31,7 +31,7 @@ Close bounded release evidence for already-owned track integrations without beco
 ## Required work and deliverables
 
 - Collect the already-owned track-integration results for oracle, migration, sync, launcher, API, client, mobile, scheduler, supervision, security, upgrade, and platform gates.
-- Record exact performance hardware/tools and anchor development-gate reports. Run the authoritative release detection check at certification cutoff; if sc-runtime 0.2.0 existed at or before that cutoff, the interrupt must have passing digest-linked evidence.
+- Record exact performance hardware/tools and anchor development-gate reports. Invoke B2's `tools/runtime-release-gate/validate-close` at certification cutoff; B13 owns no detector or validator implementation.
 - Record gaps as separately owned fix beads/branches; this sprint never edits product code.
 
 ## Relationships
@@ -46,6 +46,6 @@ No new feature or deferred redesign; AI/context graph work remains out of scope.
 
 - `req:REQ-RELEASE-EVIDENCE`: every feature criterion has one prior integration owner and a passing artifact; this sprint only verifies completeness, hashes, platform identity, and approved exclusions.
 - Every Phase B anchor development report is present and passing; no open P0/P1 defect remains. Any defect creates a separate fix owner and blocks this evidence close.
-- Release history audit proves every dispatch check was recorded and either the release was absent at cutoff or the 0.2.0 interrupt passed; the certification/epic close command fails closed otherwise.
+- B2 release-history validation proves every dispatch check was recorded and either the release was absent at cutoff or the digest-bound 0.2.0 interrupt passed; direct/tampered/ambiguous certification or epic close fails closed.
 
 Every deliverable is production-ready for release-evidence closure.

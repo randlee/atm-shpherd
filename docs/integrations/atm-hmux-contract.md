@@ -56,15 +56,18 @@ Shpherd must own this workflow:
    request fingerprint, structured result, and observed roster revision.
 5. Re-import/reconcile `atm members --team <team> --json` before attempting a
    spawn. ATM acknowledgement alone is insufficient.
-6. Acquire/verify the current Shpherd launch lease, then call hmux dynamic
-   spawn using the same operation key and an explicit selected/spare tab.
+6. Convert the reconciled ATM command evidence into typed roster-registration
+   evidence, acquire/verify the current Shpherd launch lease, then call hmux
+   dynamic spawn using the same operation key and an explicit selected/spare
+   tab. Missing/stale/digest-mismatched evidence fails before spawn.
 7. Observe the Herdr pane/agent and ATM runtime roster. Complete only when
    both roster and runtime evidence identify the intended member.
 
 If registration succeeds but spawn fails, persist `registered_not_running`.
-Retry begins with reconciliation and must reuse the same intent/key; it must
-not call `add-member` blindly or create a second pane. This directly realizes
-PRD §11 and acceptance criterion 9.
+Retry begins with reconciliation and must reuse the same intent/key/evidence;
+it must not call `add-member` blindly or create a second pane. Remove/reconcile
+uses the recorded stable runtime identity and stops no unrelated pane. This
+directly realizes PRD §11 and acceptance criterion 9.
 
 ## hmux capability contract required before implementation
 
@@ -101,19 +104,25 @@ The executable B3C contract resolves the former reference gaps as follows:
    PostgreSQL and telemetry. ATM foreign IDs/revisions enter Shpherd only
    through an explicit fallible binding table; they are never parsed as
    Shpherd ULIDs or domain revisions.
-3. Add/update/remove carry an operator caller, expected ATM revision, and
-   idempotency key. Evidence records the exact plural command argv, redacted
-   stdout hash, before/after revision, and replay status. Stale revisions and
-   unauthorized callers fail before invocation.
+3. Add/update/remove carry operation, expected ATM revision, and idempotency
+   key but no caller claims. B10A supplies a private `AuthenticatedPrincipal`
+   from verified transport context. Evidence records operation/key/team/member,
+   exact plural argv, redacted stdout hash, before/after revision, and replay
+   status. Stale revisions, forged claims, scope mismatch, and unauthorized
+   principals fail before invocation.
 4. Shpherd alone calls the plural ATM mutation commands. hmux receives proof of
    roster registration plus a lease fencing token and never mutates ATM.
 5. hmux reports a semantic version, shells, and explicit support for dry-run,
-   start, stop, observe, focus, relaunch, repair, dynamic spawn, and nudge. Each
-   request/result/error is the versioned B3C schema; absent capability is a
-   typed failure.
+   start, stop, observe, focus, relaunch, repair, dynamic spawn, nudge,
+   member-stop, and member-reconcile. Dry-run/observe/focus are fencing-free
+   reads; every mutation carries fencing/idempotency. Spawn additionally carries
+   typed evidence binding operation/key, ATM team/member, roster revision, and
+   redacted result digest. Each request/result/error is the versioned B3C
+   schema; absent capability or stale evidence is a typed failure.
 6. All mutating hmux requests include the durable operation key. Results expose
-   stable workspace/tab/pane identity and reuse evidence so restart recovery
-   reconciles instead of duplicating a pane.
+   stable workspace/tab/pane/agent identity and reuse evidence so restart
+   recovery reconciles instead of duplicating a pane. Member-scoped stop and
+   reconcile require that identity and preserve unrelated sessions.
 7. Caller authorization evidence is separate from command argv/output; secrets
    are never included in evidence, logs, PostgreSQL rows, or sync batches.
 

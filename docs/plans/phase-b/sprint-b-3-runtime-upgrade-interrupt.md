@@ -10,8 +10,8 @@ owned_paths:
   - Cargo.toml
   - Cargo.lock
   - .sc-lint/**
-  - .github/workflows/**
-  - docs/evidence/runtime-upgrade/**
+  - .github/workflows/runtime-upgrade.yml
+  - docs/evidence/runtime-upgrade/upgrade/**
 relations:
   must_follow:
     - sprint: b-2-integrate-workspace
@@ -31,7 +31,7 @@ Adopt the released runtime upgrade and its managed lint assets at the first safe
 
 - When `v0.2.0` exists, diff fresh 0.1.1/0.2.0 generations from identical answers and apply managed dependency/template changes without overwriting app work.
 - Install the release-provided sc-lint consumer assets with minimum version 0.8.4.
-- At every sprint dispatch and before B13/epic closure, write `docs/evidence/runtime-upgrade/release-trigger.json` with checked timestamp, authoritative release source, observed tag/asset digest or explicit absence, current commit, and decision. Append immutable upgrade/history evidence when the trigger fires.
+- Consume the B2 release-gate trigger and bind upgrade evidence to its observed release/asset digest. This interrupt performs no detector, dispatch-hook, history, or close-validator work.
 
 ## Relationships
 
@@ -43,8 +43,8 @@ No Shpherd feature or schema behavior is changed except compatibility required b
 
 ## Acceptance and validation
 
-- `req:ANC-003..005`: release detection history, release tag, dependency diff, dispatch/preemption decision, and sc-lint 0.8.4+ install are evidenced.
-- The validator fails B13 and epic closure if history shows 0.2.0 existed before certification and the interrupt's passing evidence/digest is absent; an explicit not-released observation is accepted only with source and timestamp.
+- `req:ANC-003..005`: the consumed B2 trigger, release tag/digest, dependency diff, dispatch/preemption decision, and sc-lint 0.8.4+ install are evidenced.
+- B2's validator accepts this evidence only when it binds the detected digest and all upgrade gates pass.
 - Setup, lint, compatibility/version checks, workspace tests/builds, client check, and Tauri checks pass.
 
 Every deliverable is production-ready for integration closure and leaves the repository on supported published dependencies.

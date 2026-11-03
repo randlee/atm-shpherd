@@ -41,15 +41,17 @@ Clients never access stores or services in-process. External ATM, hmux/Herdr, tm
 
 ## Required contract signatures
 
-B3A owns the complete store/cursor/tombstone/lease-row contracts in `sprint-b-3a-schema-projection-contract.md`; B3B owns canonical identities, hierarchy/roster/query/launcher/response/enrollment contracts in `sprint-b-3b-service-launch-api-contract.md`; B3C owns complete ATM/hmux/sc-cron contracts in `sprint-b-3c-external-integration-contract.md`. Their executable fixtures may not weaken the linked approved ADRs.
+B3A owns the complete launchable shared-row, typed-key/canonical-batch, tombstone, and tagged lease-operation contracts in `sprint-b-3a-schema-projection-contract.md`; B3B owns canonical identities, the closed hierarchy/atomic Team bundle, verified-principal dispatch, roster/query, split launcher, tagged response/stream, and enrollment contracts in `sprint-b-3b-service-launch-api-contract.md`; B3C owns verified-principal ATM, split hmux/registration-evidence, and sc-cron contracts in `sprint-b-3c-external-integration-contract.md`. Their executable fixtures may not weaken the linked approved ADRs.
 
 No public unguarded spawn method exists. `ProjectionStore` is the one Phase B open trait because the app-owned SQLite and PostgreSQL crates implement it across crate boundaries; ADR-SHP-002 and boundary validation restrict its approved implementations. Service and launcher traits, including `GuardedLauncher`, remain private or sealed unless a later ADR explicitly opens them. CLI exit codes, HTTP status, WebSocket command errors, and adapter failures map deterministically from `ErrorCode`.
 
 ## Ownership rules
 
+- B2 owns the non-serializable verified-principal seam and fail-closed runtime-release detector/history/dispatch/close gate; feature and interrupt sprints cannot replace either.
 - `shpherd-schema` owns row definitions and static store contracts; engine crates own SQL.
 - `shpherd-store-adaptor` performs allowlisted reads/writes but owns no timer, lease, conflict policy, or route.
 - `shpherd-service` owns validation, state machines, reconciliation, leases, and named mutations.
 - `shpherd-daemon` owns composition, authenticated transport, local process adapters, workers, and health.
 - Clients own presentation and platform capability adapters only.
+- Wire/domain payloads contain no caller authorization claims; daemon composition injects verified principal context.
 - General generated database commands and widget examples are removed before the first usable product slice.

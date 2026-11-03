@@ -27,7 +27,7 @@ Close the allowlisted PostgreSQL projection-store side of B3A without importing 
 
 ## Required work and deliverables
 
-- Implement only allowlisted shared rows, per-source cursors, tombstones, enrolled-host facts, and the PostgreSQL `LeaseAuthorityStore` CAS/migrations.
+- Implement the complete allowlisted launchable-definition rows, per-source cursors, typed/provenance tombstones, enrolled-host facts, canonical batch receipts, and PostgreSQL `LeaseAuthorityStore` tagged operations/migrations.
 - Prove excluded local fields cannot be encoded or persisted.
 
 ## This sprint does not close
@@ -36,7 +36,7 @@ No SQLite extension, adaptor, cross-store orchestration, conflict policy, or hos
 
 ## Acceptance and validation
 
-- `boundary:postgres-projection-store` passes the B3A projection, replay, cursor, tombstone, enrollment, exclusion, database-time lease CAS, holder/expiry/fencing/transfer suites.
-- Migration/rollback and concurrent CAS tests pass; local paths/credentials are structurally unrepresentable; lint/test, workspace build, and boundary validation pass.
+- `boundary:postgres-projection-store` passes the B3A complete projection/hydration, canonical bytes/digest, replay, cursor, typed tombstone, enrollment, exclusion, and database-time tagged acquire/renew/release/transfer suites.
+- Migration/rollback and concurrent operation tests cover every typed lease state/mismatch plus unknown-outcome idempotent retry; local paths/prompt bodies/credentials/terminal state are structurally unrepresentable; lint/test, workspace build, and boundary validation pass.
 
 Every deliverable is production-ready for the PostgreSQL store boundary.

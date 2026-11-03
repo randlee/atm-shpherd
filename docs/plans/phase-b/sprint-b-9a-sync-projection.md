@@ -31,7 +31,7 @@ Close deterministic two-host synchronization over the three finished storage bou
 
 ## Required work and deliverables
 
-- Implement service-owned allowlist selection, source-qualified vector cursors, atomic mutation/tombstone batches, offline reconciliation, deterministic conflict rejection, audit evidence, enrolled-host project-binding hydration, and second-host hydration over static adaptor reads/writes.
+- Implement service-owned complete launchable-definition allowlist selection, source-qualified vector cursors, canonical atomic mutation/tombstone batches, offline reconciliation, deterministic conflict rejection, audit evidence, enrolled-host project-binding hydration, and second-host hydration over static adaptor reads/writes.
 
 ```rust
 pub struct SyncRequest { pub source: HostId, pub target: HostId, pub after: CursorVector, pub batch_limit: u32 }
@@ -54,9 +54,10 @@ No lease or launch ownership; B9B owns safe launch after hydration.
 
 ## Acceptance and validation
 
-- Two-host create/update/delete/tombstone/offline/reconnect/out-of-order/vector-skew/conflict/exclusion/project-binding hydration tests pass.
+- Two-host create/update/delete/tombstone/offline/reconnect/out-of-order/vector-skew/conflict/exclusion/project-binding hydration tests pass with typed entity keys and cross-store canonical digest goldens.
 - Transaction-fault tests prove batch atomicity and no cursor advance; duplicate-same-hash replay is idempotent, duplicate-different-hash fails, gaps fail, and independent source cursors advance without overwriting one another.
 - Every applied/rejected batch has deterministic source/target/vector audit evidence; tombstone retention and enrolled-host acknowledgement are proven.
+- Starting from an empty target, the hydrated typed hierarchy, Team/Variant/member/assignment bundle, logical project/config/prompt refs, launcher policy, and ATM provenance are sufficient for B9B eligibility, checkout resolution/config validation, roster rendering, and launch; no resolved path, prompt body, credential, terminal handle, or origin observation is present.
 - Adaptor has no timer, route, merge, or lease policy; secrets/local handles never synchronize or log.
 
 Every deliverable is production-ready for the synchronization boundary.

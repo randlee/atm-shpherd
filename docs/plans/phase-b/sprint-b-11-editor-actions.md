@@ -35,7 +35,7 @@ Close the real authenticated command composition and equivalent browser/desktop 
 
 ## Required work and deliverables
 
-- Port create/edit/move/clone/unlink/import, discovery, the complete launcher lifecycle, host enrollment/project binding selection, confirmations/errors, and add/update/remove roster workflows through authenticated daemon commands.
+- Port atomic Team-bundle create/edit plus move/clone/unlink/import, discovery, the split read/guarded launcher lifecycle, host enrollment/project binding selection, tagged outcome confirmations/errors, and add/update/remove roster workflows through authenticated daemon commands.
 - Keep browser and desktop Tauri command capability equivalent with Herdr preselected and tmux explicit.
 
 ```ts
@@ -56,7 +56,7 @@ No mobile packaging/native capability proof; B11A owns it.
 
 ## Acceptance and validation
 
-- Real B5 hierarchy commands, B9B guarded lifecycle, and B9C add/update/remove mutations compose through B10A; browser/desktop E2E cover revisions/running constraints/clone policy, completed/accepted/replayed/conflict outcomes, read-only discovery until import, typed errors, Herdr default, tmux override, host enrollment/project checkout health, remote ownership, and idempotent reconciliation.
+- Real B5 hierarchy commands, B9B guarded lifecycle, and B9C add/update/remove mutations compose through B10A; browser/desktop E2E cover Team-bundle validity, aggregate revisions/running constraints/clone policy, completed/accepted/replayed/conflict/rejected outcomes, read-only launch actions during lease outage, mutation guard failures, read-only discovery until import, typed errors, Herdr default, tmux override, host enrollment/project checkout health, remote ownership, roster evidence, member-scoped reconcile, and idempotent recovery.
 - Responsive phone layouts pass shared-web tests.
 
 Every deliverable is production-ready for client command integration.
