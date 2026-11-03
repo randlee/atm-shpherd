@@ -24,7 +24,11 @@ recommended_model: deep-reasoning
 
 # B13 — Certify parity and release readiness
 
-## Deliverables
+## Goal
+
+Close bounded release evidence for already-owned track integrations without becoming a late product-code integration sprint.
+
+## Required work and deliverables
 
 - Collect the already-owned track-integration results for oracle, migration, sync, launcher, API, client, mobile, scheduler, supervision, security, upgrade, and platform gates.
 - Record exact performance hardware/tools and anchor development-gate reports. If sc-runtime 0.2.0 exists, the interrupt must be complete.

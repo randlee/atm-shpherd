@@ -25,7 +25,11 @@ recommended_model: deep-reasoning
 
 # B10A — Implement the authenticated daemon API
 
-## Deliverables
+## Goal
+
+Close the authenticated daemon/CLI wire boundary against B3B doubles without depending on unfinished service implementations.
+
+## Required work and deliverables
 
 - Implement versioned authenticated snapshots, named commands, and ordered event/reconnect transport against the B3B service doubles.
 - Define enrollment, endpoint/origin/TLS, authorization, version negotiation, cursor recovery, stable error mapping, and redacted telemetry.

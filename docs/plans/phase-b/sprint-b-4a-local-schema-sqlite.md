@@ -23,7 +23,11 @@ recommended_model: deep-reasoning
 
 # B4A — Implement local schema and SQLite extensions
 
-## Deliverables
+## Goal
+
+Close the local extension schema and SQLite implementation side of the B3A contract atomically.
+
+## Required work and deliverables
 
 - Implement local launcher, binding, ATM identity, eligibility, sync/version, and ownership rows/migrations after parity.
 - Implement the SQLite side of the fixed projection-store contract.

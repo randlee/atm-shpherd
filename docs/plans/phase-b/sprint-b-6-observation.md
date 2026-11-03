@@ -20,9 +20,23 @@ recommended_model: workhorse
 
 # B6 — Port observation, discovery, focus, and doctor
 
-## Deliverables
+## Goal
+
+Close the read-side service boundary without granting pollers or discovery any durable definition-write capability.
+
+## Required work and deliverables
 
 - Implement backend-neutral observation projections, lifecycle states, stale/degraded semantics, per-team error isolation, read-only discovery, explicit import request, focus resolution, and doctor diagnostics.
+
+The production read side implements the frozen B3B seam:
+
+```rust
+pub trait ObservationService: sealed::Sealed {
+    fn snapshot(&self, query: ObservationQuery) -> Result<Vec<ObservationSnapshot>, DomainError>;
+}
+```
+
+Every snapshot uses the frozen `ObservationState` enum. Discovery and pollers can return an import request or diagnostic evidence, but only B5's `DefinitionService` can persist it.
 
 ## Relationships
 

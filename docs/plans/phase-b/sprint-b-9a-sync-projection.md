@@ -25,9 +25,23 @@ recommended_model: deep-reasoning
 
 # B9A — Synchronize the approved projection
 
-## Deliverables
+## Goal
+
+Close deterministic two-host synchronization over the three finished storage boundaries without moving excluded host-local data.
+
+## Required work and deliverables
 
 - Implement service-owned selection, version/change metadata, offline reconciliation, deterministic conflict rejection, audit evidence, and second-host hydration over static adaptor reads/writes.
+
+```rust
+pub struct SyncRequest { pub source: HostId, pub target: HostId, pub after: StoreRevision }
+pub struct SyncOutcome { pub read: u64, pub applied: u64, pub rejected: u64, pub through: StoreRevision }
+pub trait SynchronizationService: sealed::Sealed {
+    fn reconcile(&self, request: SyncRequest) -> Result<SyncOutcome, DomainError>;
+}
+```
+
+An outcome is committed only after the target transaction succeeds. Conflict rejection records audit evidence and advances no target revision.
 
 ## Relationships
 
@@ -40,6 +54,7 @@ No lease or launch ownership; B9B owns safe launch after hydration.
 ## Acceptance and validation
 
 - Two-host create/update/delete/offline/reconnect/version-skew/conflict/exclusion/hydration tests pass.
+- Every applied/rejected batch has deterministic source/target/revision audit evidence, and replaying committed evidence is idempotent.
 - Adaptor has no timer, route, merge, or lease policy; secrets/local handles never synchronize or log.
 
 Every deliverable is production-ready for the synchronization boundary.

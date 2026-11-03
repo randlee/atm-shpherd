@@ -24,10 +24,24 @@ recommended_model: deep-reasoning
 
 # B12 — Port schedules and recurring operations
 
-## Deliverables
+## Goal
+
+Close recurring guarded operations through the pinned sc-cron contract with deterministic restart and missed-run behavior.
+
+## Required work and deliverables
 
 - Register Shpherd jobs through the approved sc-cron public API while keeping rows, traits, timers, and policy on their correct side of the boundary.
-- Implement CRUD, five-field minute-first grammar, six-field compatibility parsing, JSON callback payload, `CronError`, missed-run/restart policy, eligible-host/lease guarded execution, and aggregate failure isolation.
+- Integrate and contract-test sc-cron CRUD, five-field minute-first grammar, six-field compatibility parsing, JSON callback payload, `CronError`, missed-run/restart policy, eligible-host/lease guarded execution, and aggregate failure isolation without reimplementing its parser.
+
+```rust
+pub trait ShpherdScheduleRegistry: sealed::Sealed {
+    fn upsert(&self, name: String, expression: String, payload: serde_json::Value) -> Result<(), CronError>;
+    fn remove(&self, name: &str) -> Result<(), CronError>;
+    fn register_callback(&self, callback: CronCallback) -> Result<(), CronError>;
+}
+```
+
+The daemon owns this adapter and registers the B3C callback once; sc-cron never imports a Shpherd row or service trait.
 
 ## Relationships
 
@@ -40,6 +54,7 @@ No OS service lifecycle; B12A owns supervision/reboot/upgrade behavior.
 ## Acceptance and validation
 
 - Source/version prerequisite and parser/callback fixtures are recorded; sc-cron imports no Shpherd type.
+- Schedule create/read/update/delete and invalid-expression behavior pass through the pinned sc-cron API; Shpherd contains no duplicate cron parser.
 - Manual and scheduled launch share one command path; Herdr default/tmux override, restart/missed runs, and isolated aggregate failures pass.
 
 Every deliverable is production-ready for scheduled-operation integration.

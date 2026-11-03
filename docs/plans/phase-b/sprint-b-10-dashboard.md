@@ -30,10 +30,23 @@ recommended_model: workhorse
 
 # B10 — Port the dashboard read experience
 
-## Deliverables
+## Goal
+
+Close the real read composition and shared browser/desktop dashboard with measurable large-team performance.
+
+## Required work and deliverables
 
 - Replace fixtures with authenticated snapshots/events and port grouped/grid/list, hierarchy, search/filter, host/backend/status badges, team detail, and stale/disconnected states into the shared browser/Tauri app.
 - Preserve icon/window/tray shell, browser independence, pinned observability adapter, redaction, and failure-noninterference.
+
+```ts
+export interface ShpherdReadClient {
+  snapshot(request: { after?: number }): Promise<ReadonlyArray<ObservationSnapshot>>;
+  events(cursor?: number): AsyncIterable<EventEnvelope>;
+}
+```
+
+Both browser and desktop inject this interface; neither imports a store, service crate, or required Tauri API.
 
 ## Relationships
 

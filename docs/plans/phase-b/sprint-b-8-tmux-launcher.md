@@ -21,7 +21,11 @@ recommended_model: workhorse
 
 # B8 — Implement explicit tmux compatibility
 
-## Deliverables
+## Goal
+
+Close explicit tmux compatibility behind the same guarded launcher contract while preserving Herdr as the default.
+
+## Required work and deliverables
 
 - Port retained tmux/tmuxp construction, discovery, attach/focus, stop, guards, and session semantics behind the same closed launcher result/error contracts.
 - Require `LaunchLeaseGuard` for side effects. Owned paths: tmux daemon adapter and simulator fixtures/tests.

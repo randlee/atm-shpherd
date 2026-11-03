@@ -21,7 +21,11 @@ recommended_model: deep-reasoning
 
 # B6A — Import ATM team and roster projection
 
-## Deliverables
+## Goal
+
+Close the versioned ATM read/mutation adapter against frozen fixtures without undocumented SQL or singular commands.
+
+## Required work and deliverables
 
 - Implement versioned read-only ATM SQLite catalog import and exact command adapters for `atm teams add-member|update-member|remove-member ... --json` plus `atm members --team ... --json` reconciliation.
 - Record help/version and sanitized JSON fixtures, source identity/revision, normalized mapping, and typed unsupported-version diagnostics.

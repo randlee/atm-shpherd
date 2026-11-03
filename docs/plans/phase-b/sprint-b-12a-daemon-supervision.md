@@ -28,10 +28,16 @@ recommended_model: workhorse
 
 # B12A — Install and supervise the daemon
 
-## Deliverables
+## Goal
+
+Close cross-platform per-user daemon lifecycle behavior so schedules and synchronized teams survive ordinary host lifecycle events.
+
+## Required work and deliverables
 
 - Provide upgrade-safe per-user launchd, systemd, and approved Windows supervision with structured logs/health, configuration migration, graceful lease release/fencing, and data-preserving uninstall.
 - Prove synchronized teams and B12 schedules survive logout, reboot, crash, and binary upgrade.
+
+Each platform adapter implements the same lifecycle contract: install, start, stop, restart, status/health, log discovery, upgrade, and data-preserving uninstall. Generated service definitions contain only executable/config paths and environment-key references; credentials remain in the platform credential store.
 
 ## Relationships
 

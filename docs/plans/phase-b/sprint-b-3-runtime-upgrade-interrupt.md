@@ -23,7 +23,11 @@ recommended_model: workhorse
 
 # Interrupt — Upgrade to sc-runtime 0.2.0
 
-## Deliverables
+## Goal
+
+Adopt the released runtime upgrade and its managed lint assets at the first safe checkpoint without overwriting application work.
+
+## Required work and deliverables
 
 - When `v0.2.0` exists, diff fresh 0.1.1/0.2.0 generations from identical answers and apply managed dependency/template changes without overwriting app work.
 - Install the release-provided sc-lint consumer assets with minimum version 0.8.4.

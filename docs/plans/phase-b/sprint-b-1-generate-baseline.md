@@ -18,7 +18,11 @@ recommended_model: workhorse
 
 # B1 — Generate and prove the 0.1.1 baseline
 
-## Deliverables
+## Goal
+
+Prove the released generator baseline is reproducible and usable before any product migration begins.
+
+## Required work and deliverables
 
 - Generate an untouched sc-runtime `v0.1.1` `sqlite-postgres` release workspace in an absent staging destination using a retained Shpherd answers file.
 - Prove published crates resolve without local patches and record setup/lint/test/CLI/daemon results.

@@ -27,9 +27,24 @@ recommended_model: deep-reasoning
 
 # B9C — Add and launch roster members on demand
 
-## Deliverables
+## Goal
+
+Close the idempotent operator workflow that registers, synchronizes, launches, observes, and reconciles one roster member.
+
+## Required work and deliverables
 
 - Implement durable idempotent expansion state across ATM mutation, re-import, synchronization, lease guard, hmux spawn, observation, retry, update, and removal reconciliation.
+
+```rust
+pub enum ExpansionState { IntentPersisted, RosterRegistered, RegisteredNotRunning, Launching, Running, Reconciled, Failed }
+pub struct ExpansionRequest { pub team: TeamId, pub agent: AgentId, pub key: IdempotencyKey }
+pub struct ExpansionResult { pub state: ExpansionState, pub runtime: Option<RuntimeIdentity>, pub evidence: ActionEvidence }
+pub trait RosterExpansionService: sealed::Sealed {
+    fn expand(&self, request: ExpansionRequest) -> Result<ExpansionResult, DomainError>;
+}
+```
+
+State transitions are persisted before the next external side effect; retries resume from evidence and never skip reconciliation.
 
 ## Relationships
 

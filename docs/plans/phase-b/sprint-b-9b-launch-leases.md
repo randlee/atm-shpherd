@@ -28,9 +28,31 @@ recommended_model: deep-reasoning
 
 # B9B — Enforce multi-host launch leases and fencing
 
-## Deliverables
+## Goal
+
+Close one-owner multi-host launch behavior so hydrated teams cannot be launched twice during retries, failures, or ownership transfer.
+
+## Required work and deliverables
 
 - Implement host eligibility, acquire/renew/release/expiry/recovery, monotonic fencing, guarded action evidence, and ownership transfer through the real service/store composition.
+
+```rust
+pub enum LeaseState { Active, Released, Expired, Fenced }
+pub struct LaunchLease {
+    pub team: TeamId,
+    pub host: HostId,
+    pub fencing: FencingToken,
+    pub state: LeaseState,
+    pub expires_at_unix_ms: u64,
+}
+pub trait LaunchLeaseService: sealed::Sealed {
+    fn acquire(&self, team: TeamId, host: HostId, key: IdempotencyKey) -> Result<LaunchLeaseGuard, DomainError>;
+    fn renew(&self, guard: &LaunchLeaseGuard) -> Result<LaunchLease, DomainError>;
+    fn release(&self, guard: LaunchLeaseGuard) -> Result<LaunchLease, DomainError>;
+}
+```
+
+Only successful `acquire` returns the unforgeable guard. Every renewal and side effect compares the monotonic fencing token inside the same durable ownership decision.
 
 ## Relationships
 

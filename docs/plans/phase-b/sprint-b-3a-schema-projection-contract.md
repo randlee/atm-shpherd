@@ -24,7 +24,11 @@ recommended_model: deep-reasoning
 
 # B3A — Freeze schema and projection contracts
 
-## Deliverables
+## Goal
+
+Freeze the complete storage/projection contract so all three implementation siblings can close independently without interface negotiation.
+
+## Required work and deliverables
 
 - Approve row ownership, exclusions, provenance, versions, conflicts, and reconciliation against the parity fingerprint.
 - Fix the row/newtype, static store, projection batch, and adaptor test-double interfaces used by B4A/B4B/B4C.

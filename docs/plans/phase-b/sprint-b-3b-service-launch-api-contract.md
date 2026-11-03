@@ -26,7 +26,11 @@ recommended_model: deep-reasoning
 
 # B3B — Freeze service, launcher, and daemon API contracts
 
-## Deliverables
+## Goal
+
+Freeze the service, guarded-launch, command, event, and error contracts consumed independently by the service, launcher, and API layers.
+
+## Required work and deliverables
 
 - Fix validated identities/revisions, stable errors, sealed/open traits, closed launcher dispatch, private lease guard, commands/events, and test doubles.
 - Approve deterministic CLI exit, HTTP status, and event error mapping.
@@ -109,6 +113,26 @@ pub enum RosterCommand { Add { team: TeamId, agent: AgentId }, Update { team: Te
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "domain", content = "command", rename_all = "snake_case")]
 pub enum DaemonCommand { Definition(DefinitionCommand), Launch(LaunchCommand), Roster(RosterCommand) }
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct DefinitionResult { pub team: TeamId, pub revision: DomainRevision }
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ObservationState { Stopped, Starting, Running, Idle, Done, Degraded, Unknown }
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ObservationQuery { pub team: Option<TeamId>, pub after: Option<DomainRevision> }
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ObservationSnapshot { pub team: TeamId, pub revision: DomainRevision, pub state: ObservationState, pub stale: bool }
+
+pub trait DefinitionService: sealed::Sealed {
+    fn execute(&self, command: DefinitionCommand) -> Result<DefinitionResult, DomainError>;
+}
+pub trait ObservationService: sealed::Sealed {
+    fn snapshot(&self, query: ObservationQuery) -> Result<Vec<ObservationSnapshot>, DomainError>;
+}
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "event", rename_all = "snake_case")]

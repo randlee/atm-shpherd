@@ -23,7 +23,11 @@ recommended_model: deep-reasoning
 
 # B3C — Freeze ATM, hmux, and sc-cron contracts
 
-## Deliverables
+## Goal
+
+Freeze evidence-backed external integration contracts and stateful doubles before any external process adapter is implemented.
+
+## Required work and deliverables
 
 - Capture versioned ATM fixtures, hmux capability/result schema, cron grammar/callback/error schema, redaction rules, and MCP-disabled decision.
 - Supply simulators/test doubles independently consumed by B6A, B7, and B12.
@@ -45,6 +49,19 @@ pub struct MemberSpec { pub id: MemberId, pub role: String, pub agent_type: Stri
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "operation", rename_all = "snake_case")]
 pub enum AtmMutation { Add(MemberSpec), Update(MemberSpec), Remove(MemberId) }
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct AtmCatalogSnapshot { pub revision: AtmRosterRevision, pub members: Vec<MemberSpec> }
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct AtmMutationResult { pub revision: AtmRosterRevision, pub member: Option<MemberSpec> }
+mod sealed { pub trait Sealed {} }
+pub trait AtmAdapter: sealed::Sealed {
+    fn catalog(&self, team: &str) -> Result<AtmCatalogSnapshot, AtmAdapterError>;
+    fn mutate(&self, team: &str, mutation: AtmMutation) -> Result<AtmMutationResult, AtmAdapterError>;
+}
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum AtmAdapterError { UnsupportedVersion, Conflict, Unauthorized, Unavailable { retryable: bool }, InvalidResponse }
 
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -58,6 +75,15 @@ pub struct HmuxCapabilities { pub version: SemVer, pub dry_run: bool, pub relaun
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct HmuxSpawnResult { pub reused: bool, pub workspace: String, pub tab: String, pub pane: String, pub agent: String }
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct HmuxSpawnRequest { pub team: String, pub member: MemberSpec, pub shell: Shell, pub idempotency_key: String, pub target_tab: Option<String> }
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum HmuxError { UnsupportedVersion, MissingCapability(String), Conflict, Unavailable { retryable: bool }, InvalidResponse }
+pub trait HmuxClient: sealed::Sealed {
+    fn capabilities(&self) -> Result<HmuxCapabilities, HmuxError>;
+    fn spawn(&self, request: HmuxSpawnRequest) -> Result<HmuxSpawnResult, HmuxError>;
+}
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ScCronSource { pub repository: String, pub revision_or_version: String, pub api_version: String }

@@ -23,10 +23,24 @@ recommended_model: workhorse
 
 # B11A — Deliver native Tauri mobile capabilities
 
-## Deliverables
+## Goal
+
+Close installable iOS and Android shells around the proven shared application without introducing a mobile-local control plane.
+
+## Required work and deliverables
 
 - Generate/build iOS and Android projects around the shared application and authenticated API.
 - Implement platform capability adapters for deep links, notifications where supported, observability binding, secure credential use, and signing configuration outside source control.
+
+```ts
+export interface NativeCapabilities {
+  openDeepLink(url: string): Promise<void>;
+  notify(input: { title: string; body: string; route?: string }): Promise<"shown" | "unsupported">;
+  readCredential(key: string): Promise<string | null>;
+}
+```
+
+The browser supplies an explicit unsupported/no-op adapter. Mobile capability failure cannot alter the daemon command result.
 
 ## Relationships
 
@@ -39,6 +53,6 @@ No mobile-local daemon or store; browser/desktop behavior is not weakened to mat
 ## Acceptance and validation
 
 - iOS/Android projects build; supported simulator/emulator smoke tests cover authenticated reads/commands, deep links, notifications, and observability.
-- Signing guidance commits no secret; platform differences are explicit and tested.
+- Signing guidance commits no secret; credential-store success/denial and native-adapter failure are tested without changing daemon command results; platform differences are explicit.
 
 Every deliverable is production-ready for the supported native-mobile boundary.

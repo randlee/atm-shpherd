@@ -29,10 +29,22 @@ recommended_model: workhorse
 
 # B11 — Port editor and launch actions
 
-## Deliverables
+## Goal
+
+Close the real authenticated command composition and equivalent browser/desktop editor and action experience.
+
+## Required work and deliverables
 
 - Port definition editor, discovery/import, start/stop/focus, launcher/host selection, confirmations/errors, and roster expansion through authenticated daemon commands.
 - Keep browser and desktop Tauri command capability equivalent with Herdr preselected and tmux explicit.
+
+```ts
+export interface ShpherdCommandClient {
+  execute(command: CommandEnvelope): Promise<{ requestId: string; revision?: number }>;
+}
+```
+
+All editor and action mutations use this interface and render the frozen `ErrorEnvelope`; no platform adapter may bypass it.
 
 ## Relationships
 

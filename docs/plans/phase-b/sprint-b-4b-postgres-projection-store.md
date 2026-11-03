@@ -21,7 +21,11 @@ recommended_model: deep-reasoning
 
 # B4B — Implement the PostgreSQL projection store
 
-## Deliverables
+## Goal
+
+Close the allowlisted PostgreSQL projection-store side of B3A without importing local-only state or sync policy.
+
+## Required work and deliverables
 
 - Implement only allowlisted shared rows/migrations and the PostgreSQL side of the static store contract.
 - Prove excluded local fields cannot be encoded or persisted.

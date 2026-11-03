@@ -20,7 +20,11 @@ recommended_model: workhorse
 
 # B4C — Implement the static store adaptor
 
-## Deliverables
+## Goal
+
+Close static engine dispatch and row movement against B3A doubles while keeping all application policy outside the adaptor.
+
+## Required work and deliverables
 
 - Implement statically dispatched projection reads/writes against B3A test doubles.
 - Keep selection, timer, route, merge, conflict, lease, and reconciliation policy out.

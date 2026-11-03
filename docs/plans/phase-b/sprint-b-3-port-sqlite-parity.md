@@ -25,7 +25,11 @@ recommended_model: deep-reasoning
 
 # B3 — Port the scmux SQLite schema at parity
 
-## Deliverables
+## Goal
+
+Create an exact, testable SQLite parity baseline before any Shpherd-specific schema extension lands.
+
+## Required work and deliverables
 
 - Port retained scmux tables, keys, constraints, defaults, and migrations into `shpherd-schema` and `shpherd-store-sqlite` without target extensions.
 - Add schema fingerprint, representative fixture migration, and documented exclusions.

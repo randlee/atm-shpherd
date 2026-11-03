@@ -27,6 +27,21 @@ This plan implements `docs/atm-shpherd-prd.md` and the locked anchors in `anchor
 
 B2 creates these manifests from the generated workspace. Until then this table is the intended contract and B2 owns reconciliation with generated paths.
 
+## Required-document disposition
+
+| Required planning input | Authoritative source or creation owner |
+|---|---|
+| Project and product plan | `docs/atm-shpherd-prd.md`, `README.md`, and `docs/user-stories.md` |
+| Phase and sprint plans | this document and every `sprint-b-*.md` listed below |
+| Requirements and architecture | `docs/requirements.md`, `docs/architecture.md`, and the PRD |
+| Crate documentation | PRD §4.2 now; B2 creates `crates/*/README.md` and links each generated boundary manifest |
+| ADRs | `docs/architecture.md` ADR index; B3A/B3B/B3C approve the remaining proposed decisions with executable fixtures |
+| Protocol/schema/interface contracts | `docs/integrations/atm-hmux-contract.md`, `docs/porting/scmux-behavior-oracle.md`, and B3A/B3B/B3C-owned `docs/contracts/**` |
+| Machine-readable boundaries | intentionally absent before generation; B2 alone creates and validates the `boundaries/**` registry rather than pretending manifests already exist |
+| Issues inventory | Dolt-backed Beads epic `shp-phase-b` and its 25 direct children; sprint frontmatter records the exact child ID |
+| Testing/cross-platform guidance | `docs/testing-and-platforms.md`, plus sprint-local acceptance and evidence ownership |
+| Process/QA/triage | no shared ATM routing or QA workflow changes in Phase B; product-side ATM command behavior is owned by B3C/B6A/B9C and release defects receive separate fix beads |
+
 ## Tracks and waves
 
 The bootstrap chain is necessarily serial because each step consumes the generated or migrated artifact before it. After contracts and SQLite parity, storage, ATM, observation, launcher, API, and client work fan out where their owned paths are disjoint. `must_follow` edges name the consumed artifact in each sprint document.
@@ -48,7 +63,7 @@ Stable track IDs do not change between the registry and wave table. A shared con
 | Wave | Track | Sprint | Target boundary | Authoritative owned paths | Consumes |
 |---|---|---|---|---|---|
 | 0 | T-BOOT | B1 | runtime workspace | `config/generator/*`, `docs/evidence/b-1/**` | none |
-| 1 | T-BOOT | B2 | generated workspace | root manifests, crate skeleton registries, boundary index/schema, client shell | B1 generated digest |
+| 1 | T-BOOT | B2 | generated workspace | root manifests, crate skeleton registries/READMEs, boundary index/schema, client shell, platform test matrix | B1 generated digest |
 | 2 | T-STORAGE | B3 | parity schema/SQLite | schema parity modules, parity migrations/tests/evidence | B2 schema/store skeletons |
 | 2 | T-SERVICE | B3B | service/launch/API contract | service/API contract docs, core types, service/daemon/CLI manifests | B2 registry |
 | 2 | T-ATM | B3C | external integrations | ATM/hmux/cron contract docs, external types/manifest | B2 daemon adapter boundary |

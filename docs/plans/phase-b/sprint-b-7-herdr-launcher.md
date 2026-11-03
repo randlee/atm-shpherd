@@ -23,10 +23,14 @@ recommended_model: deep-reasoning
 
 # B7 — Implement the Herdr-first hmux launcher
 
-## Deliverables
+## Goal
+
+Close the local Herdr/hmux adapter behind the guarded launcher contract without taking ownership of cross-host leasing.
+
+## Required work and deliverables
 
 - Implement local normalized-definition Herdr adapter using capability-checked hmux with closed launcher dispatch.
-- Cover `.atm.toml` `[rmux]`, create/reuse workspace, tab/pane identity, dry-run, named-pane relaunch, restart name repair, bash/pwsh, selected/spare-tab dynamic spawn, ATM setup/registration coordination, supported type/model, nudge routing, and structured reuse/result evidence.
+- Cover `.atm.toml` `[rmux]`, create/reuse workspace, tab/pane identity, dry-run, named-pane relaunch, restart name repair, bash/pwsh, selected/spare-tab dynamic spawn, ATM identity plus proof-of-registration handoff, supported type/model, nudge routing, and structured reuse/result evidence.
 - All side effects require `LaunchLeaseGuard`; adapter-level retry uses the idempotency key. Owned paths: Herdr/hmux daemon adapter and simulator tests.
 
 ## Relationships
@@ -40,6 +44,6 @@ Only local adapter behavior is closed. Cross-host hydration, lease acquisition/f
 ## Acceptance and validation
 
 - `boundary:herdr-hmux-adapter`: every hmux capability and guarded start/stop/observe/focus mapping passes simulator/contract tests.
-- No unguarded spawn API exists; retry/restart cannot duplicate a pane; typed failures preserve definitions.
+- No unguarded spawn API or ATM mutation exists in this adapter; retry/restart cannot duplicate a pane; typed failures preserve definitions.
 
 Every deliverable is production-ready for the Herdr adapter boundary.
