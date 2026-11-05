@@ -4,7 +4,7 @@ bead: shp-phase-b.9
 status: planned
 closure_type: boundary
 target_boundary: tmux-adapter
-requirements: [ANC-002, ANC-008, ANC-009, ANC-013, ANC-014, REQ-LAUNCH]
+requirements: [ANC-002, ANC-008, ANC-009, ANC-013, REQ-LAUNCH]
 adrs: [ADR-SHP-004, ADR-SHP-005]
 owned_paths:
   - crates/shpherd-launchers/src/tmux/**
@@ -37,14 +37,14 @@ Close explicit tmux compatibility behind the same guarded launcher contract whil
 
 ## This sprint does not close
 
-No Herdr fallback policy, cross-host ownership, or UI launcher action; integration sprints own them.
+No Herdr fallback policy, cross-host ownership, real SSH/CLI/daemon composition, active-agent start through the product API, or UI launcher action; B9B owns the real launch integration.
 
 ## Acceptance and validation
 
 - Process simulator tests cover deadline before spawn, cancellation during tmux execution, bounded/oversized output, terminate-then-kill escalation, process-group cleanup, ignored termination, daemon crash, and idempotent recovery for not-started versus outcome-unknown mutations.
 
 - `boundary:tmux-adapter`: every shared lifecycle action, including member stop/reconcile and registration-evidence validation, is implemented or returns `CapabilityMissing`; guarded/idempotent mutations pass the shared stateful double without duplicate sessions on one host while same-name sessions on another host remain valid.
-- The adapter exposes the explicit tmux path consumed by the authenticated `shpherd` CLI; a contract integration fixture drives it through a noninteractive SSH-facing CLI/API double and starts the requested active agents.
+- The adapter exposes the explicit tmux path through the guarded launcher contract; adapter fixtures drive it only through the B3B stateful double and never claim a real CLI, daemon, SSH, or active-agent integration.
 - Unsupported capabilities return actionable stable errors; adapter tests, lint/build, and boundary validation pass.
 - Multi-variant fixtures select the explicit tmux variant's branch/runtime binding, ordered prompts, and assigned members without defaulting to or merging another variant.
 

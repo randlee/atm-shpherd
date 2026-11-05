@@ -37,8 +37,8 @@ No SQLite extension, adaptor, cross-store orchestration, conflict policy, or hos
 
 ## Acceptance and validation
 
-- `boundary:postgres-projection-store` passes the B3A host-qualified multi-variant/member/backend/status projection, canonical bytes/digest, replay, nonzero entity-revision and genesis/first/MAX/overflow cursor, variant-qualified tombstone, enrollment, and exclusion suites. Two source hosts can publish the same team/member names concurrently and both remain visible.
-- Migration/rollback and concurrent projection tests cover unknown-outcome idempotent retry; local paths/prompt bodies/credentials/terminal state are structurally unrepresentable; static checks prove there is no launch lease, ownership-transfer, fencing-token, or global-name-uniqueness API; lint/test, workspace build, and boundary validation pass.
+- `boundary:postgres-projection-store` passes the B3A host-qualified multi-variant/member/backend/status projection, canonical bytes/digest, replay, nonzero entity-revision and genesis/first/MAX/overflow cursor, indefinitely retained variant-qualified tombstone, offline-host replay, enrollment, and exclusion suites. Consumer acknowledgement never removes a tombstone. Two source hosts can publish the same team/member names concurrently and both remain visible.
+- Migration/rollback and concurrent projection tests cover unknown-outcome idempotent retry; local paths/prompt bodies/credentials/terminal state are structurally unrepresentable; static checks prove there is no Phase B tombstone-removal, launch lease, ownership-transfer, fencing-token, or global-name-uniqueness API; lint/test, workspace build, and boundary validation pass.
 - Fault fixtures exhaust the pool, block connect/acquisition, stall statement/commit, cancel each stage, and start shutdown with active transactions; every case respects its configured deadline, rolls back when uncommitted, resolves unknown outcomes through the idempotency receipt, and closes the pool without task leakage.
 
 Every deliverable is production-ready for the PostgreSQL store boundary.

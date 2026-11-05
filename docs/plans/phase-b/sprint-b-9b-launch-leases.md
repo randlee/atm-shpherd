@@ -4,8 +4,8 @@ bead: shp-phase-b.17
 status: planned
 closure_type: integration
 target_boundary: host-local-launch-safety
-requirements: [ANC-008, ANC-009, ANC-011, ANC-013, ANC-014, REQ-LAUNCH]
-adrs: [ADR-SHP-002, ADR-SHP-004, ADR-SHP-005, ADR-SHP-012, ADR-SHP-013]
+requirements: [ANC-008, ANC-009, ANC-011, ANC-013, ANC-014, REQ-API, REQ-LAUNCH]
+adrs: [ADR-SHP-002, ADR-SHP-003, ADR-SHP-004, ADR-SHP-005, ADR-SHP-011, ADR-SHP-012, ADR-SHP-013]
 owned_paths:
   - crates/shpherd-service/src/launch/**
   - crates/shpherd-service/src/host_eligibility/**
@@ -22,7 +22,9 @@ relations:
       artifact: guarded-herdr-adapter
     - sprint: b-8-tmux-launcher
       artifact: guarded-tmux-adapter
-  parallel_safe: [b-10-dashboard, b-10a-daemon-api]
+    - sprint: b-10a-daemon-api
+      artifact: authenticated-cli-daemon-launch-command-boundary
+  parallel_safe: [b-10-dashboard]
 recommended_agent: rust-service-developer
 recommended_model: deep-reasoning
 ---
@@ -31,11 +33,11 @@ recommended_model: deep-reasoning
 
 ## Goal
 
-Compose Herdr-first and explicit tmux launch through host-local idempotency/single-flight, while allowing the same team and agent names to run concurrently on other hosts.
+Solely close the real SSH-to-`shpherd`-CLI-to-daemon-to-guarded-launcher composition for Herdr-first and explicit tmux launch through host-local idempotency/single-flight, while allowing the same team and agent names to run concurrently on other hosts.
 
 ## Required work and deliverables
 
-- Per phase policy, B1's sc-runtime `v0.1.1` template installation and baseline tests, B2, and B7/B8 must close before this sprint; if `v0.2.0` is observed, its interrupt is the next Shpherd work started and completes before this sprint starts or resumes.
+- Per phase policy, B1's sc-runtime `v0.1.1` template installation and baseline tests, B2, B7/B8, and B10A must close before this sprint; if `v0.2.0` is observed, its interrupt is the next Shpherd work started and completes before this sprint starts or resumes.
 - Validate the selected host's local project binding, checkout, configuration, and launcher capability before mutation. A fleet row may inform an explicit local import, but PostgreSQL never grants or denies launch and is not required for host-local launch.
 - Issue an opaque `HostLaunchGuard` from a host-local single-flight registry only after durable operation/idempotency evidence is accepted. A byte-identical retry returns the prior local result; a different command using the same key fails without a side effect. Unknown outcomes reconcile against ATM and launcher observations before retry.
 - Compose the same service path for authenticated API calls and noninteractive `shpherd` CLI calls over SSH. Omitted backend selects Herdr; an explicit tmux selection remains supported.
@@ -45,7 +47,7 @@ The local guard is scoped by `(host, team, variant, operation)` and is neither s
 
 ## Relationships
 
-`must_follow` B3B's host-operation guard/launcher doubles and the independent B7/B8 adapters. B9A fleet projection is not a launch prerequisite.
+`must_follow` B3B's host-operation guard/launcher doubles, the independent B7/B8 adapters, and B10A's authenticated CLI/daemon launch-command boundary. B9A fleet projection is not a launch prerequisite; B9B is the sole real launch integration closure.
 
 ## This sprint does not close
 
@@ -53,12 +55,12 @@ No roster mutation workflow, scheduled launch, global ownership, or UI action; B
 
 ## Acceptance and validation
 
-- Dependency validation proves every B9B dispatch follows B1 template install/test and B2 integration transitively through the frozen contracts and B7/B8 prerequisites.
+- Dependency validation proves every B9B dispatch follows B1 template install/test and B2 integration transitively through the frozen contracts plus B7/B8/B10A prerequisites.
 - Dispatch fails unless the dependency graph contains a transitive `must_follow` path to completed B1 evidence proving the sc-runtime template was installed and every baseline test passed.
 - Concurrent and repeated local requests produce one side effect and stable replay evidence; mismatched idempotency reuse, crash/restart, unknown outcome, and stale local evidence converge through ATM/launcher observation.
 - PostgreSQL presents one combined fleet-wide view of teams from all enrolled computers; in the acceptance fixture, two simulated hosts concurrently launch the same team and agent names and both remain valid, host-qualified rows in that view.
 - With PostgreSQL unavailable, an enrolled host with a valid local definition still launches through Herdr or explicit tmux.
-- A noninteractive SSH invocation of `shpherd team start` reaches the same guarded command path, returns typed output/exit status, and starts active agents.
+- A real noninteractive SSH invocation of `shpherd team start` crosses the B10A CLI/daemon boundary, reaches the same guarded B7/B8 command path, returns typed output/exit status, and starts active agents; no other sprint claims this end-to-end proof.
 - `req:ANC-008,ANC-009`: unset selection launches through Herdr and explicit tmux launches through tmux across the real guarded composition; aggregate failures remain isolated.
 - Public APIs cannot call side effects without `HostLaunchGuard`; static checks prove no PostgreSQL lease, fencing, ownership-transfer, or global-name lock is introduced.
 

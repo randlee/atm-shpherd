@@ -4,13 +4,14 @@ bead: shp-phase-b.22
 status: planned
 closure_type: contract
 target_boundary: service-launch-api-contract
-requirements: [ANC-002, ANC-008, ANC-009, ANC-011, ANC-012, ANC-013, ANC-014, REQ-DEFINITION, REQ-LAUNCH, REQ-API]
+requirements: [ANC-002, ANC-008, ANC-009, ANC-011, ANC-012, ANC-013, REQ-DEFINITION, REQ-LAUNCH, REQ-API, REQ-OPERATE-SUPERVISION]
 adrs: [ADR-SHP-003, ADR-SHP-004, ADR-SHP-005, ADR-SHP-011, ADR-SHP-013, ADR-SHP-014]
 owned_paths:
   - docs/contracts/service-api/**
   - crates/shpherd-types/src/error.rs
   - crates/shpherd-types/src/command.rs
   - crates/shpherd-types/src/launch.rs
+  - crates/shpherd-types/src/health.rs
   - crates/shpherd-service/src/contracts/definition.rs
   - crates/shpherd-service/src/contracts/observation.rs
   - crates/shpherd-service/src/contracts/launch.rs
@@ -35,17 +36,17 @@ recommended_model: deep-reasoning
 
 ## Goal
 
-Freeze the service, guarded-launch, command, event, and error contracts consumed independently by the service, launcher, and API layers.
+Freeze the service, guarded-launch, command, event, error, and daemon health/readiness contracts consumed independently by the service, launcher, and API layers.
 
 ## Required work and deliverables
 
 - Per phase policy, B1's sc-runtime `v0.1.1` template installation and baseline tests and B2 must close before this contract; if `v0.2.0` is observed, its interrupt is the next Shpherd work started and completes before this contract starts or resumes.
-- Consume B2's canonical identities/revisions/cursors/auth/bridge evidence and fix stable errors, the closed Armada/Fleet/Flotilla/Team and atomic Team-bundle model, sealed/open traits, complete read/roster/split-launcher surfaces, host enrollment/project binding, private host-local operation guards, verified dispatch context, tagged command/response/event/resume envelopes, and stateful test doubles.
+- Consume B2's canonical identities/revisions/cursors/auth/bridge evidence and fix stable errors, the closed Armada/Fleet/Flotilla/Team and atomic Team-bundle model, sealed/open traits, complete read/roster/split-launcher surfaces, host enrollment/project binding, private host-local operation guards, verified dispatch context, tagged command/response/event/resume envelopes, complete health/readiness wire types, typed readiness-dependency input, and stateful test doubles.
 - Specify that omitted launcher selection resolves to Herdr by default while an explicit tmux policy remains supported, and require contract fixtures for both selections.
 - Approve deterministic CLI exit, HTTP status, event/reconnect behavior, clone policy, guarded-launch semantics, and host enrollment decisions in the ADRs owned by this sprint; consume B2's identity/revision/cursor decision and B3A's fleet-view projection decision only at their documented seams.
 - Define observation contracts so ATM supplies the actual running-team instance and roster/runtime state; Shpherd definitions are desired state and cannot replace ATM runtime truth.
 - Expose B3A's PostgreSQL projection through a query seam that returns one combined fleet-wide team view across all computers.
-- Define a noninteractive `shpherd` CLI command usable over SSH that starts active agents through Herdr by default or through tmux when explicitly selected, using the same guarded service path as the daemon API.
+- Define the noninteractive `shpherd` CLI command and daemon wire mapping usable over SSH, including Herdr-default and explicit-tmux selection. Contract doubles prove request/response mapping only; B9B exclusively closes real SSH-to-CLI-to-daemon-to-launcher execution and active-agent start.
 
 ## Contract signatures
 
@@ -226,6 +227,18 @@ pub struct HostEnrollment { pub host: HostId, pub daemon: DaemonInstanceId,
     pub key_fingerprint: String, pub capabilities: Vec<HostCapability>, pub enrolled_at_unix_ms: u64 }
 pub struct HostHealth { pub host: HostId, pub healthy: bool, pub checked_at_unix_ms: u64,
     pub diagnostics: Vec<Diagnostic> }
+pub enum ReadinessDependency { Configuration, Credentials, RequiredStores, Migrations,
+    OperationJournalRecovery, AtmHeartbeatRegistration, AtmHeartbeatFreshness }
+pub enum ReadinessDependencyState { Pending, Ready,
+    Failed { code: String }, Stale { last_success_unix_ms: Option<u64> } }
+pub struct ReadinessDependencyInput { pub dependency: ReadinessDependency,
+    pub state: ReadinessDependencyState, pub observed_at_unix_ms: u64,
+    pub required: bool }
+pub enum HealthState { LiveNotReady { blocking: Vec<ReadinessDependencyInput> }, Ready,
+    Degraded { reasons: Vec<ReadinessDependencyInput> }, Draining }
+pub trait ReadinessSource: Send + Sync {
+    fn snapshot(&self) -> BoxFuture<'_, Result<HealthState, DomainError>>;
+}
 pub struct ProjectBinding { pub project: ProjectId, pub host: HostId,
     pub logical_repository: String, pub local_checkout: String }
 pub enum HostCapability { Herdr, Tmux, Shell, LocalCheckout }
@@ -301,14 +314,14 @@ Every wire enum uses explicit serde tags, `deny_unknown_fields`, and stable snak
 
 ## This sprint does not close
 
-No service behavior, launcher adapter, API route, client, or host-local operation persistence.
+No service behavior, launcher adapter, API route, client, heartbeat registration/poll, real readiness composition, or host-local operation persistence.
 
 ## Acceptance and validation
 
 - This contract is a prerequisite for the scmux launcher and editor migrations; dispatch validation rejects B3B unless B1 is complete with successful sc-runtime template-installation and baseline-test evidence.
-- Named boundary manifests and ADR-SHP-005/011/013/014 fix every full hierarchy/team bundle, roster, query, host, split launcher, guard, authenticated dispatch context, tagged envelope, stream/resume token, error, and double consumed by B5/B6/B7/B8/B9B/B9C/B10A; B2/ADR-SHP-004 exclusively owns the imported identities, revisions, cursors, and bridge evidence.
+- Named boundary manifests and ADR-SHP-005/011/013/014 fix every full hierarchy/team bundle, roster, query, host, split launcher, guard, authenticated dispatch context, tagged envelope, stream/resume token, error, health/readiness state and dependency input, and double consumed by B5/B6/B7/B8/B9B/B9C/B10A/B12/B12A; B2/ADR-SHP-004 exclusively owns the imported identities, revisions, cursors, and bridge evidence.
 - Each owned ADR is approved and contains decision, alternatives, consequences, and executable evidence; the architecture index links it to this sole owner.
-- Compile and negative-boundary tests prove service traits are sealed beside their service implementations, independent launcher adapters implement only the allowlisted open ports, guards/principals are unconstructible outside their owner, and mutation is unavailable on the read launcher. Serialization/version/terminal-outcome/replay/restart-resync/auth-escalation and stateful-double contract tests, workspace build, and boundary validation pass. Error-mapping goldens prove every code preserves a typed cause and applicable details (including current revision), supplies actionable recovery, and round-trips without raw causes or secrets. Cursor goldens cover absent token, `after=0`, first event `1`, MAX read, checked overflow, and serde rejection of invalid numeric forms.
+- Compile and negative-boundary tests prove service traits are sealed beside their service implementations, independent launcher adapters implement only the allowlisted open ports, guards/principals are unconstructible outside their owner, and mutation is unavailable on the read launcher. Serialization/version/terminal-outcome/replay/restart-resync/auth-escalation and stateful-double contract tests, workspace build, and boundary validation pass. Health goldens cover every required/optional dependency, pending/ready/failed/stale input, deterministic `LiveNotReady`/`Ready`/`Degraded`/`Draining` mapping, and a readiness double that imports no B3C external type. Error-mapping goldens prove every code preserves a typed cause and applicable details (including current revision), supplies actionable recovery, and round-trips without raw causes or secrets. Cursor goldens cover absent token, `after=0`, first event `1`, MAX read, checked overflow, and serde rejection of invalid numeric forms.
 - Team-bundle contract goldens cover multiple placements for one Team, two stable draft variant keys, named members with stable ATM bindings on distinct variants, multiple ordered prompts, and distinct branch/backend/runtime bindings. Clone/unlink goldens prove preserved Team references and last-reference cleanup are representable; B5/B9/B11 own execution, launch, query, and UI integration.
 - The B3B fixture compiles at the B2 prerequisite commit using only `shpherd-types::foundation` and `shpherd-auth`; imports from B3A/B3C are prohibited.
 

@@ -128,6 +128,12 @@ pub struct HeartbeatId(pub String);
 pub struct CronCallbackPayload { pub heartbeat: HeartbeatId, pub run_id: String,
     pub scheduled_at_unix_ms: u64, pub payload: serde_json::Value }
 pub struct CronRunResult { pub completed_at_unix_ms: u64, pub evidence_sha256: String }
+pub struct HeartbeatRegistration { pub heartbeat: HeartbeatId,
+    pub registered_at_unix_ms: u64, pub expression_fingerprint: String }
+pub enum HeartbeatFreshnessState { NeverSucceeded, Fresh, Stale, Failed { retryable: bool } }
+pub struct HeartbeatFreshness { pub heartbeat: HeartbeatId,
+    pub last_attempt_unix_ms: Option<u64>, pub last_success_unix_ms: Option<u64>,
+    pub stale_after_ms: u64, pub state: HeartbeatFreshnessState }
 pub use sc_cron::CancellationToken;
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum CronError { InvalidExpression, RegistrationFailed, CallbackFailed { retryable: bool }, Canceled }
@@ -136,11 +142,11 @@ pub trait CronHandler: Send + Sync {
 }
 pub trait HeartbeatRegistrar: sealed::Sealed + Send + Sync {
     fn register_atm_state_heartbeat(&self, expression: String,
-        handler: std::sync::Arc<dyn CronHandler>) -> BoxFuture<'_, Result<(), CronError>>;
+        handler: std::sync::Arc<dyn CronHandler>) -> BoxFuture<'_, Result<HeartbeatRegistration, CronError>>;
 }
 ```
 
-Fixtures freeze exact plural ATM commands (`atm teams add-member|update-member|remove-member ... --json` and `atm members --team ... --json`), every hmux lifecycle action, the pinned `ScCronSource`, and the configured heartbeat expression. The callback receives only heartbeat/run metadata and opaque JSON; no ATM team, phase, store trait, or Shpherd row enters the sc-cron boundary.
+Fixtures freeze exact plural ATM commands (`atm teams add-member|update-member|remove-member ... --json` and `atm members --team ... --json`), every hmux lifecycle action, the pinned `ScCronSource`, configured heartbeat expression, typed registration result, and typed freshness snapshot. The callback receives only heartbeat/run metadata and opaque JSON; no ATM team, phase, store trait, Shpherd row, or B3B readiness type enters the sc-cron boundary. B12 alone maps registration/freshness semantics into B3B's independent readiness-dependency input.
 
 ATM projection v1 explicitly captures `id/name/role/agent_type/model/host/backend/target/session/alias/target_tab`. `target/session/alias` are sanitized host-local launch references and are excluded from the shared projection and telemetry; credentials, mailbox/inbox data, prompt bodies, absolute checkout paths, process handles, and unknown fields are excluded entirely. The snapshot records source fingerprint and roster revision. Mutation payloads contain no caller claims: B10A parses/verifies transport credentials and exchanges verified identity through the B2 `shpherd-auth` issuer; ATM catalog/mutation methods accept only a borrowed principal plus operation/revision/idempotency data. Successful add/update evidence binds operation/key/team/member, before/after roster revision, exact plural argv, and redacted result digest; `registration_evidence` produces the B2-owned bridge type and is the sole conversion to spawn evidence. Foreign ATM IDs/revisions never deserialize as Shpherd IDs/revisions. Forged claims, scope mismatch, unsupported versions/fingerprints, stale revisions, and unauthorized principals fail before process invocation. The stateful ATM double proves replay, escalation rejection, evidence conversion, and redaction without importing B3B.
 
@@ -155,7 +161,7 @@ No ATM import/mutation, hmux process call, heartbeat registration, scheduled-act
 ## Acceptance and validation
 
 - This contract is a prerequisite for the scmux launcher and ATM-heartbeat integration; dispatch validation rejects B3C unless B1 is complete with successful sc-runtime template-installation and baseline-test evidence.
-- `boundary:external-integrations` and ADR-SHP-006/007/009/010 fix projection/command versions, verified-principal-only ATM calls, split read/mutating hmux requests, roster-registration evidence, stable runtime identity, lifecycle capabilities, callback injection, stable failures, ownership, redaction, and fallbacks.
+- `boundary:external-integrations` and ADR-SHP-006/007/009/010 fix projection/command versions, verified-principal-only ATM calls, split read/mutating hmux requests, roster-registration evidence, stable runtime identity, lifecycle capabilities, callback injection, typed heartbeat registration/freshness results, stable failures, ownership, redaction, and fallbacks.
 - Each owned ADR is approved and contains decision, alternatives, consequences, and executable evidence; fixtures validate, stateful doubles compile, and workspace/boundary validation pass.
 - The B3C fixture compiles at the B2 prerequisite commit using only `shpherd-types::foundation` and `shpherd-auth`; imports from B3A/B3B are prohibited.
 

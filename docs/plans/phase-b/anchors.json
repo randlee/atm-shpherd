@@ -1071,6 +1071,13 @@
           "item": "sprint-b-10a-daemon-api",
           "reason": "B10A implements daemon transport, startup, health, and observability contracts; it creates or migrates no database schema object.",
           "replaced": false
+        },
+        {
+          "at": "2026-11-05T17:45:32+00:00",
+          "event": "excluded",
+          "item": "sprint-b-12a-daemon-supervision",
+          "reason": "B12A composes and supervises the completed daemon and creates or migrates no Shpherd database schema objects.",
+          "replaced": false
         }
       ],
       "exclude": [
@@ -1113,6 +1120,10 @@
         {
           "item": "sprint-b-10a-daemon-api",
           "reason": "B10A implements daemon transport, startup, health, and observability contracts; it creates or migrates no database schema object."
+        },
+        {
+          "item": "sprint-b-12a-daemon-supervision",
+          "reason": "B12A composes and supervises the completed daemon and creates or migrates no Shpherd database schema objects."
         }
       ]
     },
@@ -1631,6 +1642,13 @@
           "item": "sprint-b-10a-daemon-api",
           "reason": "B10A consumes completed store configuration through APIs and adds no Herdr-specific database field or initial parity migration.",
           "replaced": false
+        },
+        {
+          "at": "2026-11-05T17:45:32+00:00",
+          "event": "excluded",
+          "item": "sprint-b-12a-daemon-supervision",
+          "reason": "B12A supervises the completed daemon after storage integration and owns neither initial scmux schema parity nor Herdr-specific schema fields.",
+          "replaced": false
         }
       ],
       "exclude": [
@@ -1689,6 +1707,10 @@
         {
           "item": "sprint-b-10a-daemon-api",
           "reason": "B10A consumes completed store configuration through APIs and adds no Herdr-specific database field or initial parity migration."
+        },
+        {
+          "item": "sprint-b-12a-daemon-supervision",
+          "reason": "B12A supervises the completed daemon after storage integration and owns neither initial scmux schema parity nor Herdr-specific schema fields."
         }
       ]
     },
@@ -1900,6 +1922,13 @@
           "item": "sprint-b-5-definition-service",
           "reason": "B5 owns host-local definition behavior and no PostgreSQL schema, host synchronization, fleet view, or cross-host launch coordination.",
           "replaced": false
+        },
+        {
+          "at": "2026-11-05T17:44:13+00:00",
+          "event": "excluded",
+          "item": "sprint-b-8-tmux-launcher",
+          "reason": "B8 implements the host-local tmux compatibility adapter and no PostgreSQL fleet projection or cross-host fleet view.",
+          "replaced": false
         }
       ],
       "exclude": [
@@ -1926,6 +1955,10 @@
         {
           "item": "sprint-b-5-definition-service",
           "reason": "B5 owns host-local definition behavior and no PostgreSQL schema, host synchronization, fleet view, or cross-host launch coordination."
+        },
+        {
+          "item": "sprint-b-8-tmux-launcher",
+          "reason": "B8 implements the host-local tmux compatibility adapter and no PostgreSQL fleet projection or cross-host fleet view."
         }
       ]
     },
@@ -2122,6 +2155,41 @@
           "at": "2026-11-04T17:41:01+00:00",
           "event": "exclusion_removed",
           "item": "sprint-b-8-tmux-launcher"
+        },
+        {
+          "at": "2026-11-05T17:42:56+00:00",
+          "event": "excluded",
+          "item": "sprint-b-3b-service-launch-api-contract",
+          "reason": "B3B freezes CLI, daemon, and launcher contracts with doubles; B9B exclusively closes the real SSH-to-active-agent integration.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-05T17:42:56+00:00",
+          "event": "excluded",
+          "item": "sprint-b-4a-local-schema-sqlite",
+          "reason": "B4A implements local schema and SQLite storage only; B9B exclusively closes the real SSH-to-active-agent integration.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-05T17:42:56+00:00",
+          "event": "excluded",
+          "item": "sprint-b-7-herdr-launcher",
+          "reason": "B7 implements the guarded Herdr launcher adapter with doubles; B9B exclusively closes the real SSH-to-active-agent integration.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-05T17:42:56+00:00",
+          "event": "excluded",
+          "item": "sprint-b-8-tmux-launcher",
+          "reason": "B8 implements the guarded tmux compatibility adapter with doubles; B9B exclusively closes the real SSH-to-active-agent integration.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-05T17:44:59+00:00",
+          "event": "excluded",
+          "item": "sprint-b-10a-daemon-api",
+          "reason": "B10A proves SSH CLI-to-daemon wire mapping against stateful doubles; B9B exclusively composes real services, launch adapters, and active-agent start.",
+          "replaced": false
         }
       ],
       "exclude": [
@@ -2136,6 +2204,26 @@
         {
           "item": "sprint-b-3c-external-integration-contract",
           "reason": "B3C freezes ATM, hmux, and sc-cron external contracts but does not implement the shpherd CLI, persisted definitions, or either launch adapter; SSH launch is closed by later launch/API sprints."
+        },
+        {
+          "item": "sprint-b-3b-service-launch-api-contract",
+          "reason": "B3B freezes CLI, daemon, and launcher contracts with doubles; B9B exclusively closes the real SSH-to-active-agent integration."
+        },
+        {
+          "item": "sprint-b-4a-local-schema-sqlite",
+          "reason": "B4A implements local schema and SQLite storage only; B9B exclusively closes the real SSH-to-active-agent integration."
+        },
+        {
+          "item": "sprint-b-7-herdr-launcher",
+          "reason": "B7 implements the guarded Herdr launcher adapter with doubles; B9B exclusively closes the real SSH-to-active-agent integration."
+        },
+        {
+          "item": "sprint-b-8-tmux-launcher",
+          "reason": "B8 implements the guarded tmux compatibility adapter with doubles; B9B exclusively closes the real SSH-to-active-agent integration."
+        },
+        {
+          "item": "sprint-b-10a-daemon-api",
+          "reason": "B10A proves SSH CLI-to-daemon wire mapping against stateful doubles; B9B exclusively composes real services, launch adapters, and active-agent start."
         }
       ]
     },
@@ -2242,6 +2330,20 @@
           "item": "sprint-b-10-dashboard",
           "reason": "B10 renders authenticated status snapshots and events but owns no sc-cron integration, ATM polling, status publication, timer, or scheduled operation.",
           "replaced": false
+        },
+        {
+          "at": "2026-11-05T17:42:56+00:00",
+          "event": "excluded",
+          "item": "sprint-b-4b-postgres-projection-store",
+          "reason": "B4B implements the PostgreSQL projection store only; B12 owns sc-cron heartbeat polling of ATM agent state.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-05T17:44:59+00:00",
+          "event": "excluded",
+          "item": "sprint-b-10a-daemon-api",
+          "reason": "B10A maps injected readiness doubles to the health wire and owns no sc-cron registration or ATM polling; B12 owns the real heartbeat.",
+          "replaced": false
         }
       ],
       "exclude": [
@@ -2268,6 +2370,14 @@
         {
           "item": "sprint-b-10-dashboard",
           "reason": "B10 renders authenticated status snapshots and events but owns no sc-cron integration, ATM polling, status publication, timer, or scheduled operation."
+        },
+        {
+          "item": "sprint-b-4b-postgres-projection-store",
+          "reason": "B4B implements the PostgreSQL projection store only; B12 owns sc-cron heartbeat polling of ATM agent state."
+        },
+        {
+          "item": "sprint-b-10a-daemon-api",
+          "reason": "B10A maps injected readiness doubles to the health wire and owns no sc-cron registration or ATM polling; B12 owns the real heartbeat."
         }
       ]
     }

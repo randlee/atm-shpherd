@@ -217,6 +217,7 @@ Excluded from (not judged; the cell passes as `excluded`):
 - `sprint-b-6-observation`: B6 implements read-only observation after schema contracts; B3 owns the initial scmux schema port.
 - `sprint-b-5-definition-service`: B5 implements service-layer definition behavior over the completed store seam; it creates or migrates no database schema object.
 - `sprint-b-10a-daemon-api`: B10A implements daemon transport, startup, health, and observability contracts; it creates or migrates no database schema object.
+- `sprint-b-12a-daemon-supervision`: B12A composes and supervises the completed daemon and creates or migrates no Shpherd database schema objects.
 
 Beads: anchor `shp-n20`, plan questions `shp-n20.1`, dev questions `shp-n20.2`
 
@@ -337,6 +338,7 @@ Excluded from (not judged; the cell passes as `excluded`):
 - `sprint-b-11-editor-actions`: B11 ports editor and command behavior after storage integration; B3 and B4A own schema parity before extensions.
 - `sprint-b-5-definition-service`: B5 consumes the completed schema through DefinitionStore and adds no Herdr-specific database field or initial parity migration.
 - `sprint-b-10a-daemon-api`: B10A consumes completed store configuration through APIs and adds no Herdr-specific database field or initial parity migration.
+- `sprint-b-12a-daemon-supervision`: B12A supervises the completed daemon after storage integration and owns neither initial scmux schema parity nor Herdr-specific schema fields.
 
 Beads: anchor `shp-4st`, plan questions `shp-4st.1`, dev questions `shp-4st.2`
 
@@ -389,6 +391,7 @@ Excluded from (not judged; the cell passes as `excluded`):
 - `sprint-b-4c-static-adaptor`: B4C implements the static store adaptor and carries no PostgreSQL team-view behavior or fleet projection.
 - `sprint-b-6-observation`: B6 implements host-local definition and observation queries and defines no PostgreSQL schema, synchronization, fleet view, or launch coordination.
 - `sprint-b-5-definition-service`: B5 owns host-local definition behavior and no PostgreSQL schema, host synchronization, fleet view, or cross-host launch coordination.
+- `sprint-b-8-tmux-launcher`: B8 implements the host-local tmux compatibility adapter and no PostgreSQL fleet projection or cross-host fleet view.
 
 Beads: anchor `shp-a0j`, plan questions `shp-a0j.1`, dev questions `shp-a0j.2`
 
@@ -439,6 +442,11 @@ Excluded from (not judged; the cell passes as `excluded`):
 - `sprint-b-2-integrate-workspace`: B2 defines launcher-policy primitives but does not implement the shpherd CLI, persisted definitions, or Herdr/tmux launch adapters; SSH launch is closed by later launch/API sprints.
 - `sprint-b-3a-schema-projection-contract`: B3A defines storage and projection contracts for launcher selection but does not implement SSH access or session start; those behaviors belong to later launch and authenticated API work.
 - `sprint-b-3c-external-integration-contract`: B3C freezes ATM, hmux, and sc-cron external contracts but does not implement the shpherd CLI, persisted definitions, or either launch adapter; SSH launch is closed by later launch/API sprints.
+- `sprint-b-3b-service-launch-api-contract`: B3B freezes CLI, daemon, and launcher contracts with doubles; B9B exclusively closes the real SSH-to-active-agent integration.
+- `sprint-b-4a-local-schema-sqlite`: B4A implements local schema and SQLite storage only; B9B exclusively closes the real SSH-to-active-agent integration.
+- `sprint-b-7-herdr-launcher`: B7 implements the guarded Herdr launcher adapter with doubles; B9B exclusively closes the real SSH-to-active-agent integration.
+- `sprint-b-8-tmux-launcher`: B8 implements the guarded tmux compatibility adapter with doubles; B9B exclusively closes the real SSH-to-active-agent integration.
+- `sprint-b-10a-daemon-api`: B10A proves SSH CLI-to-daemon wire mapping against stateful doubles; B9B exclusively composes real services, launch adapters, and active-agent start.
 
 Beads: anchor `shp-izw`, plan questions `shp-izw.1`, dev questions `shp-izw.2`
 
@@ -467,6 +475,8 @@ Excluded from (not judged; the cell passes as `excluded`):
 - `sprint-b-9c-expand-roster`: B9C implements an operator-triggered roster expansion workflow and does not integrate sc-cron, poll ATM on a heartbeat, publish scheduled status, or define a scheduled operation; its post-MVP sentence only excludes scheduling from this sprint.
 - `sprint-b-11-editor-actions`: B11 implements editor and launch actions and does not implement the sc-cron ATM-state polling heartbeat.
 - `sprint-b-10-dashboard`: B10 renders authenticated status snapshots and events but owns no sc-cron integration, ATM polling, status publication, timer, or scheduled operation.
+- `sprint-b-4b-postgres-projection-store`: B4B implements the PostgreSQL projection store only; B12 owns sc-cron heartbeat polling of ATM agent state.
+- `sprint-b-10a-daemon-api`: B10A maps injected readiness doubles to the health wire and owns no sc-cron registration or ATM polling; B12 owns the real heartbeat.
 
 Beads: anchor `shp-atm`, plan questions `shp-atm.1`, dev questions `shp-atm.2`
 
