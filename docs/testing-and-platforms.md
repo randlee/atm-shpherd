@@ -22,11 +22,11 @@ Signing keys, enrollment credentials, API tokens, database URLs, and platform se
 ## Integration and failure evidence
 
 - B9A records two-host synchronization under disconnect, reconnect, version skew, conflict, exclusion, and partial failure.
-- B9B records lease/fencing behavior under crash, partition, stale clock, retry race, and ownership transfer.
+- B9B records host-local guard and operation-journal behavior under accepted-before-dispatch crash, restart, unpublished-event recovery, retry race, idempotency mismatch, and unknown-outcome reconciliation.
 - B9C records every crash boundary between intent, ATM mutation, re-import, synchronization, guarded spawn, and observation.
 - B10 records the exact hardware, fixture, sample count, and tool versions for the 100-team/1,500-member performance budgets.
 - B10A/B10/B11 record authentication, authorization, version mismatch, error mapping, event ordering, reconnect, and redaction evidence.
-- B12 records parser, due-run, missed-run, restart, eligible-host, single-execution, and aggregate-isolation evidence.
+- B12 records heartbeat registration, periodic ATM polling, freshness, retry/backoff, restart, and aggregate-isolation evidence; it registers no scheduled launch or instruction job.
 
 ## Release evidence
 

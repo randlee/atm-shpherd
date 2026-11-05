@@ -22,7 +22,7 @@ directly, and every operator mutation goes through a named service command.
 ### Supporting evidence
 
 - Team / member / variant definition: validated create, edit, move, clone, unlink, import
-- Launch leases so one host owns a launch, with no duplicate panes
+- Host-local single-flight guards and durable operation journals prevent duplicate panes on one host without claiming cross-host ownership
 - Host-local SQLite plus shared PostgreSQL aggregate as the product's required shape
 - Runtime pollers and adapters that cannot mutate definitions
 - Stable cross-host team identity with immutable-by-default ATM identity
@@ -44,11 +44,11 @@ must not be blind, and one team's error must not stop or rewrite another team.
 - Discovery of runtime sessions that exist outside the definitions
 - Isolation: an error for one team cannot stop or rewrite another
 
-## Persona 3: Agent Scheduler
+## Persona 3: Agent Scheduler (post-Phase-B)
 
 **As a scheduler, I want agent teams to start on a schedule, so that recurring agent work runs without me launching windows by hand.**
 
-The scheduling registration surface lives on sc-runtime primitives: a registered job is either an
+This is a post-Phase-B capability. Phase B registers only the sc-cron heartbeat that polls ATM agent state; it registers no scheduled launch or instruction job. The later scheduling registration surface lives on sc-runtime primitives: a registered job is either an
 in-process Rust hook or the documented `python3 &lt;module&gt; cron.tick` / `cron.stop` hook, receiving
 one JSON object containing the schedule name and row payload only — never ATM team or phase fields.
 
@@ -65,7 +65,7 @@ one JSON object containing the schedule name and row payload only — never ATM 
 `shpherd-ui` is one responsive TypeScript client over the daemon's authenticated HTTP/WebSocket
 API, served to browsers and bundled by Tauri for macOS, Windows, Linux, iOS and Android. Tauri is
 a first-class client target, not a replacement transport. Desktop and phone builds are
-presentation shells only: they never open shpherd stores, run hmux, or acquire launch leases.
+presentation shells only: they never open shpherd stores, run hmux, or issue host-local launch guards.
 
 ### Supporting evidence
 
@@ -78,16 +78,17 @@ presentation shells only: they never open shpherd stores, run hmux, or acquire l
 
 **As an operator with more than one machine, I want to launch a synchronized ATM-backed team from an eligible second computer, so that capacity is not tied to the box I happen to be sitting at.**
 
-This is the capability scmux never had. It depends on host-aggregate sync being correct rather
-than eventual: a launch from an eligible host must not create duplicate ATM members or duplicate
-runtime panes.
+This is the capability scmux never had. A host may explicitly import synchronized desired-state
+data, but launch authority remains local: each eligible host resolves its own definition and may
+run the same named team independently. The host-local guard prevents duplicate side effects on
+that host without imposing cross-host ownership.
 
 ### Supporting evidence
 
-- Host-aggregate synchronization between local SQLite and the shared PostgreSQL store
-- Launch lease acquisition gated on eligibility
+- Host-aggregate synchronization between local SQLite and the shared PostgreSQL read model
+- Host-local launch guard and durable idempotency gated on local eligibility
 - ATM catalog importer as the read-only upstream source for launchable teams and rosters
-- No duplicate ATM members or duplicate panes on a second-host launch
+- No duplicate ATM members or panes from replaying one host-local launch request; same-named teams may run independently on different hosts
 
 ---
 
