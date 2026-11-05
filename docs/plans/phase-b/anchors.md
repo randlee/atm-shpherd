@@ -274,6 +274,7 @@ Excluded from (not judged; the cell passes as `excluded`):
 - `sprint-b-4b-postgres-projection-store`: B4B stores projected launcher policy but does not select or implement Shpherd launcher defaults.
 - `sprint-b-9a-sync-projection`: B9A synchronizes an already-selected launcher policy but does not define or implement backend selection.
 - `sprint-b-11a-mobile`: B11A packages shared clients for iOS and Android but does not define or implement launch-backend selection.
+- `sprint-b-6-observation`: B6 returns the persisted launcher policy through a read-only launch-preparation capability; B9B owns applying the omitted-selection Herdr default and performing launch.
 
 Beads: anchor `shp-vn1`, plan questions `shp-vn1.1`, dev questions `shp-vn1.2`
 
@@ -302,6 +303,7 @@ Excluded from (not judged; the cell passes as `excluded`):
 - `sprint-b-9a-sync-projection`: B9A synchronizes tmux configuration values but does not define team launcher configuration or implement tmux launching.
 - `sprint-b-10-dashboard`: B10 is a read-only catalog/dashboard integration and neither defines launcher configuration nor implements tmux launching.
 - `sprint-b-4a-local-schema-sqlite`: B4A persists schema and operation evidence but does not implement or exercise the tmux launcher; B8 and B9B own that lifecycle.
+- `sprint-b-6-observation`: B6 returns explicit tmux policy as launch-preparation data but owns no tmux adapter or launch mutation; B8 and B9B close that behavior.
 
 Beads: anchor `shp-tar`, plan questions `shp-tar.1`, dev questions `shp-tar.2`
 
@@ -339,6 +341,7 @@ Excluded from (not judged; the cell passes as `excluded`):
 - `sprint-b-5-definition-service`: B5 consumes the completed schema through DefinitionStore and adds no Herdr-specific database field or initial parity migration.
 - `sprint-b-10a-daemon-api`: B10A consumes completed store configuration through APIs and adds no Herdr-specific database field or initial parity migration.
 - `sprint-b-12a-daemon-supervision`: B12A supervises the completed daemon after storage integration and owns neither initial scmux schema parity nor Herdr-specific schema fields.
+- `sprint-b-3b-service-launch-api-contract`: B3B freezes service and launch contracts but creates or migrates no database schema fields; B3 and B4A own parity-before-extension ordering.
 
 Beads: anchor `shp-4st`, plan questions `shp-4st.1`, dev questions `shp-4st.2`
 
@@ -447,6 +450,7 @@ Excluded from (not judged; the cell passes as `excluded`):
 - `sprint-b-7-herdr-launcher`: B7 implements the guarded Herdr launcher adapter with doubles; B9B exclusively closes the real SSH-to-active-agent integration.
 - `sprint-b-8-tmux-launcher`: B8 implements the guarded tmux compatibility adapter with doubles; B9B exclusively closes the real SSH-to-active-agent integration.
 - `sprint-b-10a-daemon-api`: B10A proves SSH CLI-to-daemon wire mapping against stateful doubles; B9B exclusively composes real services, launch adapters, and active-agent start.
+- `sprint-b-6-observation`: B6 supplies the production read-only launch input and owns no SSH transport, CLI/daemon mapping, launcher adapter, or active-agent start; B9B closes the end-to-end path.
 
 Beads: anchor `shp-izw`, plan questions `shp-izw.1`, dev questions `shp-izw.2`
 

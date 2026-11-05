@@ -1338,6 +1338,13 @@
           "item": "sprint-b-11a-mobile",
           "reason": "B11A packages shared clients for iOS and Android but does not define or implement launch-backend selection.",
           "replaced": false
+        },
+        {
+          "at": "2026-11-05T17:57:43+00:00",
+          "event": "excluded",
+          "item": "sprint-b-6-observation",
+          "reason": "B6 returns the persisted launcher policy through a read-only launch-preparation capability; B9B owns applying the omitted-selection Herdr default and performing launch.",
+          "replaced": false
         }
       ],
       "exclude": [
@@ -1368,6 +1375,10 @@
         {
           "item": "sprint-b-11a-mobile",
           "reason": "B11A packages shared clients for iOS and Android but does not define or implement launch-backend selection."
+        },
+        {
+          "item": "sprint-b-6-observation",
+          "reason": "B6 returns the persisted launcher policy through a read-only launch-preparation capability; B9B owns applying the omitted-selection Herdr default and performing launch."
         }
       ]
     },
@@ -1464,6 +1475,13 @@
           "item": "sprint-b-4a-local-schema-sqlite",
           "reason": "B4A persists schema and operation evidence but does not implement or exercise the tmux launcher; B8 and B9B own that lifecycle.",
           "replaced": false
+        },
+        {
+          "at": "2026-11-05T17:57:43+00:00",
+          "event": "excluded",
+          "item": "sprint-b-6-observation",
+          "reason": "B6 returns explicit tmux policy as launch-preparation data but owns no tmux adapter or launch mutation; B8 and B9B close that behavior.",
+          "replaced": false
         }
       ],
       "exclude": [
@@ -1490,6 +1508,10 @@
         {
           "item": "sprint-b-4a-local-schema-sqlite",
           "reason": "B4A persists schema and operation evidence but does not implement or exercise the tmux launcher; B8 and B9B own that lifecycle."
+        },
+        {
+          "item": "sprint-b-6-observation",
+          "reason": "B6 returns explicit tmux policy as launch-preparation data but owns no tmux adapter or launch mutation; B8 and B9B close that behavior."
         }
       ]
     },
@@ -1649,6 +1671,13 @@
           "item": "sprint-b-12a-daemon-supervision",
           "reason": "B12A supervises the completed daemon after storage integration and owns neither initial scmux schema parity nor Herdr-specific schema fields.",
           "replaced": false
+        },
+        {
+          "at": "2026-11-05T17:58:22+00:00",
+          "event": "excluded",
+          "item": "sprint-b-3b-service-launch-api-contract",
+          "reason": "B3B freezes service and launch contracts but creates or migrates no database schema fields; B3 and B4A own parity-before-extension ordering.",
+          "replaced": false
         }
       ],
       "exclude": [
@@ -1711,6 +1740,10 @@
         {
           "item": "sprint-b-12a-daemon-supervision",
           "reason": "B12A supervises the completed daemon after storage integration and owns neither initial scmux schema parity nor Herdr-specific schema fields."
+        },
+        {
+          "item": "sprint-b-3b-service-launch-api-contract",
+          "reason": "B3B freezes service and launch contracts but creates or migrates no database schema fields; B3 and B4A own parity-before-extension ordering."
         }
       ]
     },
@@ -2190,6 +2223,13 @@
           "item": "sprint-b-10a-daemon-api",
           "reason": "B10A proves SSH CLI-to-daemon wire mapping against stateful doubles; B9B exclusively composes real services, launch adapters, and active-agent start.",
           "replaced": false
+        },
+        {
+          "at": "2026-11-05T17:57:43+00:00",
+          "event": "excluded",
+          "item": "sprint-b-6-observation",
+          "reason": "B6 supplies the production read-only launch input and owns no SSH transport, CLI/daemon mapping, launcher adapter, or active-agent start; B9B closes the end-to-end path.",
+          "replaced": false
         }
       ],
       "exclude": [
@@ -2224,6 +2264,10 @@
         {
           "item": "sprint-b-10a-daemon-api",
           "reason": "B10A proves SSH CLI-to-daemon wire mapping against stateful doubles; B9B exclusively composes real services, launch adapters, and active-agent start."
+        },
+        {
+          "item": "sprint-b-6-observation",
+          "reason": "B6 supplies the production read-only launch input and owns no SSH transport, CLI/daemon mapping, launcher adapter, or active-agent start; B9B closes the end-to-end path."
         }
       ]
     },

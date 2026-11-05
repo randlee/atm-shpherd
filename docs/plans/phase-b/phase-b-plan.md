@@ -19,7 +19,7 @@ This plan implements `docs/atm-shpherd-prd.md` and the locked anchors in `anchor
 | foundation/types/auth | root/package manifests | canonical cross-track IDs, revisions/cursors, logical refs, bridge evidence, and verification-independent authorization | generated runtime only | B2 |
 | schema | `boundaries/shpherd-schema.yaml` | rows, errors, store contracts, parity and extension migrations | B2 foundation | B3, B3A, B4A |
 | engine stores/adaptor | engine manifests | separate SQLite, PostgreSQL, and static-adaptor implementations | schema contract | B4A, B4B, B4C, B9A |
-| domain service | `boundaries/shpherd-service.yaml` | definitions, observation, reconciliation, and host-local idempotent commands | schema/adaptor | B5, B6, B9B, B9C |
+| domain service | `boundaries/shpherd-service.yaml` | definitions, observation/launch preparation, reconciliation, and host-local idempotent commands | schema/adaptor | B5, B6, B9B, B9C |
 | local launch adapters | launcher manifest | independent closed Herdr/tmux adapters and hmux capability contract | service/types | B7, B8 |
 | ATM adapter | ATM manifest | independent versioned observation and exact command mutation/reconciliation; ATM is actual-state authority | service/types | B6A |
 | daemon API | daemon manifest | authenticated snapshots, commands, events, errors, and complete health/readiness wire plus typed dependency-input contract | service/types | B3B, B10A, B12A |
@@ -54,7 +54,7 @@ Stable track IDs do not change between the registry and wave table. A shared con
 | T-BOOT | released runtime workspace | B1 baseline | B2 integration; 0.2.0 interrupt | B2 | 3: B1 → B2 → interrupt |
 | T-STORAGE | parity, local/shared stores, synchronization | B3A after B3 parity | B4A, B4B, B4C | B9A | 4: B3 → B3A → B4x → B9A |
 | T-SERVICE | definition and observation services | B3B service contract plus B3A/B4A definition store | B5, B6 | B10 read composition and B11 command composition, independently | 4: latest contract → B4A → B5/B6 → B10/B11 |
-| T-LAUNCH | independent Herdr/tmux launch adapters and host-local safety | B3B plus B3C hmux contract and B10A CLI/daemon boundary | B7, B8, B10A | B9B sole real SSH launch composition | 3: latest contract → B7/B8/B10A → B9B |
+| T-LAUNCH | independent Herdr/tmux launch adapters and host-local safety | B3B launch contract, B4A local journal store, B6 production launch reader, B3C hmux contract, and B10A CLI/daemon boundary | B6, B7, B8, B10A | B9B sole real SSH launch composition | 5: B3 → B3A → B4A → B6 → B9B; B7/B8/B10A close in parallel |
 | T-ATM | versioned roster projection and expansion | B3C | B6A | B9C | 3: B3C → B6A → B9C |
 | T-API-CLIENT | authenticated API and shared clients | B3B | B10A boundary | B10 read and B11 command applications in parallel, then B11A native packaging | 4: B3B → B10A → B10/B11 → B11A |
 | T-HEARTBEAT | ATM-state polling heartbeat | B3C sc-cron registration/freshness contract plus B3B readiness-input contract | B12 registration, polling, and typed freshness publication | B12 | 2: B3B/B3C → B12 |
@@ -73,13 +73,13 @@ Stable track IDs do not change between the registry and wave table. A shared con
 | 3 | T-LAUNCH | B7 | Herdr/hmux adapter | independent Herdr adapter/tests and hmux fixtures | B3B guard + B3C hmux double |
 | 3 | T-LAUNCH | B8 | tmux adapter | independent tmux adapter/tests and fixtures | B3B guard/observation double |
 | 3 | T-API-CLIENT | B10A | daemon API/CLI boundary | daemon API/auth/events/health mapping tests and CLI | B3B service/readiness doubles |
-| 4 | T-STORAGE | B4A | local schema/SQLite | schema/SQLite extension modules, migrations, tests | B3A local contract |
+| 4 | T-STORAGE | B4A | local schema/SQLite | schema/SQLite extension modules, migrations, DefinitionStore/OperationJournalStore tests | B3A local contract |
 | 4 | T-STORAGE | B4B | PostgreSQL projection | PostgreSQL projection modules, migrations, tests | B3A shared contract |
 | 4 | T-STORAGE | B4C | static adaptor | adaptor source/tests | B3A batch/store doubles |
 | 5 | T-SERVICE | B5 | definition service | `shpherd-service/{src,tests}/definitions/**` | B3B definition double + B4A definition store |
-| 5 | T-SERVICE | B6 | observation service | `shpherd-service/{src,tests}/observation/**` | B3B reader double + B4A definition-store reads |
+| 5 | T-SERVICE | B6 | observation/launch-preparation service | `shpherd-service/{src,tests}/observation/**` | B3B reader contract + B4A definition-store reads |
 | 5 | T-STORAGE | B9A | cross-store synchronization | service sync modules/tests and sync integration tests | B4A/B4B/B4C |
-| 6 | T-LAUNCH | B9B | host-local launch safety | service operation/launch modules/tests, sole real SSH CLI/daemon/launcher integration, and cross-host duplicate-name evidence | B7/B8/B10A |
+| 6 | T-LAUNCH | B9B | host-local launch safety | service operation-journal/launch modules/tests, sole real SSH CLI/daemon/production-reader/launcher integration, and independent-host duplicate-name evidence | B4A/B6/B7/B8/B10A |
 | 6 | T-API-CLIENT | B10 | read client/API composition | catalog/API/observability client paths, real-service integration, performance tests | B10A/B5/B6/B9A |
 | 7 | T-ATM | B9C | roster expansion | roster workflow and integration tests | B6A/B7/B9A/B9B |
 | 7 | T-HEARTBEAT | B12 | ATM-state heartbeat | heartbeat registration, typed freshness publication, readiness-input mapping, and ATM observation/projection integration | B3B/B3C/B6A/B9A |
