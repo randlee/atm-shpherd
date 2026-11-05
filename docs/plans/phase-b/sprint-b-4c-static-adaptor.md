@@ -4,7 +4,7 @@ bead: shp-phase-b.25
 status: planned
 closure_type: boundary
 target_boundary: static-store-adaptor
-requirements: []
+requirements: [REQ-SYNC]
 adrs: [ADR-SHP-002, ADR-SHP-004, ADR-SHP-015]
 owned_paths:
   - crates/shpherd-store-adaptor/src/**
@@ -26,8 +26,8 @@ Close static engine dispatch and row movement against B3A doubles while keeping 
 
 ## Required work and deliverables
 
-- Implement statically dispatched projection reads/writes, exact canonical batch/digest receipts, and typed key/cursor/tombstone failures against B3A test doubles; tagged lease-authority operations remain a distinct PostgreSQL-only seam.
-- Keep selection, timer, route, merge, conflict, lease, and reconciliation policy out.
+- Implement statically dispatched projection reads/writes, exact canonical batch/digest receipts, and typed key/cursor/tombstone failures against B3A test doubles.
+- Keep selection, timer, route, merge, conflict, launch-authority, and reconciliation policy out.
 
 ## This sprint does not close
 

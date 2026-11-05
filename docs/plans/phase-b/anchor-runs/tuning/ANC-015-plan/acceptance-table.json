@@ -1,0 +1,144 @@
+[
+  {
+    "candidate_id": "boundary",
+    "question_sha256": "d4b3fa4cee6d090f8fbde12a00b787af86601525b04b9a0b0feffa5d85f2d653",
+    "semantic_accepted": true,
+    "score": {
+      "exact_role_cells": 60,
+      "total_role_cells": 60,
+      "exact_semantic_verdicts": 20,
+      "total_semantic_verdicts": 20,
+      "stable_cases": 10,
+      "total_cases": 10,
+      "regressions": 0
+    },
+    "confidence_diagnostics": {
+      "threshold": 0.8,
+      "cells_at_or_above_threshold": 57,
+      "total_cells": 60,
+      "minimum": 0.6,
+      "p10": 0.86,
+      "median": 1.0,
+      "mean": 0.961
+    },
+    "complexity_bytes": 1568,
+    "mismatches": [],
+    "reason": "Exact role labels and semantic verdicts on both identical repeats, stable in every case, zero regressions.",
+    "rank": 1,
+    "selected": true
+  },
+  {
+    "candidate_id": "specific",
+    "question_sha256": "24255442696551b065f03b26d333d701b2bd5c74a90f744438b88ce21cd8d998",
+    "semantic_accepted": true,
+    "score": {
+      "exact_role_cells": 60,
+      "total_role_cells": 60,
+      "exact_semantic_verdicts": 20,
+      "total_semantic_verdicts": 20,
+      "stable_cases": 10,
+      "total_cases": 10,
+      "regressions": 0
+    },
+    "confidence_diagnostics": {
+      "threshold": 0.8,
+      "cells_at_or_above_threshold": 54,
+      "total_cells": 60,
+      "minimum": 0.68,
+      "p10": 0.77,
+      "median": 1.0,
+      "mean": 0.9405
+    },
+    "complexity_bytes": 1571,
+    "mismatches": [],
+    "reason": "Exact role labels and semantic verdicts on both identical repeats, stable in every case, zero regressions.",
+    "rank": 2,
+    "selected": false
+  },
+  {
+    "candidate_id": "baseline",
+    "question_sha256": "8e9e29b043185ff7a76912e1d28726222bcd3fc867dcabb78a9bef523029ec05",
+    "semantic_accepted": false,
+    "score": {
+      "exact_role_cells": 58,
+      "total_role_cells": 60,
+      "exact_semantic_verdicts": 18,
+      "total_semantic_verdicts": 20,
+      "stable_cases": 10,
+      "total_cases": 10,
+      "regressions": 0
+    },
+    "confidence_diagnostics": {
+      "threshold": 0.8,
+      "cells_at_or_above_threshold": 50,
+      "total_cells": 60,
+      "minimum": 0.16,
+      "p10": 0.52,
+      "median": 0.97,
+      "mean": 0.8808333333333334
+    },
+    "complexity_bytes": 2554,
+    "mismatches": [
+      {
+        "case_id": "mixed-conflict",
+        "repeat": 1,
+        "role": "contradicted",
+        "expected": "yes",
+        "observed": "no"
+      },
+      {
+        "case_id": "mixed-conflict",
+        "repeat": 2,
+        "role": "contradicted",
+        "expected": "yes",
+        "observed": "no"
+      }
+    ],
+    "reason": "Rejected: frozen-oracle role mismatches remain; no labels or cases were changed.",
+    "rank": 3,
+    "selected": false
+  },
+  {
+    "candidate_id": "behavioral",
+    "question_sha256": "71786fda5fc81769a8091f62c3c816afc3094e20ed99b9db2ee7a8c36370670d",
+    "semantic_accepted": false,
+    "score": {
+      "exact_role_cells": 58,
+      "total_role_cells": 60,
+      "exact_semantic_verdicts": 18,
+      "total_semantic_verdicts": 20,
+      "stable_cases": 10,
+      "total_cases": 10,
+      "regressions": 2
+    },
+    "confidence_diagnostics": {
+      "threshold": 0.8,
+      "cells_at_or_above_threshold": 49,
+      "total_cells": 60,
+      "minimum": 0.3,
+      "p10": 0.49,
+      "median": 1.0,
+      "mean": 0.9051666666666667
+    },
+    "complexity_bytes": 1520,
+    "mismatches": [
+      {
+        "case_id": "replacement",
+        "repeat": 1,
+        "role": "relevant",
+        "expected": "yes",
+        "observed": "no"
+      },
+      {
+        "case_id": "replacement",
+        "repeat": 2,
+        "role": "relevant",
+        "expected": "yes",
+        "observed": "no"
+      }
+    ],
+    "reason": "Rejected: frozen-oracle role mismatches remain; no labels or cases were changed.",
+    "rank": 4,
+    "selected": false
+  }
+]

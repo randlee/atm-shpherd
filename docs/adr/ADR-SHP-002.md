@@ -2,7 +2,7 @@
 
 - **Status:** Approved
 - **Owner:** B3A
-- **Decision:** SQLite is complete host state; PostgreSQL receives the explicit minimum launchable definition: typed placement, Team/Variant, typed project git ref, ordered nonempty prompt refs, launcher/ATM provenance, variant-qualified members, per-variant backend/runtime bindings, assignments/state, enrollment, and source-qualified cursor/tombstone metadata. Resolved paths, prompt bodies, credentials, terminal handles, and observations stay local.
+- **Decision:** SQLite is complete host state; PostgreSQL receives the explicit minimum launchable definition: typed placement, Team/Variant, typed project git ref, ordered nonempty prompt refs, launcher/ATM provenance, variant-qualified members, per-variant backend/runtime bindings, assignments/state, enrollment, and source-qualified cursor/tombstone metadata. Resolved paths, prompt bodies, credentials, terminal handles, and observations stay local. The schema-owned open `DefinitionStore` is the sole durable definition read/atomic-commit seam: only `shpherd-store-sqlite` implements it in production, while `shpherd-service` consumes its read and commit capabilities through static composition; every other implementation or consumer edge is forbidden by boundary manifests.
 - **Alternatives rejected:** generic replication, shared SQL, last-write-wins, or copying paths/logs/credentials.
-- **Consequences:** projection additions require an allowlist migration and exclusion tests.
-- **Evidence:** B3A allowlist/exclusion and empty-target hydration fixtures, B4 store contract tests, and B9A two-host launchability/replay/conflict tests.
+- **Consequences:** projection additions require an allowlist migration and exclusion tests. Definition persistence cannot be recreated inside a service, daemon, poller, or second engine path.
+- **Evidence:** B3A allowlist/exclusion, DefinitionStore compile-fail edges, and empty-target hydration fixtures; B4 atomic definition-store tests; and B9A two-host launchability/replay/conflict tests.

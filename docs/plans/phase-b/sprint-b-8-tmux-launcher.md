@@ -4,11 +4,11 @@ bead: shp-phase-b.9
 status: planned
 closure_type: boundary
 target_boundary: tmux-adapter
-requirements: []
+requirements: [ANC-002, ANC-008, ANC-009, ANC-013, ANC-014, REQ-LAUNCH]
 adrs: [ADR-SHP-004, ADR-SHP-005]
 owned_paths:
-  - crates/shpherd-daemon/src/adapters/tmux/**
-  - crates/shpherd-daemon/tests/tmux/**
+  - crates/shpherd-launchers/src/tmux/**
+  - crates/shpherd-launchers/tests/tmux/**
   - tests/fixtures/tmux/**
 relations:
   must_follow:
@@ -27,8 +27,9 @@ Close explicit tmux compatibility behind the same guarded launcher contract whil
 
 ## Required work and deliverables
 
-- Port retained tmux/tmuxp dry-run/start/stop/observe/focus/relaunch/repair/dynamic-spawn/nudge, construction, discovery, guards, idempotency, evidence, and session semantics behind the same closed launcher result/error contracts; unsupported capabilities fail explicitly.
-- Require `LaunchLeaseGuard` for every mutation while keeping dry-run/observe/focus on the read-only trait. Owned paths: tmux daemon adapter and simulator fixtures/tests.
+- Per phase policy, B1's sc-runtime `v0.1.1` template installation and baseline tests, B2, and B3B must close before this sprint; if `v0.2.0` is observed, its interrupt is the next Shpherd work started and completes before this sprint starts or resumes.
+- Port retained tmux/tmuxp dry-run/start/stop/observe/focus/relaunch/repair/dynamic-spawn/nudge, construction, discovery, guards, idempotency, evidence, and session semantics behind the same boundary-allowlisted launcher port and service-issued mutation guard; unsupported capabilities fail explicitly. Tmux observations are launcher evidence only and never replace ATM as the source of truth for each running team instance.
+- Require `HostLaunchGuard` for every mutation while keeping dry-run/observe/focus on the read-only trait. The guard and idempotency journal are host-local; an identically named tmux team may run on another host. Owned paths: independent tmux adapter and simulator fixtures/tests.
 
 ## Relationships
 
@@ -36,11 +37,14 @@ Close explicit tmux compatibility behind the same guarded launcher contract whil
 
 ## This sprint does not close
 
-No Herdr fallback policy, remote ownership transfer, or UI launcher action; integration sprints own them.
+No Herdr fallback policy, cross-host ownership, or UI launcher action; integration sprints own them.
 
 ## Acceptance and validation
 
-- `boundary:tmux-adapter`: every shared lifecycle action, including member stop/reconcile and registration-evidence validation, is implemented or returns `CapabilityMissing`; read actions work without lease authority and guarded/idempotent mutations pass the shared stateful double without duplicate sessions.
+- Process simulator tests cover deadline before spawn, cancellation during tmux execution, bounded/oversized output, terminate-then-kill escalation, process-group cleanup, ignored termination, daemon crash, and idempotent recovery for not-started versus outcome-unknown mutations.
+
+- `boundary:tmux-adapter`: every shared lifecycle action, including member stop/reconcile and registration-evidence validation, is implemented or returns `CapabilityMissing`; guarded/idempotent mutations pass the shared stateful double without duplicate sessions on one host while same-name sessions on another host remain valid.
+- The adapter exposes the explicit tmux path consumed by the authenticated `shpherd` CLI; a contract integration fixture drives it through a noninteractive SSH-facing CLI/API double and starts the requested active agents.
 - Unsupported capabilities return actionable stable errors; adapter tests, lint/build, and boundary validation pass.
 - Multi-variant fixtures select the explicit tmux variant's branch/runtime binding, ordered prompts, and assigned members without defaulting to or merging another variant.
 

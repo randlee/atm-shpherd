@@ -1,0 +1,156 @@
+{
+  "schema": "plan-anchor/anchor-oracle/1",
+  "authority": {
+    "intent": {
+      "id": "phase-b-intent",
+      "version": "2026-11-02",
+      "sha256": "89c58853b6428ba3f074f23839fb8d40a83eabe040c7be4f107bbe7a8acd7b6b",
+      "content": "# Intent - phase-b\n\nWritten 2026-11-02 by randlee and Codex.\n\n## What this plan is for\n\nPhase B turns the existing atm-shpherd product definition and client prototype into a working sc-runtime application. It begins with an untouched, tested sc-runtime 0.1.1 `sqlite-postgres` generation, then ports the current scmux schema, business behavior, and web UI into the Shpherd architecture.\n\nThe execution-ready boundary map, wave table, and sprint documents are indexed by `phase-b-plan.md`. The locked anchor record remains `anchors.json`; hardening may reorganize sprint ownership but may not weaken or replace those anchors.\n\nShpherd is an operator convenience and status tool. ATM is the source of truth for each running team instance; Shpherd persists local launch definitions and observations in SQLite, publishes host-qualified reports to a shared PostgreSQL fleet view, and launches through independent Herdr or tmux adapters. PostgreSQL does not own teams or serialize launches, so identical team and agent names may run concurrently on different hosts. Phase B uses sc-cron only as the ATM-state polling heartbeat; scheduled launches and instructions are later work.\n\n## What success looks like\n\n- The generated sc-runtime baseline passes setup, lint, test, CLI-build, and daemon-build gates before scmux migration begins.\n- The `shpherd` CLI and `atm-shpherd` daemon reproduce the retained scmux schema, definition management, observation, launcher, and browser/Tauri UI behavior.\n- A team launches through Herdr by default and through tmux when explicitly configured.\n- PostgreSQL shows host-qualified teams across all computers without becoming launch authority; an operator may explicitly create/import a local definition and launch it through `shpherd` over SSH.\n- The Phase B sc-cron heartbeat polls authoritative ATM agent state and refreshes Shpherd observations; it never schedules a launch or instruction.\n- The repository upgrades to sc-runtime 0.2.0 immediately after release, including its dependency refresh and complete sc-lint 0.8.4-or-newer consumer installation.\n\n## What is deliberately out of scope\n\n- AI chat, ontology generation, OxyGraph context providers, and schema-derived agent context graphs.\n- Replacing app-owned Shpherd schema, synchronization, launcher, or ATM policy with sc-runtime responsibilities.\n- Exact visual redesign beyond porting the retained scmux UI behavior into the existing browser/Tauri client.\n- PostgreSQL launch leases, global ownership/fencing, global team-name uniqueness, and scheduled/overnight team actions.\n\n## Anchors\n\nAnchors for this plan live in `anchors.json` (record of truth) and are rendered to `anchors.md`. Requirements and ADRs that govern this plan are listed there too, under their own IDs.\n"
+    },
+    "anchors": {
+      "sha256": "e64f65d7c284cf90b5d7db6f7fcd295285952a9b9dc256890950984fe9d55e51",
+      "records": [
+        {
+          "id": "ANC-015",
+          "version": 3,
+          "state": "locked",
+          "statement": "Phase B must use sc-cron as a heartbeat that polls ATM agent state.",
+          "quote": "for mvp, cron would be heartbead for polling atm agent state.",
+          "kind": "directive",
+          "scope": "Phase B beads that integrate sc-cron, poll ATM agent state, publish status, or define scheduled operations.",
+          "check": "The sc-cron registry and callback tests expose the ATM-state polling heartbeat and no scheduled launch or instruction job.",
+          "fixtures": {
+            "pass": [
+              "sc-cron runs a heartbeat that polls ATM agent state for Shpherd status."
+            ],
+            "fail": [
+              "An sc-cron job launches atm-dev at 2 a.m. and instructs atm-lead to begin a sprint during Phase B."
+            ]
+          },
+          "summary": "Limit MVP cron to ATM heartbeat",
+          "deterministic_check": "The sc-cron registry and callback tests expose the ATM-state polling heartbeat and no scheduled launch or instruction job.",
+          "context": "Phase B architecture clarification in Codex"
+        }
+      ]
+    }
+  },
+  "gate": "planning",
+  "roles": [
+    "relevant",
+    "addressed",
+    "contradicted"
+  ],
+  "frozen_before_live": true,
+  "cases": [
+    {
+      "id": "fixture-pass",
+      "text": "sc-cron runs a heartbeat that polls ATM agent state for Shpherd status.",
+      "expected_answers": {
+        "relevant": "yes",
+        "addressed": "yes",
+        "contradicted": "no"
+      },
+      "expected_verdict": "satisfied",
+      "rationale": "Approved polling-heartbeat fixture."
+    },
+    {
+      "id": "fixture-fail",
+      "text": "An sc-cron job launches atm-dev at 2 a.m. and instructs atm-lead to begin a sprint during Phase B.",
+      "expected_answers": {
+        "relevant": "yes",
+        "addressed": "no",
+        "contradicted": "yes"
+      },
+      "expected_verdict": "contradicted",
+      "rationale": "Approved scheduled launch and instruction fail fixture; heartbeat polling is absent."
+    },
+    {
+      "id": "minimal",
+      "text": "Phase B uses sc-cron as a heartbeat that polls ATM agent state.",
+      "expected_answers": {
+        "relevant": "yes",
+        "addressed": "yes",
+        "contradicted": "no"
+      },
+      "expected_verdict": "satisfied",
+      "rationale": "Exact positive obligation."
+    },
+    {
+      "id": "silence",
+      "text": "Initialize the Phase B sc-cron job registry.",
+      "expected_answers": {
+        "relevant": "yes",
+        "addressed": "no",
+        "contradicted": "no"
+      },
+      "expected_verdict": "not_addressed",
+      "rationale": "Registry initialization is in scope but does not state heartbeat or actions; silence is not conflict."
+    },
+    {
+      "id": "topical-only",
+      "text": "Document the sc-cron heartbeat callback name, without specifying what that callback does.",
+      "expected_answers": {
+        "relevant": "yes",
+        "addressed": "no",
+        "contradicted": "no"
+      },
+      "expected_verdict": "not_addressed",
+      "rationale": "A callback name alone does not specify ATM-state polling."
+    },
+    {
+      "id": "replacement",
+      "text": "Phase B removes the sc-cron ATM-state polling heartbeat and instead polls ATM only when the user refreshes the browser.",
+      "expected_answers": {
+        "relevant": "yes",
+        "addressed": "no",
+        "contradicted": "yes"
+      },
+      "expected_verdict": "contradicted",
+      "rationale": "Explicit removal of required sc-cron heartbeat violates positive obligation."
+    },
+    {
+      "id": "irrelevant",
+      "text": "Adjust the logo spacing in the browser header CSS.",
+      "expected_answers": {
+        "relevant": "no",
+        "addressed": "no",
+        "contradicted": "no"
+      },
+      "expected_verdict": "not_applicable",
+      "rationale": "Presentation spacing is independent of cron, polling, status and scheduled actions."
+    },
+    {
+      "id": "deferred-actions",
+      "text": "In Phase B, sc-cron runs the heartbeat polling ATM agent state. Scheduled launches and instructions are deferred until after Phase B.",
+      "expected_answers": {
+        "relevant": "yes",
+        "addressed": "yes",
+        "contradicted": "no"
+      },
+      "expected_verdict": "satisfied",
+      "rationale": "Explicit later-work boundary preserves current Phase B heartbeat-only behavior."
+    },
+    {
+      "id": "manual-launch",
+      "text": "In Phase B, sc-cron runs a heartbeat polling ATM agent state. An operator may manually launch a team through the CLI; no scheduled launch or instruction job is registered.",
+      "expected_answers": {
+        "relevant": "yes",
+        "addressed": "yes",
+        "contradicted": "no"
+      },
+      "expected_verdict": "satisfied",
+      "rationale": "Manual operator launch is allowed by INTENT; it is not a scheduled cron operation."
+    },
+    {
+      "id": "mixed-conflict",
+      "text": "In Phase B, sc-cron runs a heartbeat polling ATM agent state, and a separate sc-cron job launches a team nightly and instructs its lead to start work.",
+      "expected_answers": {
+        "relevant": "yes",
+        "addressed": "yes",
+        "contradicted": "yes"
+      },
+      "expected_verdict": "contradicted",
+      "rationale": "Polling obligation is present while prohibited scheduled launch/instruction is independently added."
+    }
+  ]
+}

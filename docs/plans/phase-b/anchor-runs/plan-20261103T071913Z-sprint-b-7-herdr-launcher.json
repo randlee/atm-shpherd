@@ -1,0 +1,803 @@
+{
+  "schema": "plan-anchoring/run/1",
+  "run_id": "plan-20261103T071913Z-sprint-b-7-herdr-launcher",
+  "gate": "plan",
+  "created_at": "2026-11-03T07:19:13+00:00",
+  "anchors_path": "docs/plans/phase-b/anchors.json",
+  "plan": "phase-b",
+  "item": {
+    "id": "sprint-b-7-herdr-launcher",
+    "title": "sprint-b-7-herdr-launcher",
+    "source": "docs/plans/phase-b/sprint-b-7-herdr-launcher.md",
+    "chars": 3004,
+    "truncated": false,
+    "chars_before_reduction": 3004,
+    "code_reduced": {
+      "blocks": 0,
+      "lines": 0
+    }
+  },
+  "model_requested": "jev-latest",
+  "model_answered": "jev-1.14.0",
+  "threshold": 0.6,
+  "max_request_bytes": 24000,
+  "min_item_chars": 2000,
+  "dry_run": false,
+  "fixture": false,
+  "results": [
+    {
+      "anchor_id": "ANC-001",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Shpherd's initial runtime workspace must be generated from sc-runtime version 0.1.1.",
+      "quote": "install the sc-runtime templates at 0.1.1 (latest release)",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "Cargo metadata and the generation record identify sc-runtime 0.1.1 for the initial Shpherd scaffold.",
+      "kind": "directive",
+      "leaning": "not_addressed",
+      "question_set": {
+        "gate": "plan",
+        "version": 1,
+        "overridden": false
+      },
+      "questions_sha256": "45c142d4b4a63bd5c580d2407d06af54171ebec6302dd62d0ba982450416f8cd",
+      "near_threshold": true,
+      "unstable": true,
+      "answers_second": {
+        "relevant": {
+          "type": "choice",
+          "choice": "yes",
+          "confidence": 0.56,
+          "probabilities": {
+            "yes": 0.71,
+            "no": 0.28,
+            "unclear": 0.01
+          }
+        },
+        "addressed": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.85,
+          "probabilities": {
+            "yes": 0.01,
+            "no": 0.9,
+            "unclear": 0.09
+          }
+        },
+        "contradicted": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.76,
+          "probabilities": {
+            "yes": 0.11,
+            "no": 0.84,
+            "unclear": 0.05
+          }
+        }
+      },
+      "verdict_first": "not_addressed",
+      "verdict_second": "underspecified",
+      "verdict": "underspecified",
+      "answers": {
+        "relevant": {
+          "type": "choice",
+          "choice": "yes",
+          "confidence": 0.66,
+          "probabilities": {
+            "yes": 0.77,
+            "no": 0.22,
+            "unclear": 0.01
+          }
+        },
+        "addressed": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.85,
+          "probabilities": {
+            "yes": 0.01,
+            "no": 0.9,
+            "unclear": 0.09
+          }
+        },
+        "contradicted": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.83,
+          "probabilities": {
+            "yes": 0.07,
+            "no": 0.89,
+            "unclear": 0.04
+          }
+        }
+      },
+      "min_confidence": 0.56,
+      "explanation": "Jev was not confident (min confidence 0.56); the anchor or the bead may be underspecified.",
+      "usage": {
+        "input_tokens": 1722,
+        "output_tokens": 117
+      },
+      "low_questions": [
+        {
+          "ask": "second",
+          "role": "relevance",
+          "question_id": "relevant",
+          "choice": "yes",
+          "confidence": 0.56
+        }
+      ],
+      "attempts": 2,
+      "item_chars_sent": 3004,
+      "item_shortened": false,
+      "request_bytes": 6016
+    },
+    {
+      "anchor_id": "ANC-002",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Template installation and testing must precede scmux feature and UI migration in Phase B.",
+      "quote": "I would expect the plan to start w/ template installation and testing. Then have sprints to migrate the current scmux features and ui to shpherd.",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "Every scmux migration bead depends transitively on the completed sc-runtime installation-and-test bead.",
+      "kind": "directive",
+      "leaning": "not_applicable",
+      "question_set": {
+        "gate": "plan",
+        "version": 1,
+        "overridden": false
+      },
+      "questions_sha256": "45c142d4b4a63bd5c580d2407d06af54171ebec6302dd62d0ba982450416f8cd",
+      "near_threshold": true,
+      "unstable": true,
+      "answers_second": {
+        "relevant": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.62,
+          "probabilities": {
+            "yes": 0.23,
+            "no": 0.75,
+            "unclear": 0.02
+          }
+        },
+        "addressed": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.91,
+          "probabilities": {
+            "yes": 0.02,
+            "no": 0.94,
+            "unclear": 0.04
+          }
+        },
+        "contradicted": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.88,
+          "probabilities": {
+            "yes": 0.05,
+            "no": 0.92,
+            "unclear": 0.03
+          }
+        }
+      },
+      "verdict_first": "underspecified",
+      "verdict_second": "not_applicable",
+      "verdict": "underspecified",
+      "answers": {
+        "relevant": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.56,
+          "probabilities": {
+            "yes": 0.27,
+            "no": 0.71,
+            "unclear": 0.02
+          }
+        },
+        "addressed": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.91,
+          "probabilities": {
+            "yes": 0.02,
+            "no": 0.94,
+            "unclear": 0.04
+          }
+        },
+        "contradicted": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.89,
+          "probabilities": {
+            "yes": 0.05,
+            "no": 0.93,
+            "unclear": 0.02
+          }
+        }
+      },
+      "min_confidence": 0.56,
+      "explanation": "Jev was not confident (min confidence 0.56); the anchor or the bead may be underspecified.",
+      "usage": {
+        "input_tokens": 1713,
+        "output_tokens": 117
+      },
+      "low_questions": [
+        {
+          "ask": "first",
+          "role": "relevance",
+          "question_id": "relevant",
+          "choice": "no",
+          "confidence": 0.56
+        }
+      ],
+      "attempts": 2,
+      "item_chars_sent": 3004,
+      "item_shortened": false,
+      "request_bytes": 5997
+    },
+    {
+      "anchor_id": "ANC-008",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Herdr must be Shpherd's default launcher.",
+      "quote": "shpherd will be herdr first (by default)",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "A launcher selection test proves an unset launcher chooses Herdr.",
+      "kind": "directive",
+      "leaning": "satisfied",
+      "question_set": {
+        "gate": "plan",
+        "version": 1,
+        "overridden": false
+      },
+      "questions_sha256": "45c142d4b4a63bd5c580d2407d06af54171ebec6302dd62d0ba982450416f8cd",
+      "verdict": "underspecified",
+      "answers": {
+        "relevant": {
+          "type": "choice",
+          "choice": "yes",
+          "confidence": 1.0,
+          "probabilities": {
+            "yes": 1.0,
+            "no": 0.0,
+            "unclear": 0.0
+          }
+        },
+        "addressed": {
+          "type": "choice",
+          "choice": "yes",
+          "confidence": 0.22,
+          "probabilities": {
+            "yes": 0.48,
+            "no": 0.37,
+            "unclear": 0.15
+          }
+        },
+        "contradicted": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.86,
+          "probabilities": {
+            "yes": 0.05,
+            "no": 0.91,
+            "unclear": 0.04
+          }
+        }
+      },
+      "min_confidence": 0.22,
+      "explanation": "Jev was not confident (min confidence 0.22); the anchor or the bead may be underspecified.",
+      "usage": {
+        "input_tokens": 1709,
+        "output_tokens": 117
+      },
+      "low_questions": [
+        {
+          "ask": "first",
+          "role": "compliance",
+          "question_id": "addressed",
+          "choice": "yes",
+          "confidence": 0.22
+        }
+      ],
+      "attempts": 1,
+      "item_chars_sent": 3004,
+      "item_shortened": false,
+      "request_bytes": 5962
+    },
+    {
+      "anchor_id": "ANC-009",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Shpherd must support tmux launching.",
+      "quote": "but will also support tmux launching (default in scmux).",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "A launcher integration test proves an explicitly selected tmux backend can launch, observe, focus, and stop a team.",
+      "kind": "directive",
+      "leaning": "not_applicable",
+      "question_set": {
+        "gate": "plan",
+        "version": 1,
+        "overridden": false
+      },
+      "questions_sha256": "45c142d4b4a63bd5c580d2407d06af54171ebec6302dd62d0ba982450416f8cd",
+      "verdict": "underspecified",
+      "answers": {
+        "relevant": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.25,
+          "probabilities": {
+            "yes": 0.49,
+            "no": 0.5,
+            "unclear": 0.01
+          }
+        },
+        "addressed": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.35,
+          "probabilities": {
+            "yes": 0.32,
+            "no": 0.57,
+            "unclear": 0.11
+          }
+        },
+        "contradicted": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.77,
+          "probabilities": {
+            "yes": 0.13,
+            "no": 0.85,
+            "unclear": 0.02
+          }
+        }
+      },
+      "min_confidence": 0.25,
+      "explanation": "Jev was not confident (min confidence 0.25); the anchor or the bead may be underspecified.",
+      "usage": {
+        "input_tokens": 1711,
+        "output_tokens": 117
+      },
+      "low_questions": [
+        {
+          "ask": "first",
+          "role": "relevance",
+          "question_id": "relevant",
+          "choice": "no",
+          "confidence": 0.25
+        },
+        {
+          "ask": "first",
+          "role": "compliance",
+          "question_id": "addressed",
+          "choice": "no",
+          "confidence": 0.35
+        }
+      ],
+      "attempts": 1,
+      "item_chars_sent": 3004,
+      "item_shortened": false,
+      "request_bytes": 5980
+    },
+    {
+      "anchor_id": "ANC-003",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "The sc-runtime 0.2.0 upgrade must be the next Shpherd work started after version 0.2.0 is released.",
+      "quote": "updrade to 0.2.0 as soon as it lands",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "The tracker history shows no new feature bead started between the sc-runtime 0.2.0 release and the Shpherd 0.2.0 upgrade bead.",
+      "kind": "directive",
+      "leaning": "not_applicable",
+      "question_set": {
+        "gate": "plan",
+        "version": 1,
+        "overridden": false
+      },
+      "questions_sha256": "45c142d4b4a63bd5c580d2407d06af54171ebec6302dd62d0ba982450416f8cd",
+      "near_threshold": true,
+      "confirmed": true,
+      "verdict": "not_applicable",
+      "answers": {
+        "relevant": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.89,
+          "probabilities": {
+            "yes": 0.06,
+            "no": 0.93,
+            "unclear": 0.01
+          }
+        },
+        "addressed": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 1.0,
+          "probabilities": {
+            "yes": 0.0,
+            "no": 1.0,
+            "unclear": 0.0
+          }
+        },
+        "contradicted": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.64,
+          "probabilities": {
+            "yes": 0.2,
+            "no": 0.76,
+            "unclear": 0.04
+          }
+        }
+      },
+      "min_confidence": 0.64,
+      "explanation": "The anchor does not govern this bead.",
+      "usage": {
+        "input_tokens": 1734,
+        "output_tokens": 117
+      },
+      "attempts": 2,
+      "item_chars_sent": 3004,
+      "item_shortened": false,
+      "request_bytes": 6025
+    },
+    {
+      "anchor_id": "ANC-004",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Shpherd's sc-runtime 0.2.0 upgrade must include the dependency updates supplied by that release.",
+      "quote": "0.2.0 upgrades some dependencies and fully installs sc-lint 0.8.4+ on consumer repo",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "Shpherd's dependency manifests match a fresh sc-runtime 0.2.0 generation for managed dependency versions.",
+      "kind": "directive",
+      "leaning": "not_applicable",
+      "question_set": {
+        "gate": "plan",
+        "version": 1,
+        "overridden": false
+      },
+      "questions_sha256": "45c142d4b4a63bd5c580d2407d06af54171ebec6302dd62d0ba982450416f8cd",
+      "verdict": "not_applicable",
+      "answers": {
+        "relevant": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.89,
+          "probabilities": {
+            "yes": 0.06,
+            "no": 0.93,
+            "unclear": 0.01
+          }
+        },
+        "addressed": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.98,
+          "probabilities": {
+            "yes": 0.0,
+            "no": 0.99,
+            "unclear": 0.01
+          }
+        },
+        "contradicted": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.98,
+          "probabilities": {
+            "yes": 0.01,
+            "no": 0.99,
+            "unclear": 0.0
+          }
+        }
+      },
+      "min_confidence": 0.89,
+      "explanation": "The anchor does not govern this bead.",
+      "usage": {
+        "input_tokens": 1734,
+        "output_tokens": 117
+      },
+      "attempts": 1,
+      "item_chars_sent": 3004,
+      "item_shortened": false,
+      "request_bytes": 6018
+    },
+    {
+      "anchor_id": "ANC-005",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Shpherd's sc-runtime 0.2.0 upgrade must leave sc-lint 0.8.4 or newer fully installed in the consumer repository.",
+      "quote": "0.2.0 upgrades some dependencies and fully installs sc-lint 0.8.4+ on consumer repo",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "The consumer repository contains the complete sc-lint installation and its version check reports 0.8.4 or newer.",
+      "kind": "directive",
+      "leaning": "not_applicable",
+      "question_set": {
+        "gate": "plan",
+        "version": 1,
+        "overridden": false
+      },
+      "questions_sha256": "45c142d4b4a63bd5c580d2407d06af54171ebec6302dd62d0ba982450416f8cd",
+      "verdict": "not_applicable",
+      "answers": {
+        "relevant": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.88,
+          "probabilities": {
+            "yes": 0.07,
+            "no": 0.92,
+            "unclear": 0.01
+          }
+        },
+        "addressed": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.98,
+          "probabilities": {
+            "yes": 0.0,
+            "no": 0.99,
+            "unclear": 0.01
+          }
+        },
+        "contradicted": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.98,
+          "probabilities": {
+            "yes": 0.01,
+            "no": 0.99,
+            "unclear": 0.0
+          }
+        }
+      },
+      "min_confidence": 0.88,
+      "explanation": "The anchor does not govern this bead.",
+      "usage": {
+        "input_tokens": 1744,
+        "output_tokens": 117
+      },
+      "attempts": 1,
+      "item_chars_sent": 3004,
+      "item_shortened": false,
+      "request_bytes": 6034
+    },
+    {
+      "anchor_id": "ANC-006",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Shpherd's initial database schema must be ported from scmux.",
+      "quote": "use the existing schema + ui logic in scmux",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "A schema parity test compares Shpherd migrations with the pinned scmux schema and explains every intentional difference.",
+      "kind": "directive",
+      "leaning": "not_applicable",
+      "question_set": {
+        "gate": "plan",
+        "version": 1,
+        "overridden": false
+      },
+      "questions_sha256": "45c142d4b4a63bd5c580d2407d06af54171ebec6302dd62d0ba982450416f8cd",
+      "verdict": "not_applicable",
+      "answers": {
+        "relevant": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.96,
+          "probabilities": {
+            "yes": 0.02,
+            "no": 0.97,
+            "unclear": 0.01
+          }
+        },
+        "addressed": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 1.0,
+          "probabilities": {
+            "yes": 0.0,
+            "no": 1.0,
+            "unclear": 0.0
+          }
+        },
+        "contradicted": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.92,
+          "probabilities": {
+            "yes": 0.04,
+            "no": 0.95,
+            "unclear": 0.01
+          }
+        }
+      },
+      "min_confidence": 0.92,
+      "explanation": "The anchor does not govern this bead.",
+      "usage": {
+        "input_tokens": 1716,
+        "output_tokens": 117
+      },
+      "attempts": 1,
+      "item_chars_sent": 3004,
+      "item_shortened": false,
+      "request_bytes": 5988
+    },
+    {
+      "anchor_id": "ANC-007",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Shpherd's initial UI logic must be ported from scmux.",
+      "quote": "use the existing schema + ui logic in scmux",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "UI parity tests map each retained scmux dashboard and editor behavior to a Shpherd implementation and test.",
+      "kind": "directive",
+      "leaning": "not_applicable",
+      "question_set": {
+        "gate": "plan",
+        "version": 1,
+        "overridden": false
+      },
+      "questions_sha256": "45c142d4b4a63bd5c580d2407d06af54171ebec6302dd62d0ba982450416f8cd",
+      "verdict": "not_applicable",
+      "answers": {
+        "relevant": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.89,
+          "probabilities": {
+            "yes": 0.06,
+            "no": 0.93,
+            "unclear": 0.01
+          }
+        },
+        "addressed": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.97,
+          "probabilities": {
+            "yes": 0.01,
+            "no": 0.98,
+            "unclear": 0.01
+          }
+        },
+        "contradicted": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.43,
+          "probabilities": {
+            "yes": 0.36,
+            "no": 0.62,
+            "unclear": 0.02
+          }
+        }
+      },
+      "min_confidence": 0.43,
+      "explanation": "The anchor does not govern this bead.",
+      "usage": {
+        "input_tokens": 1716,
+        "output_tokens": 117
+      },
+      "attempts": 1,
+      "item_chars_sent": 3004,
+      "item_shortened": false,
+      "request_bytes": 5978
+    },
+    {
+      "anchor_id": "ANC-010",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Shpherd's initial database port must establish scmux schema parity before adding Herdr-specific fields.",
+      "quote": "We may need to upgrade the scmux database schema i.e. add additional fields for herdr launching, but starting w/ parity is the goal.",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "The schema-parity commit and tests precede any migration that adds Herdr-specific columns or tables.",
+      "kind": "directive",
+      "leaning": "not_applicable",
+      "question_set": {
+        "gate": "plan",
+        "version": 1,
+        "overridden": false
+      },
+      "questions_sha256": "45c142d4b4a63bd5c580d2407d06af54171ebec6302dd62d0ba982450416f8cd",
+      "near_threshold": true,
+      "confirmed": true,
+      "verdict": "not_applicable",
+      "answers": {
+        "relevant": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.62,
+          "probabilities": {
+            "yes": 0.23,
+            "no": 0.75,
+            "unclear": 0.02
+          }
+        },
+        "addressed": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.94,
+          "probabilities": {
+            "yes": 0.01,
+            "no": 0.96,
+            "unclear": 0.03
+          }
+        },
+        "contradicted": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.73,
+          "probabilities": {
+            "yes": 0.14,
+            "no": 0.82,
+            "unclear": 0.04
+          }
+        }
+      },
+      "min_confidence": 0.62,
+      "explanation": "The anchor does not govern this bead.",
+      "usage": {
+        "input_tokens": 1721,
+        "output_tokens": 117
+      },
+      "attempts": 2,
+      "item_chars_sent": 3004,
+      "item_shortened": false,
+      "request_bytes": 6039
+    }
+  ],
+  "summary": {
+    "counts": {
+      "underspecified": 4,
+      "not_applicable": 6
+    },
+    "failing": [
+      "ANC-001",
+      "ANC-002",
+      "ANC-008",
+      "ANC-009"
+    ],
+    "leaning_counts": {
+      "not_addressed": 1,
+      "not_applicable": 8,
+      "satisfied": 1
+    },
+    "unstable": [
+      "ANC-001",
+      "ANC-002"
+    ],
+    "errors": [],
+    "excluded": [],
+    "shortened": [],
+    "pass": false
+  }
+}

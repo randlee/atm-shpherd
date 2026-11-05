@@ -9,7 +9,7 @@ target_branch: develop
 
 ## Authority and goal
 
-This plan implements `docs/atm-shpherd-prd.md` and the locked anchors in `anchors.json`. The sprint documents here are authoritative execution scope; Beads epic `shp-phase-b` mirrors status and dependencies. Phase B begins with an untouched sc-runtime 0.1.1 `sqlite-postgres` generation, proves it, ports scmux parity, then adds Shpherd-owned ATM, launcher, synchronization, API, UI, scheduling, and operational behavior. Herdr is the default; tmux remains explicit.
+This plan implements `docs/atm-shpherd-prd.md` and the locked anchors in `anchors.json`. The sprint documents here are authoritative execution scope; Beads epic `shp-phase-b` mirrors status and dependencies. Phase B begins with an untouched sc-runtime 0.1.1 `sqlite-postgres` generation, proves it, ports scmux parity, then adds independent Shpherd ATM-observation, launcher, fleet-projection, API, UI, heartbeat, and operational components composed by a thin daemon. ATM remains authoritative for each running team instance. Herdr is the default; tmux remains explicit, including from the `shpherd` CLI over SSH.
 
 ## Boundary map
 
@@ -19,12 +19,12 @@ This plan implements `docs/atm-shpherd-prd.md` and the locked anchors in `anchor
 | foundation/types/auth | root/package manifests | canonical cross-track IDs, revisions/cursors, logical refs, bridge evidence, and verification-independent authorization | generated runtime only | B2 |
 | schema | `boundaries/shpherd-schema.yaml` | rows, errors, store contracts, parity and extension migrations | B2 foundation | B3, B3A, B4A |
 | engine stores/adaptor | engine manifests | separate SQLite, PostgreSQL, and static-adaptor implementations | schema contract | B4A, B4B, B4C, B9A |
-| domain service | `boundaries/shpherd-service.yaml` | definitions, observation, leases, reconciliation, guarded commands | schema/adaptor | B5, B6, B9B, B9C |
-| local launch adapters | daemon manifest | closed Herdr/tmux launcher and hmux capability contract | service/types | B7, B8 |
-| ATM adapter | daemon manifest | versioned import and exact command mutation/reconciliation | service/types | B6A |
+| domain service | `boundaries/shpherd-service.yaml` | definitions, observation, reconciliation, and host-local idempotent commands | schema/adaptor | B5, B6, B9B, B9C |
+| local launch adapters | launcher manifest | independent closed Herdr/tmux adapters and hmux capability contract | service/types | B7, B8 |
+| ATM adapter | ATM manifest | independent versioned observation and exact command mutation/reconciliation; ATM is actual-state authority | service/types | B6A |
 | daemon API | daemon manifest | authenticated snapshots, commands, events, errors | service/types | B10A |
 | clients | client boundary | browser/Tauri presentation and capability adapters | daemon API only | B10, B11, B11A |
-| scheduler/supervision | daemon manifest | sc-cron registration and OS lifecycle | service/API | B12, B12A |
+| heartbeat/supervision | daemon manifest | ATM-state polling heartbeat registration and OS lifecycle | ATM/projection/API | B12, B12A |
 
 B2 creates these manifests from the generated workspace. Until then this table is the intended contract and B2 owns reconciliation with generated paths.
 
@@ -39,7 +39,7 @@ B2 creates these manifests from the generated workspace. Until then this table i
 | ADRs | `docs/architecture.md` ADR index; B3A/B3B/B3C approve the remaining proposed decisions with executable fixtures |
 | Protocol/schema/interface contracts | `docs/integrations/atm-hmux-contract.md`, `docs/porting/scmux-behavior-oracle.md`, and B3A/B3B/B3C-owned `docs/contracts/**` |
 | Machine-readable boundaries | intentionally absent before generation; B2 alone creates and validates the `boundaries/**` registry rather than pretending manifests already exist |
-| Issues inventory | `docs/issues-inventory.md` plus Dolt-backed Beads epic `shp-phase-b` and its 25 direct children; sprint frontmatter records the exact child ID |
+| Issues inventory | `docs/issues-inventory.md` plus Dolt-backed Beads epic `shp-phase-b`; sprint frontmatter records implementation bead IDs and governance records are classified separately |
 | Testing/cross-platform guidance | `docs/testing-and-platforms.md`, plus sprint-local acceptance and evidence ownership |
 | Process/QA/triage | no shared ATM routing or QA workflow changes in Phase B; product-side ATM command behavior is owned by B3C/B6A/B9C and release defects receive separate fix beads |
 
@@ -53,54 +53,54 @@ Stable track IDs do not change between the registry and wave table. A shared con
 |---|---|---|---|---|---|
 | T-BOOT | released runtime workspace | B1 baseline | B2 integration; 0.2.0 interrupt | B2 | 3: B1 → B2 → interrupt |
 | T-STORAGE | parity, local/shared stores, synchronization | B3A after B3 parity | B4A, B4B, B4C | B9A | 4: B3 → B3A → B4x → B9A |
-| T-SERVICE | definition and observation services | B3B | B5, B6 | B10 read composition; B11 command composition | 4: B3B → B5/B6 → B10 → B11 |
-| T-LAUNCH | Herdr/tmux launch ownership | B3B plus B3C hmux contract | B7, B8 | B9B | 3: latest contract → B7/B8 → B9B |
+| T-SERVICE | definition and observation services | B3B service contract plus B3A/B4A definition store | B5, B6 | B10 read composition; B11 command composition | 5: latest contract → B4A → B5/B6 → B10 → B11 |
+| T-LAUNCH | independent Herdr/tmux launch adapters and host-local safety | B3B plus B3C hmux contract | B7, B8 | B9B | 3: latest contract → B7/B8 → B9B |
 | T-ATM | versioned roster projection and expansion | B3C | B6A | B9C | 3: B3C → B6A → B9C |
 | T-API-CLIENT | authenticated API and shared clients | B3B | B10A boundary | B10, B11, then B11A native packaging | 5: B3B → B10A → B10 → B11 → B11A |
-| T-SCHEDULE | recurring guarded operations | B3C sc-cron contract | B12 application registration/policy | B12 | 2: B3C → B12 |
+| T-HEARTBEAT | ATM-state polling heartbeat | B3C sc-cron contract | B12 application registration/policy | B12 | 2: B3C → B12 |
 | T-OPS | daemon supervision and lifecycle | B3B/B3C lifecycle contracts | B12A platform adapters | B12A | 3: B3B/B3C → B10A/B12 → B12A |
 | T-RELEASE | bounded release evidence | prior track evidence contracts | none | B13 evidence only | 1: B13 |
 
 | Wave | Track | Sprint | Target boundary | Authoritative owned paths | Consumes |
 |---|---|---|---|---|---|
 | 0 | T-BOOT | B1 | runtime workspace | `config/generator/*`, `docs/evidence/b-1/**` | none |
-| 1 | T-BOOT | B2 | generated workspace | root manifests, crate skeleton registries/READMEs, B2 foundation types/auth/compile fixtures, boundary index/schema, client shell, platform test matrix, `tools/runtime-release-gate/**`, exact workflow/history/test paths | B1 generated digest |
+| 1 | T-BOOT | B2 | generated workspace | root manifests, crate skeleton registries/READMEs, B2 foundation types/auth/boundary fixtures, boundary index/schema, client shell, platform test matrix, ordinary release-check evidence | B1 generated digest |
 | 2 | T-STORAGE | B3 | parity schema/SQLite | schema parity modules, parity migrations/tests/evidence | B2 schema/store skeletons |
 | 2 | T-SERVICE | B3B | service/launch/API contract | service/API contract docs, core types, service/daemon/CLI manifests | B2 registry |
 | 2 | T-ATM | B3C | external integrations | ATM/hmux/cron contract docs, external types/manifest | B2 daemon adapter boundary |
 | 3 | T-STORAGE | B3A | schema/projection contract | storage contract docs/types/store manifests | B3 fingerprint |
-| 3 | T-SERVICE | B5 | definition service | `shpherd-service/{src,tests}/definitions/**` | B3B definition double |
-| 3 | T-SERVICE | B6 | observation service | `shpherd-service/{src,tests}/observation/**` | B3B reader double |
-| 3 | T-ATM | B6A | ATM adapter | daemon ATM adapter/tests and ATM fixtures | B3C ATM double |
-| 3 | T-LAUNCH | B7 | Herdr/hmux adapter | daemon Herdr adapter/tests and hmux fixtures | B3B guard + B3C hmux double |
-| 3 | T-LAUNCH | B8 | tmux adapter | daemon tmux adapter/tests and fixtures | B3B guard/observation double |
+| 3 | T-ATM | B6A | ATM adapter | independent ATM adapter/tests and ATM fixtures | B3C ATM double |
+| 3 | T-LAUNCH | B7 | Herdr/hmux adapter | independent Herdr adapter/tests and hmux fixtures | B3B guard + B3C hmux double |
+| 3 | T-LAUNCH | B8 | tmux adapter | independent tmux adapter/tests and fixtures | B3B guard/observation double |
 | 3 | T-API-CLIENT | B10A | daemon API/CLI boundary | daemon API/auth/events/tests and CLI | B3B service doubles |
 | 4 | T-STORAGE | B4A | local schema/SQLite | schema/SQLite extension modules, migrations, tests | B3A local contract |
 | 4 | T-STORAGE | B4B | PostgreSQL projection | PostgreSQL projection modules, migrations, tests | B3A shared contract |
 | 4 | T-STORAGE | B4C | static adaptor | adaptor source/tests | B3A batch/store doubles |
+| 5 | T-SERVICE | B5 | definition service | `shpherd-service/{src,tests}/definitions/**` | B3B definition double + B4A definition store |
+| 5 | T-SERVICE | B6 | observation service | `shpherd-service/{src,tests}/observation/**` | B3B reader double + B4A definition-store reads |
 | 5 | T-STORAGE | B9A | cross-store synchronization | service sync modules/tests and sync integration tests | B4A/B4B/B4C |
-| 6 | T-LAUNCH | B9B | launch ownership | service lease/launch modules/tests and launch integration | B7/B8/B9A |
+| 6 | T-LAUNCH | B9B | host-local launch safety | service operation/launch modules/tests, SSH CLI integration, and cross-host duplicate-name evidence | B7/B8 |
 | 6 | T-API-CLIENT | B10 | read client/API composition | catalog/API/observability client paths, real-service integration, performance tests | B10A/B5/B6/B9A |
 | 7 | T-ATM | B9C | roster expansion | roster workflow and integration tests | B6A/B7/B9A/B9B |
-| 7 | T-SCHEDULE | B12 | scheduled operations | daemon scheduling and service scheduled-operation paths | B3C/B9B |
+| 7 | T-HEARTBEAT | B12 | ATM-state heartbeat | daemon heartbeat registration plus ATM observation/projection integration | B3C/B6A/B9A |
 | 8 | T-API-CLIENT | B11 | editor/actions/API composition | editor/action client paths, real-command integration, E2E tests | B10/B5/B9B/B9C |
-| 8 | T-OPS | B12A | supervision | supervision source/tests, platform packaging, operations docs | B10A/B9B/B12 |
+| 8 | T-OPS | B12A | supervision | thin-daemon supervision source/tests, platform packaging, operations docs | B10A/B9B/B12 |
 | 9 | T-API-CLIENT | B11A | Tauri mobile | generated mobile projects, mobile adapters/tests/docs | B11 |
 | 10 | T-RELEASE | B13 | release evidence | `docs/evidence/phase-b/**`, release note | B9C/B11A/B12A evidence |
 | interrupt | T-BOOT | 0.2.0 upgrade | runtime workspace | runtime-managed manifests/lint, exact upgrade workflow/evidence paths | B2 gate trigger + released tag |
 
 - Sprint count: 25 including three independent contract sprints, three storage boundary siblings, and the 0.2.0 interrupt.
-- Maximum usable width: 7 (wave 3).
+- Maximum usable width: 5 (wave 3).
 - Longest `must_follow` chain: 11 including bootstrap and evidence-only certification. Feature tracks close at their own integration sprint; B13 adds no product integration.
-- Structured relations in sprint frontmatter contain 44 named-artifact `must_follow` edges and 33 unique `parallel_safe` pairs. Validation rejects duplicate pairs, any must-follow/parallel-safe contradiction, and same-wave owned-path intersections.
-- B2 installs the always-executed release detector, hash-chained history, serialized dispatch hook, and B13/epic close validator before any feature dispatch. The 0.2.0 interrupt runs when that gate fires and owns only the upgrade. Tampered/ambiguous history, concurrent dispatch, or detector failure fails closed; B13 and epic closure require B2 validator success.
+- Structured relations in sprint frontmatter name every consumed artifact and parallel-safe pair. Validation rejects duplicate pairs, any must-follow/parallel-safe contradiction, and same-wave owned-path intersections; relation counts are derived rather than frozen in prose.
+- B2 defines the authoritative release check used before feature dispatch and at B13. A present 0.2.0 release routes to the interrupt, absence is recorded, and an unavailable/ambiguous detector blocks until retried; Beads and sprint evidence remain the audit record without custom dispatch or closure hooks.
 
 ## Track contracts
 
 - B2 first freezes the only canonical cross-track primitives: IDs, nonzero entity revisions, genesis-capable store/event cursors, typed hierarchy/logical refs, launcher/member primitives, registration evidence, and the `shpherd-auth` principal/issuer seam. Its compile matrix builds each contract track at its declared prerequisite and forbids sibling imports.
-- B3A depends on parity and freezes only the complete launchable shared definition, typed-key/canonical batch, tombstone, and tagged lease-operation composites for B4A/B4B/B4C.
-- B3B starts after B2 and freezes only the closed hierarchy/atomic Team bundle, service/query, split launcher, guard, tagged response/stream, error, and test-double composites while consuming B2 foundation/auth.
-- B3C starts after B2 and freezes only ATM, split hmux, sc-cron, redaction, and MCP-disabled external composites while consuming B2 foundation/auth and bridge evidence.
+- B3A depends on parity and freezes only the host-qualified fleet row, app-owned definition-store read/atomic-commit seam, typed-key/canonical batch, tombstone, and projection-operation composites for B4A/B4B/B4C. It defines no launch authority.
+- B3B starts after B2 and freezes only the closed hierarchy/atomic Team bundle, service/query, split launcher, host-local operation guard, tagged response/stream, error, and test-double composites while consuming B2 foundation/auth.
+- B3C starts after B2 and freezes only ATM, split hmux, the ATM-heartbeat sc-cron callback, redaction, and MCP-disabled external composites while consuming B2 foundation/auth and bridge evidence.
 
 ## Performance and platform budgets
 
@@ -108,8 +108,8 @@ B10 measures a deterministic 100-team/1,500-member fixture on the macOS arm64 CI
 
 ## Traceability
 
-Every sprint has one structured `requirements`, `adrs`, `owned_paths`, and `relations` list. Contract and boundary sprints use empty requirement lists and boundary/ADR-rooted criteria. Integration ownership is unique: ANC-001/002 belong to B1; ANC-003..005 to the interrupt; ANC-006/010 to B9A; ANC-008/009 to B9B; ANC-007 and REQ-API to B10; REQ-DEFINITION to B11. B13 verifies evidence completeness without re-owning any feature criterion.
+Every sprint has one structured `requirements`, `adrs`, `owned_paths`, and `relations` list. Each list includes every requirement or locked anchor that the sprint implements or constrains; acceptance ownership remains explicit in prose and may be unique even when several prerequisite contracts cite the same authority. B13 verifies evidence completeness without re-owning any feature criterion.
 
 ## Process artifacts
 
-The boundary manifests are consumed by compilation/boundary validation and remain permanent. Contract fixtures are consumed by independent layer implementations and retained as regression tests. The parity fingerprint is consumed by B3A/B9A to prevent premature target-specific drift. B13 only assembles immutable evidence; defects receive separate fix ownership. The release validator audits tag-detection history and refuses B13/epic closure if an applicable 0.2.0 trigger was ignored.
+The boundary manifests are consumed by compilation/boundary validation and remain permanent. Contract fixtures are consumed by independent layer implementations and retained as regression tests. The parity fingerprint is consumed by B3A/B9A to prevent premature target-specific drift. B13 only assembles immutable evidence; defects receive separate fix ownership. B13 repeats the authoritative release check and requires matching interrupt evidence if 0.2.0 was observed.

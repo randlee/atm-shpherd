@@ -29,6 +29,7 @@ Close installable iOS and Android shells around the proven shared application wi
 
 ## Required work and deliverables
 
+- Per phase policy, B1's sc-runtime `v0.1.1` template installation and baseline tests, B2, and B11 must close before native UI packaging; if `v0.2.0` is observed, its interrupt is the next Shpherd work started and completes before this sprint starts or resumes.
 - Generate/build iOS and Android projects around the shared application and authenticated API.
 - Implement platform capability adapters for deep links, notifications where supported, observability binding, secure credential use, and signing configuration outside source control.
 
@@ -52,6 +53,7 @@ No mobile-local daemon or store; browser/desktop behavior is not weakened to mat
 
 ## Acceptance and validation
 
+- Dispatch fails unless the dependency graph contains a transitive `must_follow` path to completed B1 evidence proving the sc-runtime template was installed and every baseline test passed.
 - iOS/Android projects build; supported simulator/emulator smoke tests cover authenticated reads/commands, deep links, notifications, and observability.
 - Signing guidance commits no secret; credential-store success/denial and native-adapter failure are tested without changing daemon command results; platform differences are explicit.
 

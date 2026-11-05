@@ -1,6 +1,6 @@
 # atm-shpherd
 
-`atm-shpherd` is a multi-host control plane for defining, launching, and observing many ATM-backed agent teams. It preserves scmux's useful product behavior—team hierarchy, explicit definitions, launch gates, runtime observation, and dashboard workflows—while replatforming as a sc-runtime application. It is not a scmux fork or crate rename.
+`atm-shpherd` is a multi-host operator convenience and status tool for defining, launching, and observing ATM-backed agent teams. ATM remains the source of truth for each running team. Shpherd persists launch definitions, starts Herdr or tmux sessions on a selected host, and provides one fleet view without becoming a distributed team authority. It preserves scmux's useful product behavior while replatforming as a sc-runtime application; it is not a scmux fork or crate rename.
 
 ## Operator surfaces
 
@@ -10,12 +10,12 @@ One responsive Shpherd UI is available in three equal forms:
 - a Tauri desktop app with an icon, Dock/task-switcher presence, dedicated window, tray/status surface, notifications, and deep links; and
 - a Tauri iOS/Android app with the same authenticated team API and command capability.
 
-The clients are presentation shells. They never open Shpherd stores, run hmux, acquire launch leases, or implement team business logic. Every action is authorized and executed by an `atm-shpherd` daemon on an enrolled host or control-plane endpoint.
+The clients are presentation shells. They never open Shpherd stores, run hmux, or implement team business logic. Every action is authorized and executed on the selected host. The same `shpherd` command remains usable from a noninteractive SSH session; browser and Tauri clients call the host daemon API.
 
 ## Commands
 
 - `shpherd` — thin operator CLI.
-- `atm-shpherd` — daemon; owns database access, domain services, runtime adapters, synchronization, and API/static UI hosting.
+- `atm-shpherd` — thin daemon; composes database, ATM, launcher, heartbeat, and API components and supervises their lifecycle without owning their policy.
 
 ## Architecture
 
@@ -28,11 +28,11 @@ shpherd-store-sqlite     SQLite-only migrations and queries
 shpherd-store-postgres   Postgres-only migrations and queries
 shpherd-store-adaptor    app-owned host-aggregate row movement
 shpherd-service          domain rules and named mutation paths
-shpherd-daemon           API, static UI hosting, local adapters; produces atm-shpherd
+shpherd-daemon           API, static UI hosting, composition/lifecycle; produces atm-shpherd
 shpherd-cli              thin client; produces shpherd
 ```
 
-`sc-runtime` provides reusable infrastructure, not Shpherd domain code. In particular, `sc-cron` knows no Shpherd rows or traits: the application registers an adaptor-sync callback through its public API, and the adaptor owns no timer.
+`sc-runtime` provides reusable infrastructure, not Shpherd domain code. In Phase B, `sc-cron` triggers only the heartbeat that polls ATM agent state; future overnight launch-and-instruction jobs are outside the MVP.
 
 Each managed repository normally keeps host-local state below `.shpherd/`:
 
@@ -49,12 +49,12 @@ Configuration follows sc-config's JSON `config/default.json` and ignored `config
 ## Data and runtime flow
 
 ```text
-ATM SQLite → host SQLite ⇄ app-owned adaptor ⇄ shared PostgreSQL
-                                                ⇅
-                                  eligible target-host SQLite → hmux / Herdr
+ATM actual state → host SQLite → shared PostgreSQL fleet view
+       │                 │
+       └─ observed by    └─ persisted launch definition → hmux / Herdr or tmux
 ```
 
-ATM catalog ingestion is read-only. Roster changes use documented `atm teams` commands with JSON output, then re-import and synchronize the observed revision. hmux is the first Herdr-native launcher adapter; tmux remains a compatible adapter where necessary.
+ATM observation is read-only. Roster changes use documented `atm teams` commands with JSON output, then re-read the authoritative ATM state. PostgreSQL is only a host-qualified fleet view: it neither grants launch authority nor prevents identical teams and agents from running concurrently on different hosts. hmux is the first Herdr-native launcher adapter; tmux remains a compatible adapter.
 
 The shared TypeScript UI uses `@synaptic-canvas/sc-observability` for non-throwing, redacted client observability. It must never block or alter a team action.
 

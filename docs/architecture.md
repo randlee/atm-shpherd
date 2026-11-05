@@ -19,7 +19,7 @@ shpherd-types <- shpherd-auth <- {shpherd-service, shpherd-daemon}
                          shpherd-cli / browser / Tauri
 ```
 
-Clients never access stores or services in-process. External ATM, hmux/Herdr, tmux, sc-cron, and observability integrations are leaf adapters owned by `shpherd-daemon` or the client capability layer.
+Clients never access stores or services in-process. ATM observation/roster commands and hmux/Herdr/tmux launching are independent application adapters composed by the thin `shpherd-daemon`; `sc-cron` supplies only the Phase B ATM-state polling heartbeat. The daemon owns transport and lifecycle composition, not those components' domain policy.
 
 ## ADR index
 
@@ -36,24 +36,26 @@ Clients never access stores or services in-process. External ATM, hmux/Herdr, tm
 | [ADR-SHP-009](adr/ADR-SHP-009.md) | approved | injectable sc-cron handler | B3C |
 | [ADR-SHP-010](adr/ADR-SHP-010.md) | approved | MCP disabled in Phase B | B3C |
 | [ADR-SHP-011](adr/ADR-SHP-011.md) | approved | versioned response/event envelope | B3B |
-| [ADR-SHP-012](adr/ADR-SHP-012.md) | approved | PostgreSQL lease authority | B3A |
+| [ADR-SHP-012](adr/ADR-SHP-012.md) | approved | PostgreSQL fleet read model and host-local launch safety | B3A |
 | [ADR-SHP-013](adr/ADR-SHP-013.md) | approved | enrolled hosts/local project bindings | B3B |
 | [ADR-SHP-014](adr/ADR-SHP-014.md) | approved | clone identity/reference policy | B3B |
 | [ADR-SHP-015](adr/ADR-SHP-015.md) | approved | source-qualified synchronization protocol | B3A |
+| [ADR-SHP-016](adr/ADR-SHP-016.md) | approved | evidence-based runtime release check; amends ADR-SHP-001 | B2 |
 
 ## Required contract signatures
 
-B2 owns all canonical cross-track primitives and bridge evidence in `shpherd-types::foundation`, plus the verification-independent principal/issuer capability in lower `shpherd-auth`. B3A owns only complete launchable shared-row, typed-key/canonical-batch, tombstone, and tagged lease-operation composites; B3B owns only the closed hierarchy/atomic Team bundle, dispatch, roster/query, split launcher, tagged response/stream, and enrollment composites; B3C owns only ATM, split hmux, and sc-cron composites. Each contract fixture compiles at its declared prerequisite without sibling imports and may not weaken the linked approved ADRs.
+B2 owns all canonical cross-track primitives and bridge evidence in `shpherd-types::foundation`, plus the verification-independent principal/issuer capability in lower `shpherd-auth`. B3A owns only host-qualified fleet rows, typed-key/canonical-batch, tombstone, and projection-operation composites; B3B owns only the closed hierarchy/atomic Team bundle, dispatch, roster/query, split launcher, tagged response/stream, and enrollment composites; B3C owns only ATM, split hmux, and the ATM-heartbeat sc-cron composites. Each contract fixture compiles at its declared prerequisite without sibling imports and may not weaken the linked approved ADRs.
 
-No public unguarded spawn method exists. `ProjectionStore` is the one Phase B open trait because the app-owned SQLite and PostgreSQL crates implement it across crate boundaries; ADR-SHP-002 and boundary validation restrict its approved implementations. Service and launcher traits, including `GuardedLauncher`, remain private or sealed unless a later ADR explicitly opens them. CLI exit codes, HTTP status, WebSocket command errors, and adapter failures map deterministically from `ErrorCode`.
+No public unguarded spawn method exists. The deliberately open cross-crate ports are `DefinitionStore` (schema-owned port with `shpherd-store-sqlite` as the sole production implementation and `shpherd-service` as its read/commit consumer), `ProjectionStore` (app-owned SQLite/PostgreSQL implementations), `OperationJournalStore` (schema/storage port with app-owned SQLite implementation), `OperationJournal` (service adapter over that lower port), `CronHandler` (the daemon-composed ATM heartbeat callback), `EvidenceVerifier` (daemon auth composition only), `AtmRosterAuthority` (service-owned port with the independent ATM adapter allowlisted), and the service-owned launcher and `HostProjectResolver` ports (independent hmux/Herdr/tmux adapters allowlisted). Boundary manifests and ADRs enumerate their permitted implementation and dependent crates. Application service traits are sealed beside their `shpherd-service` implementations; launcher mutation requires a host-local opaque operation guard and durable idempotency evidence. PostgreSQL exposes no launch-authorization, ownership, or global-uniqueness port. CLI exit codes, HTTP status, WebSocket command errors, and adapter failures map deterministically from `ErrorCode`.
 
 ## Ownership rules
 
-- B2 owns the canonical foundation, lower `shpherd-auth` non-serializable principal/issuer seam, and fail-closed runtime-release detector/history/dispatch/close gate; feature and interrupt sprints cannot replace them. Daemon alone parses/verifies credentials; service and adapters consume borrowed principals and never depend on daemon.
+- B2 owns the canonical foundation, lower `shpherd-auth` non-serializable principal/issuer seam, and authoritative release-check contract; feature and interrupt sprints cannot replace them. Daemon alone parses/verifies credentials and holds the issuer/verifier capability; boundary lint forbids service/adaptor issuer construction. Service and adapters consume borrowed principals and never depend on daemon.
 - `shpherd-schema` owns row definitions and static store contracts; engine crates own SQL.
-- `shpherd-store-adaptor` performs allowlisted reads/writes but owns no timer, lease, conflict policy, or route.
-- `shpherd-service` owns validation, state machines, reconciliation, leases, and named mutations.
-- `shpherd-daemon` owns composition, authenticated transport, local process adapters, workers, and health.
+- `shpherd-store-adaptor` performs allowlisted host-qualified fleet projection reads/writes but owns no timer, launch authority, conflict policy, or route.
+- `shpherd-service` owns validation, reconciliation, host-local idempotency/single-flight policy, and named mutations; ATM remains authoritative for actual running-team state.
+- `shpherd-atm` and `shpherd-launchers` own their external-system adapters without owning timers or transport; the same team and agent names may run on different hosts.
+- `shpherd-daemon` is a thin composition root for authenticated transport, component lifecycle, the ATM polling heartbeat, and health.
 - Clients own presentation and platform capability adapters only.
 - Wire/domain payloads contain no caller authorization claims; daemon composition injects verified principal context.
 - General generated database commands and widget examples are removed before the first usable product slice.
