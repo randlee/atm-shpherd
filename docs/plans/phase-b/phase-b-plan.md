@@ -53,10 +53,10 @@ Stable track IDs do not change between the registry and wave table. A shared con
 |---|---|---|---|---|---|
 | T-BOOT | released runtime workspace | B1 baseline | B2 integration; 0.2.0 interrupt | B2 | 3: B1 → B2 → interrupt |
 | T-STORAGE | parity, local/shared stores, synchronization | B3A after B3 parity | B4A, B4B, B4C | B9A | 4: B3 → B3A → B4x → B9A |
-| T-SERVICE | definition and observation services | B3B service contract plus B3A/B4A definition store | B5, B6 | B10 read composition; B11 command composition | 5: latest contract → B4A → B5/B6 → B10 → B11 |
+| T-SERVICE | definition and observation services | B3B service contract plus B3A/B4A definition store | B5, B6 | B10 read composition and B11 command composition, independently | 4: latest contract → B4A → B5/B6 → B10/B11 |
 | T-LAUNCH | independent Herdr/tmux launch adapters and host-local safety | B3B plus B3C hmux contract | B7, B8 | B9B | 3: latest contract → B7/B8 → B9B |
 | T-ATM | versioned roster projection and expansion | B3C | B6A | B9C | 3: B3C → B6A → B9C |
-| T-API-CLIENT | authenticated API and shared clients | B3B | B10A boundary | B10, B11, then B11A native packaging | 5: B3B → B10A → B10 → B11 → B11A |
+| T-API-CLIENT | authenticated API and shared clients | B3B | B10A boundary | B10 read and B11 command applications in parallel, then B11A native packaging | 4: B3B → B10A → B10/B11 → B11A |
 | T-HEARTBEAT | ATM-state polling heartbeat | B3C sc-cron contract | B12 application registration/policy | B12 | 2: B3C → B12 |
 | T-OPS | daemon supervision and lifecycle | B3B/B3C lifecycle contracts | B12A platform adapters | B12A | 3: B3B/B3C → B10A/B12 → B12A |
 | T-RELEASE | bounded release evidence | prior track evidence contracts | none | B13 evidence only | 1: B13 |
@@ -83,9 +83,9 @@ Stable track IDs do not change between the registry and wave table. A shared con
 | 6 | T-API-CLIENT | B10 | read client/API composition | catalog/API/observability client paths, real-service integration, performance tests | B10A/B5/B6/B9A |
 | 7 | T-ATM | B9C | roster expansion | roster workflow and integration tests | B6A/B7/B9A/B9B |
 | 7 | T-HEARTBEAT | B12 | ATM-state heartbeat | daemon heartbeat registration plus ATM observation/projection integration | B3C/B6A/B9A |
-| 8 | T-API-CLIENT | B11 | editor/actions/API composition | editor/action client paths, real-command integration, E2E tests | B10/B5/B9B/B9C |
+| 8 | T-API-CLIENT | B11 | editor/actions/API composition | editor/action client paths, real-command integration, E2E tests | B2/B10A/B5/B9B/B9C; parallel-safe with B10 |
 | 8 | T-OPS | B12A | supervision | thin-daemon supervision source/tests, platform packaging, operations docs | B10A/B9B/B12 |
-| 9 | T-API-CLIENT | B11A | Tauri mobile | generated mobile projects, mobile adapters/tests/docs | B11 |
+| 9 | T-API-CLIENT | B11A | Tauri mobile | generated mobile projects, mobile adapters/tests/docs | B10 read application + B11 command application |
 | 10 | T-RELEASE | B13 | release evidence | `docs/evidence/phase-b/**`, release note | B9C/B11A/B12A evidence |
 | interrupt | T-BOOT | 0.2.0 upgrade | runtime workspace | runtime-managed manifests/lint, exact upgrade workflow/evidence paths | B2 gate trigger + released tag |
 

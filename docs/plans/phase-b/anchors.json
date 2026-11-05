@@ -324,6 +324,13 @@
           "item": "sprint-b-12-scheduling",
           "reason": "B12 adds the new sc-cron ATM heartbeat after the required B1/B2 prerequisites and does not migrate scmux schema, feature behavior, or UI.",
           "replaced": false
+        },
+        {
+          "at": "2026-11-05T17:19:45+00:00",
+          "event": "excluded",
+          "item": "sprint-b-11a-mobile",
+          "reason": "B11A packages the already-migrated shared application for native mobile and does not port scmux schema, feature behavior, or UI.",
+          "replaced": false
         }
       ],
       "exclude": [
@@ -350,6 +357,10 @@
         {
           "item": "sprint-b-12-scheduling",
           "reason": "B12 adds the new sc-cron ATM heartbeat after the required B1/B2 prerequisites and does not migrate scmux schema, feature behavior, or UI."
+        },
+        {
+          "item": "sprint-b-11a-mobile",
+          "reason": "B11A packages the already-migrated shared application for native mobile and does not port scmux schema, feature behavior, or UI."
         }
       ]
     },

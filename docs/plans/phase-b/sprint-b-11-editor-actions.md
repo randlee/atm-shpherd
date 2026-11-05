@@ -14,15 +14,17 @@ owned_paths:
   - tests/integration/api-command/**
 relations:
   must_follow:
-    - sprint: b-10-dashboard
-      artifact: authenticated-shared-client-shell
+    - sprint: b-2-integrate-workspace
+      artifact: shared-client-shell
+    - sprint: b-10a-daemon-api
+      artifact: authenticated-command-client-boundary
     - sprint: b-5-definition-service
       artifact: real-definition-command-service
     - sprint: b-9b-launch-leases
       artifact: guarded-launch-command
     - sprint: b-9c-expand-roster
       artifact: idempotent-roster-expansion-command
-  parallel_safe: [b-12a-daemon-supervision]
+  parallel_safe: [b-10-dashboard, b-12a-daemon-supervision]
 recommended_agent: full-stack-client-developer
 recommended_model: workhorse
 ---
@@ -49,11 +51,11 @@ All editor and action mutations use this interface and render the frozen `ErrorE
 
 ## Relationships
 
-`must_follow` B10's authenticated client shell, B5's real definition command service, B9B's guarded launch command, and B9C's idempotent roster-expansion command.
+`must_follow` B2's shared client shell, B10A's authenticated command-client boundary, B5's real definition command service, B9B's guarded launch command, and B9C's idempotent roster-expansion command. B11 is parallel-safe with B10 because their command and read application paths are disjoint and both consume the B2/B10A-owned client contracts.
 
 ## This sprint does not close
 
-No mobile packaging/native capability proof; B11A owns it.
+No dashboard read composition or mobile packaging/native capability proof; B10 and B11A own those independently.
 
 ## Acceptance and validation
 

@@ -80,6 +80,7 @@ Excluded from (not judged; the cell passes as `excluded`):
 - `sprint-b-12a-daemon-supervision`: B12A adds new cross-platform daemon supervision after migrated features are complete; it does not port scmux schema, feature behavior, or UI.
 - `sprint-b-9b-launch-leases`: B9B composes host-local launch safety after the launcher port and does not port scmux schema, feature behavior, or UI.
 - `sprint-b-12-scheduling`: B12 adds the new sc-cron ATM heartbeat after the required B1/B2 prerequisites and does not migrate scmux schema, feature behavior, or UI.
+- `sprint-b-11a-mobile`: B11A packages the already-migrated shared application for native mobile and does not port scmux schema, feature behavior, or UI.
 
 Beads: anchor `shp-vvt`, plan questions `shp-vvt.1`, dev questions `shp-vvt.2`
 

@@ -51,7 +51,7 @@ Both browser and desktop inject this interface; neither imports a store, service
 
 ## Relationships
 
-`must_follow` B10A's authenticated snapshot/event boundary, the real B5 definition and B6 observation services, and B9A's partial-host snapshot semantics. Parallel-safe with B9B, B9C, and B12 through disjoint client paths.
+`must_follow` B10A's authenticated snapshot/event boundary, the real B5 definition and B6 observation services, and B9A's partial-host snapshot semantics. Parallel-safe with B9B, B9C, B11, and B12 through disjoint client paths; the unique B10/B11 pair is recorded on B11. B2 owns the shared client shell, so B11 does not consume a shell artifact from B10.
 
 ## This sprint does not close
 
