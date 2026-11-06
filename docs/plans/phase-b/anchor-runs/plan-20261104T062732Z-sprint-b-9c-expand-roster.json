@@ -1,0 +1,771 @@
+{
+  "schema": "plan-anchoring/run/1",
+  "run_id": "plan-20261104T062732Z-sprint-b-9c-expand-roster",
+  "gate": "plan",
+  "created_at": "2026-11-04T06:27:32+00:00",
+  "anchors_path": "/Users/randlee/github/atm-shpherd/docs/plans/phase-b/anchors.json",
+  "plan": "phase-b",
+  "item": {
+    "id": "sprint-b-9c-expand-roster",
+    "title": "B9C expand roster",
+    "source": "/Users/randlee/github/atm-shpherd/docs/plans/phase-b/sprint-b-9c-expand-roster.md",
+    "chars": 5589,
+    "truncated": false,
+    "chars_before_reduction": 5589,
+    "code_reduced": {
+      "blocks": 0,
+      "lines": 0
+    }
+  },
+  "model_requested": "jev-latest",
+  "model_answered": "jev-1.14.0",
+  "threshold": 0.6,
+  "max_request_bytes": 24000,
+  "min_item_chars": 2000,
+  "dry_run": false,
+  "fixture": false,
+  "results": [
+    {
+      "anchor_id": "ANC-003",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "The sc-runtime 0.2.0 upgrade must be the next Shpherd work started after version 0.2.0 is released.",
+      "quote": "updrade to 0.2.0 as soon as it lands",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "The tracker history shows no new feature bead started between the sc-runtime 0.2.0 release and the Shpherd 0.2.0 upgrade bead.",
+      "kind": "directive",
+      "leaning": "satisfied",
+      "question_set": {
+        "gate": "plan",
+        "version": 1,
+        "overridden": false
+      },
+      "questions_sha256": "45c142d4b4a63bd5c580d2407d06af54171ebec6302dd62d0ba982450416f8cd",
+      "verdict": "satisfied",
+      "answers": {
+        "relevant": {
+          "type": "choice",
+          "choice": "yes",
+          "confidence": 0.98,
+          "probabilities": {
+            "yes": 0.99,
+            "no": 0.01,
+            "unclear": 0.0
+          }
+        },
+        "addressed": {
+          "type": "choice",
+          "choice": "yes",
+          "confidence": 0.91,
+          "probabilities": {
+            "yes": 0.94,
+            "no": 0.05,
+            "unclear": 0.01
+          }
+        },
+        "contradicted": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.85,
+          "probabilities": {
+            "yes": 0.09,
+            "no": 0.9,
+            "unclear": 0.01
+          }
+        }
+      },
+      "min_confidence": 0.85,
+      "explanation": "The directive is carried forward.",
+      "usage": {
+        "input_tokens": 2345,
+        "output_tokens": 117
+      },
+      "attempts": 1,
+      "item_chars_sent": 5589,
+      "item_shortened": false,
+      "request_bytes": 8625
+    },
+    {
+      "anchor_id": "ANC-008",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Herdr must be Shpherd's default launcher.",
+      "quote": "shpherd will be herdr first (by default)",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "A launcher selection test proves an unset launcher chooses Herdr.",
+      "kind": "directive",
+      "leaning": "satisfied",
+      "question_set": {
+        "gate": "plan",
+        "version": 1,
+        "overridden": false
+      },
+      "questions_sha256": "45c142d4b4a63bd5c580d2407d06af54171ebec6302dd62d0ba982450416f8cd",
+      "verdict": "satisfied",
+      "answers": {
+        "relevant": {
+          "type": "choice",
+          "choice": "yes",
+          "confidence": 1.0,
+          "probabilities": {
+            "yes": 1.0,
+            "no": 0.0,
+            "unclear": 0.0
+          }
+        },
+        "addressed": {
+          "type": "choice",
+          "choice": "yes",
+          "confidence": 1.0,
+          "probabilities": {
+            "yes": 1.0,
+            "no": 0.0,
+            "unclear": 0.0
+          }
+        },
+        "contradicted": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.98,
+          "probabilities": {
+            "yes": 0.01,
+            "no": 0.99,
+            "unclear": 0.0
+          }
+        }
+      },
+      "min_confidence": 0.98,
+      "explanation": "The directive is carried forward.",
+      "usage": {
+        "input_tokens": 2320,
+        "output_tokens": 117
+      },
+      "attempts": 1,
+      "item_chars_sent": 5589,
+      "item_shortened": false,
+      "request_bytes": 8562
+    },
+    {
+      "anchor_id": "ANC-009",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Shpherd must support tmux launching.",
+      "quote": "but will also support tmux launching (default in scmux).",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "A launcher integration test proves an explicitly selected tmux backend can launch, observe, focus, and stop a team.",
+      "kind": "directive",
+      "leaning": "satisfied",
+      "question_set": {
+        "gate": "plan",
+        "version": 1,
+        "overridden": false
+      },
+      "questions_sha256": "45c142d4b4a63bd5c580d2407d06af54171ebec6302dd62d0ba982450416f8cd",
+      "verdict": "satisfied",
+      "answers": {
+        "relevant": {
+          "type": "choice",
+          "choice": "yes",
+          "confidence": 1.0,
+          "probabilities": {
+            "yes": 1.0,
+            "no": 0.0,
+            "unclear": 0.0
+          }
+        },
+        "addressed": {
+          "type": "choice",
+          "choice": "yes",
+          "confidence": 0.98,
+          "probabilities": {
+            "yes": 0.99,
+            "no": 0.01,
+            "unclear": 0.0
+          }
+        },
+        "contradicted": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.97,
+          "probabilities": {
+            "yes": 0.02,
+            "no": 0.98,
+            "unclear": 0.0
+          }
+        }
+      },
+      "min_confidence": 0.97,
+      "explanation": "The directive is carried forward.",
+      "usage": {
+        "input_tokens": 2322,
+        "output_tokens": 117
+      },
+      "attempts": 1,
+      "item_chars_sent": 5589,
+      "item_shortened": false,
+      "request_bytes": 8580
+    },
+    {
+      "anchor_id": "ANC-011",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Phase B must treat ATM as the source of truth for each running team instance.",
+      "quote": "yes, the source of truth of teams is atm (where the actual team lives).",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-03",
+      "context": "Phase B architecture clarification in Codex",
+      "anchor_version": 3,
+      "deterministic_check": "ATM observation tests prove Shpherd reads the running team instance from ATM rather than treating the stored definition as actual state.",
+      "kind": "directive",
+      "leaning": "satisfied",
+      "question_set": {
+        "gate": "plan",
+        "version": 1,
+        "overridden": false
+      },
+      "questions_sha256": "45c142d4b4a63bd5c580d2407d06af54171ebec6302dd62d0ba982450416f8cd",
+      "near_threshold": true,
+      "confirmed": true,
+      "verdict": "satisfied",
+      "answers": {
+        "relevant": {
+          "type": "choice",
+          "choice": "yes",
+          "confidence": 1.0,
+          "probabilities": {
+            "yes": 1.0,
+            "no": 0.0,
+            "unclear": 0.0
+          }
+        },
+        "addressed": {
+          "type": "choice",
+          "choice": "yes",
+          "confidence": 0.67,
+          "probabilities": {
+            "yes": 0.78,
+            "no": 0.11,
+            "unclear": 0.11
+          }
+        },
+        "contradicted": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.97,
+          "probabilities": {
+            "yes": 0.02,
+            "no": 0.98,
+            "unclear": 0.0
+          }
+        }
+      },
+      "min_confidence": 0.67,
+      "explanation": "The directive is carried forward.",
+      "usage": {
+        "input_tokens": 2332,
+        "output_tokens": 117
+      },
+      "attempts": 2,
+      "item_chars_sent": 5589,
+      "item_shortened": false,
+      "request_bytes": 8629
+    },
+    {
+      "anchor_id": "ANC-012",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Phase B PostgreSQL must provide a fleet-wide view of teams across all computers.",
+      "quote": "The postgresdb is simply a view of all teams on all computers.",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-03",
+      "context": "Phase B architecture clarification in Codex",
+      "anchor_version": 5,
+      "deterministic_check": "PostgreSQL schema and boundary tests expose a fleet-wide team view and no launch-lease or launch-authority operation.",
+      "kind": "directive",
+      "leaning": "satisfied",
+      "question_set": {
+        "gate": "plan",
+        "version": 1,
+        "overridden": true
+      },
+      "questions_sha256": "e0ad4f582098621828f670f21a91ce516a530d2aad0c0a4ce549abf74139de90",
+      "questions": {
+        "relevant": {
+          "criteria": {
+            "no": "It concerns an unrelated component with no effect on those behaviors.",
+            "unclear": "The work area cannot be identified.",
+            "yes": "It changes or depends on one of these PostgreSQL team behaviors."
+          },
+          "instructions": "Does `item.text` affect PostgreSQL team storage, synchronization, fleet display, or PostgreSQL launch coordination? Judge subject overlap only.",
+          "type": "choice"
+        },
+        "addressed": {
+          "criteria": {
+            "no": "It omits that commitment, names only the topic, or limits the view to one computer.",
+            "unclear": "It mentions a team view but the intended computer coverage cannot be determined.",
+            "yes": "It promises a combined all-computers fleet view, including concrete examples joining teams from two computers."
+          },
+          "instructions": "Does `item.text` commit to PostgreSQL showing teams from multiple computers together in a fleet-wide view? Judge only whether that view commitment is present.",
+          "type": "choice"
+        },
+        "contradicted": {
+          "criteria": {
+            "no": "It states no such restriction or launch authority, including silence and local offline caches alongside a fleet-wide PostgreSQL view.",
+            "unclear": "An explicit proposed behavior leaves it uncertain whether such a restriction or authority exists.",
+            "yes": "It excludes other computers from the PostgreSQL team view, grants PostgreSQL a global launch lease, or makes it reject same-name launches across computers."
+          },
+          "instructions": "Does `item.text` restrict the PostgreSQL fleet view to one computer, or give PostgreSQL authority over team launches? ANC-012 requires a fleet-wide team view; its approved boundary forbids global launch leases and PostgreSQL rejecting a second computer running a same-named team. Silence is not conflict.",
+          "type": "choice"
+        }
+      },
+      "verdict": "satisfied",
+      "answers": {
+        "relevant": {
+          "type": "choice",
+          "choice": "yes",
+          "confidence": 1.0,
+          "probabilities": {
+            "no": 0.0,
+            "unclear": 0.0,
+            "yes": 1.0
+          }
+        },
+        "addressed": {
+          "type": "choice",
+          "choice": "yes",
+          "confidence": 0.97,
+          "probabilities": {
+            "no": 0.02,
+            "unclear": 0.0,
+            "yes": 0.98
+          }
+        },
+        "contradicted": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 1.0,
+          "probabilities": {
+            "no": 1.0,
+            "unclear": 0.0,
+            "yes": 0.0
+          }
+        }
+      },
+      "min_confidence": 0.97,
+      "explanation": "The directive is carried forward.",
+      "usage": {
+        "input_tokens": 2145,
+        "output_tokens": 117
+      },
+      "attempts": 1,
+      "item_chars_sent": 5589,
+      "item_shortened": false,
+      "request_bytes": 7788
+    },
+    {
+      "anchor_id": "ANC-013",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Phase B must permit identical team and agent names to run concurrently on different hosts.",
+      "quote": "I would expect teams could move/be duplicated on multiple hosts. There is no problem running the same set of named agents on 2 computers and working on parallel non-intersecting work.",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-03",
+      "context": "Phase B architecture clarification in Codex",
+      "anchor_version": 3,
+      "deterministic_check": "A multi-host fixture runs and displays identical team and agent names concurrently under distinct hosts.",
+      "kind": "directive",
+      "leaning": "satisfied",
+      "question_set": {
+        "gate": "plan",
+        "version": 1,
+        "overridden": false
+      },
+      "questions_sha256": "45c142d4b4a63bd5c580d2407d06af54171ebec6302dd62d0ba982450416f8cd",
+      "verdict": "satisfied",
+      "answers": {
+        "relevant": {
+          "type": "choice",
+          "choice": "yes",
+          "confidence": 1.0,
+          "probabilities": {
+            "yes": 1.0,
+            "no": 0.0,
+            "unclear": 0.0
+          }
+        },
+        "addressed": {
+          "type": "choice",
+          "choice": "yes",
+          "confidence": 1.0,
+          "probabilities": {
+            "yes": 1.0,
+            "no": 0.0,
+            "unclear": 0.0
+          }
+        },
+        "contradicted": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.98,
+          "probabilities": {
+            "yes": 0.01,
+            "no": 0.99,
+            "unclear": 0.0
+          }
+        }
+      },
+      "min_confidence": 0.98,
+      "explanation": "The directive is carried forward.",
+      "usage": {
+        "input_tokens": 2334,
+        "output_tokens": 117
+      },
+      "attempts": 1,
+      "item_chars_sent": 5589,
+      "item_shortened": false,
+      "request_bytes": 8647
+    },
+    {
+      "anchor_id": "ANC-014",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Phase B must allow an operator connected over SSH to start a Herdr or tmux session with active agents.",
+      "quote": "it allows anyone to start a herdr/tmux session with active agents over ssh.",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-03",
+      "context": "Phase B architecture clarification in Codex",
+      "anchor_version": 3,
+      "deterministic_check": "A noninteractive SSH-session integration test starts active agents through Herdr by default and tmux when selected.",
+      "kind": "directive",
+      "leaning": "satisfied",
+      "question_set": {
+        "gate": "plan",
+        "version": 1,
+        "overridden": false
+      },
+      "questions_sha256": "45c142d4b4a63bd5c580d2407d06af54171ebec6302dd62d0ba982450416f8cd",
+      "verdict": "satisfied",
+      "answers": {
+        "relevant": {
+          "type": "choice",
+          "choice": "yes",
+          "confidence": 1.0,
+          "probabilities": {
+            "yes": 1.0,
+            "no": 0.0,
+            "unclear": 0.0
+          }
+        },
+        "addressed": {
+          "type": "choice",
+          "choice": "yes",
+          "confidence": 0.98,
+          "probabilities": {
+            "yes": 0.99,
+            "no": 0.01,
+            "unclear": 0.0
+          }
+        },
+        "contradicted": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.98,
+          "probabilities": {
+            "yes": 0.01,
+            "no": 0.99,
+            "unclear": 0.0
+          }
+        }
+      },
+      "min_confidence": 0.98,
+      "explanation": "The directive is carried forward.",
+      "usage": {
+        "input_tokens": 2342,
+        "output_tokens": 117
+      },
+      "attempts": 1,
+      "item_chars_sent": 5589,
+      "item_shortened": false,
+      "request_bytes": 8657
+    },
+    {
+      "anchor_id": "ANC-007",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Shpherd's initial UI logic must be ported from scmux.",
+      "quote": "use the existing schema + ui logic in scmux",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "UI parity tests map each retained scmux dashboard and editor behavior to a Shpherd implementation and test.",
+      "kind": "directive",
+      "leaning": "not_applicable",
+      "question_set": {
+        "gate": "plan",
+        "version": 1,
+        "overridden": false
+      },
+      "questions_sha256": "45c142d4b4a63bd5c580d2407d06af54171ebec6302dd62d0ba982450416f8cd",
+      "verdict": "not_applicable",
+      "answers": {
+        "relevant": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.96,
+          "probabilities": {
+            "yes": 0.03,
+            "no": 0.97,
+            "unclear": 0.0
+          }
+        },
+        "addressed": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.97,
+          "probabilities": {
+            "yes": 0.01,
+            "no": 0.98,
+            "unclear": 0.01
+          }
+        },
+        "contradicted": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.94,
+          "probabilities": {
+            "yes": 0.03,
+            "no": 0.96,
+            "unclear": 0.01
+          }
+        }
+      },
+      "min_confidence": 0.94,
+      "explanation": "The anchor does not govern this bead.",
+      "usage": {
+        "input_tokens": 2327,
+        "output_tokens": 117
+      },
+      "attempts": 1,
+      "item_chars_sent": 5589,
+      "item_shortened": false,
+      "request_bytes": 8578
+    },
+    {
+      "anchor_id": "ANC-001",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Shpherd's initial runtime workspace must be generated from sc-runtime version 0.1.1.",
+      "quote": "install the sc-runtime templates at 0.1.1 (latest release)",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "Cargo metadata and the generation record identify sc-runtime 0.1.1 for the initial Shpherd scaffold.",
+      "kind": "directive",
+      "leaning": null,
+      "verdict": "excluded",
+      "answers": null,
+      "min_confidence": null,
+      "exclusion": {
+        "item": "sprint-b-9c-expand-roster",
+        "reason": "B9C implements roster expansion after workspace generation and does not install the initial runtime template."
+      },
+      "explanation": "Excluded from this bead by the anchor's exclude list: B9C implements roster expansion after workspace generation and does not install the initial runtime template.",
+      "attempts": 0
+    },
+    {
+      "anchor_id": "ANC-002",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Template installation and testing must precede scmux feature and UI migration in Phase B.",
+      "quote": "I would expect the plan to start w/ template installation and testing. Then have sprints to migrate the current scmux features and ui to shpherd.",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "Every scmux migration bead depends transitively on the completed sc-runtime installation-and-test bead.",
+      "kind": "directive",
+      "leaning": null,
+      "verdict": "excluded",
+      "answers": null,
+      "min_confidence": null,
+      "exclusion": {
+        "item": "sprint-b-9c-expand-roster",
+        "reason": "B9C implements new ATM roster expansion after the retained scmux behavior is ported; it does not port scmux schema, feature behavior, or UI."
+      },
+      "explanation": "Excluded from this bead by the anchor's exclude list: B9C implements new ATM roster expansion after the retained scmux behavior is ported; it does not port scmux schema, feature behavior, or UI.",
+      "attempts": 0
+    },
+    {
+      "anchor_id": "ANC-004",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Shpherd's sc-runtime 0.2.0 upgrade must include the dependency updates supplied by that release.",
+      "quote": "0.2.0 upgrades some dependencies and fully installs sc-lint 0.8.4+ on consumer repo",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "Shpherd's dependency manifests match a fresh sc-runtime 0.2.0 generation for managed dependency versions.",
+      "kind": "directive",
+      "leaning": null,
+      "verdict": "excluded",
+      "answers": null,
+      "min_confidence": null,
+      "exclusion": {
+        "item": "sprint-b-9c-expand-roster",
+        "reason": "B9C performs roster expansion and does not apply dependency updates supplied by sc-runtime 0.2.0; the runtime-upgrade interrupt owns that work."
+      },
+      "explanation": "Excluded from this bead by the anchor's exclude list: B9C performs roster expansion and does not apply dependency updates supplied by sc-runtime 0.2.0; the runtime-upgrade interrupt owns that work.",
+      "attempts": 0
+    },
+    {
+      "anchor_id": "ANC-005",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Shpherd's sc-runtime 0.2.0 upgrade must leave sc-lint 0.8.4 or newer fully installed in the consumer repository.",
+      "quote": "0.2.0 upgrades some dependencies and fully installs sc-lint 0.8.4+ on consumer repo",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "The consumer repository contains the complete sc-lint installation and its version check reports 0.8.4 or newer.",
+      "kind": "directive",
+      "leaning": null,
+      "verdict": "excluded",
+      "answers": null,
+      "min_confidence": null,
+      "exclusion": {
+        "item": "sprint-b-9c-expand-roster",
+        "reason": "B9C performs roster expansion and does not install sc-lint; the runtime-upgrade interrupt owns the sc-lint 0.8.4 or newer installation."
+      },
+      "explanation": "Excluded from this bead by the anchor's exclude list: B9C performs roster expansion and does not install sc-lint; the runtime-upgrade interrupt owns the sc-lint 0.8.4 or newer installation.",
+      "attempts": 0
+    },
+    {
+      "anchor_id": "ANC-006",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Shpherd's initial database schema must be ported from scmux.",
+      "quote": "use the existing schema + ui logic in scmux",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "A schema parity test compares Shpherd migrations with the pinned scmux schema and explains every intentional difference.",
+      "kind": "directive",
+      "leaning": null,
+      "verdict": "excluded",
+      "answers": null,
+      "min_confidence": null,
+      "exclusion": {
+        "item": "sprint-b-9c-expand-roster",
+        "reason": "B9C composes roster and launch services and creates or migrates no Shpherd database schema object."
+      },
+      "explanation": "Excluded from this bead by the anchor's exclude list: B9C composes roster and launch services and creates or migrates no Shpherd database schema object.",
+      "attempts": 0
+    },
+    {
+      "anchor_id": "ANC-010",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Shpherd's initial database port must establish scmux schema parity before adding Herdr-specific fields.",
+      "quote": "We may need to upgrade the scmux database schema i.e. add additional fields for herdr launching, but starting w/ parity is the goal.",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "The schema-parity commit and tests precede any migration that adds Herdr-specific columns or tables.",
+      "kind": "directive",
+      "leaning": null,
+      "verdict": "excluded",
+      "answers": null,
+      "min_confidence": null,
+      "exclusion": {
+        "item": "sprint-b-9c-expand-roster",
+        "reason": "B9C adds no Herdr-specific database schema field and does not own initial schema parity."
+      },
+      "explanation": "Excluded from this bead by the anchor's exclude list: B9C adds no Herdr-specific database schema field and does not own initial schema parity.",
+      "attempts": 0
+    },
+    {
+      "anchor_id": "ANC-015",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Phase B must use sc-cron as a heartbeat that polls ATM agent state.",
+      "quote": "for mvp, cron would be heartbead for polling atm agent state.",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-03",
+      "context": "Phase B architecture clarification in Codex",
+      "anchor_version": 3,
+      "deterministic_check": "The sc-cron registry and callback tests expose the ATM-state polling heartbeat and no scheduled launch or instruction job.",
+      "kind": "directive",
+      "leaning": null,
+      "verdict": "excluded",
+      "answers": null,
+      "min_confidence": null,
+      "exclusion": {
+        "item": "sprint-b-9c-expand-roster",
+        "reason": "B9C implements an operator-triggered roster expansion workflow and does not integrate sc-cron, poll ATM on a heartbeat, publish scheduled status, or define a scheduled operation; its post-MVP sentence only excludes scheduling from this sprint."
+      },
+      "explanation": "Excluded from this bead by the anchor's exclude list: B9C implements an operator-triggered roster expansion workflow and does not integrate sc-cron, poll ATM on a heartbeat, publish scheduled status, or define a scheduled operation; its post-MVP sentence only excludes scheduling from this sprint.",
+      "attempts": 0
+    }
+  ],
+  "summary": {
+    "counts": {
+      "satisfied": 7,
+      "not_applicable": 1,
+      "excluded": 7
+    },
+    "failing": [],
+    "leaning_counts": {
+      "not_applicable": 1,
+      "satisfied": 7
+    },
+    "unstable": [],
+    "errors": [],
+    "excluded": [
+      {
+        "anchor_id": "ANC-001",
+        "reason": "B9C implements roster expansion after workspace generation and does not install the initial runtime template."
+      },
+      {
+        "anchor_id": "ANC-002",
+        "reason": "B9C implements new ATM roster expansion after the retained scmux behavior is ported; it does not port scmux schema, feature behavior, or UI."
+      },
+      {
+        "anchor_id": "ANC-004",
+        "reason": "B9C performs roster expansion and does not apply dependency updates supplied by sc-runtime 0.2.0; the runtime-upgrade interrupt owns that work."
+      },
+      {
+        "anchor_id": "ANC-005",
+        "reason": "B9C performs roster expansion and does not install sc-lint; the runtime-upgrade interrupt owns the sc-lint 0.8.4 or newer installation."
+      },
+      {
+        "anchor_id": "ANC-006",
+        "reason": "B9C composes roster and launch services and creates or migrates no Shpherd database schema object."
+      },
+      {
+        "anchor_id": "ANC-010",
+        "reason": "B9C adds no Herdr-specific database schema field and does not own initial schema parity."
+      },
+      {
+        "anchor_id": "ANC-015",
+        "reason": "B9C implements an operator-triggered roster expansion workflow and does not integrate sc-cron, poll ATM on a heartbeat, publish scheduled status, or define a scheduled operation; its post-MVP sentence only excludes scheduling from this sprint."
+      }
+    ],
+    "shortened": [],
+    "pass": true
+  }
+}

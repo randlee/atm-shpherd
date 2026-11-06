@@ -1,0 +1,158 @@
+[
+  {
+    "candidate_id": "specific",
+    "question_sha256": "27ca8614e4cc3e94bb3bc736b8a3cd78606279a3fae1314bee2ca9208630ff56",
+    "semantic_accepted": true,
+    "score": {
+      "exact_role_cells": 60,
+      "total_role_cells": 60,
+      "exact_semantic_verdicts": 20,
+      "total_semantic_verdicts": 20,
+      "stable_cases": 10,
+      "total_cases": 10,
+      "regressions": 0
+    },
+    "confidence_diagnostics": {
+      "threshold": 0.8,
+      "cells_at_or_above_threshold": 58,
+      "total_cells": 60,
+      "minimum": 0.68,
+      "p10": 0.88,
+      "median": 1.0,
+      "mean": 0.965
+    },
+    "complexity_bytes": 1707,
+    "mismatches": [],
+    "reason": "Exact role labels and semantic verdicts on both identical repeats, stable in every case, zero regressions.",
+    "rank": 1,
+    "selected": true
+  },
+  {
+    "candidate_id": "boundary",
+    "question_sha256": "3215404b5c2ac6a7ed8c8cee93882719a36ecf6259ccb73b02954dde81b53be9",
+    "semantic_accepted": true,
+    "score": {
+      "exact_role_cells": 60,
+      "total_role_cells": 60,
+      "exact_semantic_verdicts": 20,
+      "total_semantic_verdicts": 20,
+      "stable_cases": 10,
+      "total_cases": 10,
+      "regressions": 0
+    },
+    "confidence_diagnostics": {
+      "threshold": 0.8,
+      "cells_at_or_above_threshold": 56,
+      "total_cells": 60,
+      "minimum": 0.42,
+      "p10": 0.82,
+      "median": 1.0,
+      "mean": 0.9416666666666667
+    },
+    "complexity_bytes": 1739,
+    "mismatches": [],
+    "reason": "Exact role labels and semantic verdicts on both identical repeats, stable in every case, zero regressions.",
+    "rank": 2,
+    "selected": false
+  },
+  {
+    "candidate_id": "behavioral",
+    "question_sha256": "f5b8dcea452eb12010d4a14d1a4237b007ebf7e3454972b1194457178e770b3f",
+    "semantic_accepted": false,
+    "score": {
+      "exact_role_cells": 58,
+      "total_role_cells": 60,
+      "exact_semantic_verdicts": 18,
+      "total_semantic_verdicts": 20,
+      "stable_cases": 10,
+      "total_cases": 10,
+      "regressions": 2
+    },
+    "confidence_diagnostics": {
+      "threshold": 0.8,
+      "cells_at_or_above_threshold": 52,
+      "total_cells": 60,
+      "minimum": 0.6,
+      "p10": 0.68,
+      "median": 0.98,
+      "mean": 0.9196666666666666
+    },
+    "complexity_bytes": 1690,
+    "mismatches": [
+      {
+        "case_id": "silence",
+        "repeat": 1,
+        "role": "relevant",
+        "expected": "yes",
+        "observed": "unclear"
+      },
+      {
+        "case_id": "silence",
+        "repeat": 2,
+        "role": "relevant",
+        "expected": "yes",
+        "observed": "unclear"
+      }
+    ],
+    "reason": "Rejected: frozen-oracle role mismatches remain; no labels or cases were changed.",
+    "rank": 3,
+    "selected": false
+  },
+  {
+    "candidate_id": "baseline",
+    "question_sha256": "8e9e29b043185ff7a76912e1d28726222bcd3fc867dcabb78a9bef523029ec05",
+    "semantic_accepted": false,
+    "score": {
+      "exact_role_cells": 56,
+      "total_role_cells": 60,
+      "exact_semantic_verdicts": 16,
+      "total_semantic_verdicts": 20,
+      "stable_cases": 10,
+      "total_cases": 10,
+      "regressions": 0
+    },
+    "confidence_diagnostics": {
+      "threshold": 0.8,
+      "cells_at_or_above_threshold": 48,
+      "total_cells": 60,
+      "minimum": 0.13,
+      "p10": 0.38,
+      "median": 0.98,
+      "mean": 0.871
+    },
+    "complexity_bytes": 2554,
+    "mismatches": [
+      {
+        "case_id": "fixture-fail",
+        "repeat": 1,
+        "role": "contradicted",
+        "expected": "yes",
+        "observed": "no"
+      },
+      {
+        "case_id": "fixture-fail",
+        "repeat": 2,
+        "role": "contradicted",
+        "expected": "yes",
+        "observed": "no"
+      },
+      {
+        "case_id": "mixed-conflict",
+        "repeat": 1,
+        "role": "contradicted",
+        "expected": "yes",
+        "observed": "no"
+      },
+      {
+        "case_id": "mixed-conflict",
+        "repeat": 2,
+        "role": "contradicted",
+        "expected": "yes",
+        "observed": "no"
+      }
+    ],
+    "reason": "Rejected: frozen-oracle role mismatches remain; no labels or cases were changed.",
+    "rank": 4,
+    "selected": false
+  }
+]

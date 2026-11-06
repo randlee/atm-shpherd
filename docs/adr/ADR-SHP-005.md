@@ -2,7 +2,7 @@
 
 - **Status:** Approved
 - **Owner:** B3B
-- **Decision:** launcher selection is the closed Herdr/tmux enum. Separate read and mutation traits make dry-run/observe/focus unguarded and available during lease outage; start/stop/relaunch/repair/spawn/nudge/member-stop/member-reconcile require an unforgeable lease guard plus idempotency key. Spawn also requires typed current roster-registration evidence.
-- **Alternatives rejected:** public spawn helpers, dynamic launcher plugins, or adapter-owned lease policy.
+- **Decision:** launcher selection is the closed Herdr/tmux enum. Separate read and mutation traits make dry-run/observe/focus unguarded. Start/stop/relaunch/repair/spawn/nudge/member-stop/member-reconcile require an unforgeable host-local operation guard plus idempotency key so retries cannot duplicate side effects on one host. Spawn also requires typed current ATM roster-registration evidence.
+- **Alternatives rejected:** public spawn helpers, dynamic launcher plugins, adapter-owned concurrency policy, or a PostgreSQL/global launch lease.
 - **Consequences:** new launchers require an ADR and exhaustive dispatch update.
-- **Evidence:** compile-fail mutation-without-guard tests, read-during-lease-outage tests, and shared Herdr/tmux lifecycle/registration-evidence simulator suite.
+- **Evidence:** compile-fail mutation-without-local-guard tests, host-local duplicate-request tests, cross-host same-name launch tests, and the shared Herdr/tmux lifecycle/registration-evidence simulator suite.

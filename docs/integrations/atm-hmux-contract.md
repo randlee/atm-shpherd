@@ -17,7 +17,7 @@ modified.
 | Roster mutation | `atm teams add-member`, `update-member`, and `remove-member` in `crates/atm/src/commands/teams.rs`. | The daemon service, after an explicit operator intent and domain validation, is the only Shpherd caller. |
 | Runtime member status | `atm members --team <team> --json` overlays runtime observation; unavailable observation is represented explicitly rather than as “dead.” `crates/atm/src/commands/members.rs`. | Import as observation/evidence; never persist it as definition truth. |
 | Herdr process integration | ATM carries backend/target/session/alias metadata; `atm-herdr` is intentionally a leaf adapter and has no direct roster/SQLite writes (`docs/atm-herdr/boundaries.md`). | hmux owns the compatible Herdr workspace/pane creation and agent command construction. |
-| Team policy, lease, intent, reconciliation | Not owned by ATM or hmux. | Owned by Shpherd service and durable action/intention records. |
+| Team policy, host-local guard, intent, reconciliation | Not owned by ATM or hmux. | Owned by Shpherd service and durable action/intention records; no distributed lease or fencing. |
 
 ## ATM command capabilities evidenced today
 
@@ -57,7 +57,7 @@ Shpherd must own this workflow:
 5. Re-import/reconcile `atm members --team <team> --json` before attempting a
    spawn. ATM acknowledgement alone is insufficient.
 6. Convert the reconciled ATM command evidence into typed roster-registration
-   evidence, acquire/verify the current Shpherd launch lease, then call hmux
+   evidence, issue the host-local Shpherd launch guard after durable journal acceptance, then call hmux
    dynamic spawn using the same operation key and an explicit selected/spare
    tab. Missing/stale/digest-mismatched evidence fails before spawn.
 7. Observe the Herdr pane/agent and ATM runtime roster. Complete only when
@@ -113,11 +113,11 @@ The executable B3C contract resolves the former reference gaps as follows:
    status. Stale revisions, forged claims, scope mismatch, and unauthorized
    principals fail before invocation.
 4. Shpherd alone calls the plural ATM mutation commands. hmux receives proof of
-   roster registration plus a lease fencing token and never mutates ATM.
+   roster registration plus the borrowed opaque host-local guard and idempotency key, and never mutates ATM.
 5. hmux reports a semantic version, shells, and explicit support for dry-run,
    start, stop, observe, focus, relaunch, repair, dynamic spawn, nudge,
-   member-stop, and member-reconcile. Dry-run/observe/focus are fencing-free
-   reads; every mutation carries fencing/idempotency. Spawn additionally carries
+   member-stop, and member-reconcile. Dry-run/observe/focus are guard-free
+   reads; every mutation carries the borrowed host-local guard and idempotency key. Spawn additionally carries
    typed evidence binding operation/key, ATM team/member, roster revision, and
    redacted result digest. Each request/result/error is the versioned B3C
    schema; absent capability or stale evidence is a typed failure.

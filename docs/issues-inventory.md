@@ -1,23 +1,24 @@
 # Phase B issue inventory
 
-The authoritative implementation inventory is the set returned by
-`bd children shp-phase-b`: exactly 25 open direct children, each named by one
-`docs/plans/phase-b/sprint-b-*.md` frontmatter `bead` field. Plan validation
-requires a bijection between those 25 IDs and the 25 sprint documents.
+The authoritative implementation inventory is the unique set of bead IDs named
+by `docs/plans/phase-b/sprint-b-*.md` frontmatter. Each ID must resolve under the
+Phase B epic and remain an implementation record. Direct epic children that are
+explicitly typed as governance, evaluation, or history records are reported but
+are not required to have a sprint document.
 
 The identifiers `shp-phase-b.5` and `shp-phase-b.15` are retained current
 children whose titles/scope were re-cut to B4A and B3A. Their earlier B4 and B3A
 titles are history entries, not extra implementation sprints. No obsolete
-parent-child edges remain. Plan-anchor root/question/report beads may carry the
-`phase:b` label, but are governance records outside the Phase B epic and are
-not counted as implementation sprints.
+parent-child edges remain. Plan-anchor root/question/report beads and
+`shp-phase-b.26` are governance records, not implementation sprints, even when
+attached to the Phase B epic.
 
 The deterministic inventory check is:
 
-1. list direct children of `shp-phase-b` and sort by bead ID;
-2. parse every Phase B sprint document's `bead` value and sort by bead ID;
-3. require both sets to contain 25 unique, identical IDs;
-4. require every implementation child to remain open until its sprint's own
+1. parse every Phase B sprint document's `bead` value and require uniqueness;
+2. resolve each referenced record under `shp-phase-b` and require it to be classified as implementation;
+3. list remaining direct children separately as governance/history or report an unclassified record;
+4. require every implementation record to remain open until its sprint's own
    acceptance evidence passes; and
 5. report anchor/governance records separately rather than treating a shared
    label as a parent edge.

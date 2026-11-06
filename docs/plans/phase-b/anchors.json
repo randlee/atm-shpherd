@@ -75,6 +75,90 @@
           "item": "sprint-b-13-release-certification",
           "reason": "B13 certifies existing implementation evidence and does not install or generate the initial Shpherd runtime workspace.",
           "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:11:12+00:00",
+          "event": "excluded",
+          "item": "sprint-b-3-port-sqlite-parity",
+          "reason": "This sprint follows the generated workspace and ports SQLite schema parity; it does not install or generate the initial runtime workspace.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:12:05+00:00",
+          "event": "excluded",
+          "item": "sprint-b-3a-schema-projection-contract",
+          "reason": "B3A freezes storage contracts after bootstrap and does not install or generate the initial runtime workspace.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:12:58+00:00",
+          "event": "excluded",
+          "item": "sprint-b-3b-service-launch-api-contract",
+          "reason": "B3B freezes application contracts after bootstrap and does not install or generate the initial runtime workspace.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:12:59+00:00",
+          "event": "excluded",
+          "item": "sprint-b-3c-external-integration-contract",
+          "reason": "B3C freezes external integration contracts after bootstrap and does not install or generate the initial runtime workspace.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:16:40+00:00",
+          "event": "excluded",
+          "item": "sprint-b-4a-local-schema-sqlite",
+          "reason": "B4A extends the already-generated workspace and does not install or generate the initial sc-runtime template baseline.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:20:16+00:00",
+          "event": "excluded",
+          "item": "sprint-b-7-herdr-launcher",
+          "reason": "B7 implements the Herdr adapter after workspace generation and does not install or generate the initial sc-runtime template baseline.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:20:52+00:00",
+          "event": "excluded",
+          "item": "sprint-b-8-tmux-launcher",
+          "reason": "B8 ports tmux compatibility after workspace generation and does not install or generate the initial runtime template.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:20:52+00:00",
+          "event": "excluded",
+          "item": "sprint-b-9a-sync-projection",
+          "reason": "B9A integrates completed stores after workspace generation and does not install or generate the initial runtime template.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:22:44+00:00",
+          "event": "excluded",
+          "item": "sprint-b-9b-launch-leases",
+          "reason": "B9B is later launch integration and does not install the initial workspace or perform the sc-runtime v0.2.0 dependency/sc-lint upgrade.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:22:44+00:00",
+          "event": "excluded",
+          "item": "sprint-b-9c-expand-roster",
+          "reason": "B9C implements roster expansion after workspace generation and does not install the initial runtime template.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:22:45+00:00",
+          "event": "excluded",
+          "item": "sprint-b-11a-mobile",
+          "reason": "B11A is later native packaging and does not install the initial workspace or perform the sc-runtime v0.2.0 dependency/sc-lint upgrade.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:43:10+00:00",
+          "event": "excluded",
+          "item": "sprint-b-10a-daemon-api",
+          "reason": "B10A implements the daemon API after bootstrap and does not install or generate the initial runtime workspace.",
+          "replaced": false
         }
       ],
       "exclude": [
@@ -89,6 +173,54 @@
         {
           "item": "sprint-b-13-release-certification",
           "reason": "B13 certifies existing implementation evidence and does not install or generate the initial Shpherd runtime workspace."
+        },
+        {
+          "item": "sprint-b-3-port-sqlite-parity",
+          "reason": "This sprint follows the generated workspace and ports SQLite schema parity; it does not install or generate the initial runtime workspace."
+        },
+        {
+          "item": "sprint-b-3a-schema-projection-contract",
+          "reason": "B3A freezes storage contracts after bootstrap and does not install or generate the initial runtime workspace."
+        },
+        {
+          "item": "sprint-b-3b-service-launch-api-contract",
+          "reason": "B3B freezes application contracts after bootstrap and does not install or generate the initial runtime workspace."
+        },
+        {
+          "item": "sprint-b-3c-external-integration-contract",
+          "reason": "B3C freezes external integration contracts after bootstrap and does not install or generate the initial runtime workspace."
+        },
+        {
+          "item": "sprint-b-4a-local-schema-sqlite",
+          "reason": "B4A extends the already-generated workspace and does not install or generate the initial sc-runtime template baseline."
+        },
+        {
+          "item": "sprint-b-7-herdr-launcher",
+          "reason": "B7 implements the Herdr adapter after workspace generation and does not install or generate the initial sc-runtime template baseline."
+        },
+        {
+          "item": "sprint-b-8-tmux-launcher",
+          "reason": "B8 ports tmux compatibility after workspace generation and does not install or generate the initial runtime template."
+        },
+        {
+          "item": "sprint-b-9a-sync-projection",
+          "reason": "B9A integrates completed stores after workspace generation and does not install or generate the initial runtime template."
+        },
+        {
+          "item": "sprint-b-9b-launch-leases",
+          "reason": "B9B is later launch integration and does not install the initial workspace or perform the sc-runtime v0.2.0 dependency/sc-lint upgrade."
+        },
+        {
+          "item": "sprint-b-9c-expand-roster",
+          "reason": "B9C implements roster expansion after workspace generation and does not install the initial runtime template."
+        },
+        {
+          "item": "sprint-b-11a-mobile",
+          "reason": "B11A is later native packaging and does not install the initial workspace or perform the sc-runtime v0.2.0 dependency/sc-lint upgrade."
+        },
+        {
+          "item": "sprint-b-10a-daemon-api",
+          "reason": "B10A implements the daemon API after bootstrap and does not install or generate the initial runtime workspace."
         }
       ]
     },
@@ -150,12 +282,85 @@
           "item": "sprint-b-13-release-certification",
           "reason": "B13 certifies existing implementation evidence and does not implement template installation or scmux migration.",
           "replaced": false
+        },
+        {
+          "at": "2026-11-03T08:09:42+00:00",
+          "event": "excluded",
+          "item": "sprint-b-9a-sync-projection",
+          "reason": "B9A implements new SQLite-to-PostgreSQL synchronization after schema parity; it does not port scmux schema, feature behavior, or UI.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T08:09:42+00:00",
+          "event": "excluded",
+          "item": "sprint-b-9b-launch-leases",
+          "reason": "B9B implements new multi-host launch leasing after the scmux launcher port; it does not port scmux schema, feature behavior, or UI.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T08:09:42+00:00",
+          "event": "excluded",
+          "item": "sprint-b-9c-expand-roster",
+          "reason": "B9C implements new ATM roster expansion after the retained scmux behavior is ported; it does not port scmux schema, feature behavior, or UI.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T08:12:20+00:00",
+          "event": "excluded",
+          "item": "sprint-b-12a-daemon-supervision",
+          "reason": "B12A adds new cross-platform daemon supervision after migrated features are complete; it does not port scmux schema, feature behavior, or UI.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-04T05:54:23+00:00",
+          "event": "excluded",
+          "item": "sprint-b-9b-launch-leases",
+          "reason": "B9B composes host-local launch safety after the launcher port and does not port scmux schema, feature behavior, or UI.",
+          "replaced": true
+        },
+        {
+          "at": "2026-11-04T06:29:15+00:00",
+          "event": "excluded",
+          "item": "sprint-b-12-scheduling",
+          "reason": "B12 adds the new sc-cron ATM heartbeat after the required B1/B2 prerequisites and does not migrate scmux schema, feature behavior, or UI.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-05T17:19:45+00:00",
+          "event": "excluded",
+          "item": "sprint-b-11a-mobile",
+          "reason": "B11A packages the already-migrated shared application for native mobile and does not port scmux schema, feature behavior, or UI.",
+          "replaced": false
         }
       ],
       "exclude": [
         {
           "item": "sprint-b-13-release-certification",
           "reason": "B13 certifies existing implementation evidence and does not implement template installation or scmux migration."
+        },
+        {
+          "item": "sprint-b-9a-sync-projection",
+          "reason": "B9A implements new SQLite-to-PostgreSQL synchronization after schema parity; it does not port scmux schema, feature behavior, or UI."
+        },
+        {
+          "item": "sprint-b-9c-expand-roster",
+          "reason": "B9C implements new ATM roster expansion after the retained scmux behavior is ported; it does not port scmux schema, feature behavior, or UI."
+        },
+        {
+          "item": "sprint-b-12a-daemon-supervision",
+          "reason": "B12A adds new cross-platform daemon supervision after migrated features are complete; it does not port scmux schema, feature behavior, or UI."
+        },
+        {
+          "item": "sprint-b-9b-launch-leases",
+          "reason": "B9B composes host-local launch safety after the launcher port and does not port scmux schema, feature behavior, or UI."
+        },
+        {
+          "item": "sprint-b-12-scheduling",
+          "reason": "B12 adds the new sc-cron ATM heartbeat after the required B1/B2 prerequisites and does not migrate scmux schema, feature behavior, or UI."
+        },
+        {
+          "item": "sprint-b-11a-mobile",
+          "reason": "B11A packages the already-migrated shared application for native mobile and does not port scmux schema, feature behavior, or UI."
         }
       ]
     },
@@ -210,6 +415,19 @@
           "fields": [
             "fixtures"
           ]
+        },
+        {
+          "at": "2026-11-03T07:07:27+00:00",
+          "event": "excluded",
+          "item": "sprint-b-1-generate-baseline",
+          "reason": "This sprint establishes the sc-runtime 0.1.1 baseline and does not cover work started after sc-runtime 0.2.0 is released.",
+          "replaced": false
+        }
+      ],
+      "exclude": [
+        {
+          "item": "sprint-b-1-generate-baseline",
+          "reason": "This sprint establishes the sc-runtime 0.1.1 baseline and does not cover work started after sc-runtime 0.2.0 is released."
         }
       ]
     },
@@ -285,6 +503,118 @@
           "item": "sprint-b-12a-daemon-supervision",
           "reason": "B12A adds daemon lifecycle supervision and does not perform the sc-runtime 0.2.0 dependency upgrade.",
           "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:07:27+00:00",
+          "event": "excluded",
+          "item": "sprint-b-1-generate-baseline",
+          "reason": "This sprint establishes the sc-runtime 0.1.1 baseline and does not cover the dependency updates in the sc-runtime 0.2.0 upgrade.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:12:05+00:00",
+          "event": "excluded",
+          "item": "sprint-b-3-port-sqlite-parity",
+          "reason": "B3 ports scmux SQLite parity and does not perform the sc-runtime 0.2.0 dependency upgrade.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:12:59+00:00",
+          "event": "excluded",
+          "item": "sprint-b-3b-service-launch-api-contract",
+          "reason": "B3B freezes service and launcher contracts but does not perform the sc-runtime 0.2.0 dependency upgrade.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:12:59+00:00",
+          "event": "excluded",
+          "item": "sprint-b-3c-external-integration-contract",
+          "reason": "B3C freezes external integration contracts but does not perform the sc-runtime 0.2.0 dependency upgrade.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:17:42+00:00",
+          "event": "excluded",
+          "item": "sprint-b-4a-local-schema-sqlite",
+          "reason": "B4A implements SQLite schema extensions and does not perform the sc-runtime v0.2.0 managed dependency upgrade.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:20:51+00:00",
+          "event": "excluded",
+          "item": "sprint-b-7-herdr-launcher",
+          "reason": "sprint-b-7-herdr-launcher implements feature behavior and does not perform the sc-runtime v0.2.0 managed dependency upgrade.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:20:51+00:00",
+          "event": "excluded",
+          "item": "sprint-b-8-tmux-launcher",
+          "reason": "sprint-b-8-tmux-launcher implements feature behavior and does not perform the sc-runtime v0.2.0 managed dependency upgrade.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:20:51+00:00",
+          "event": "excluded",
+          "item": "sprint-b-9a-sync-projection",
+          "reason": "sprint-b-9a-sync-projection implements feature behavior and does not perform the sc-runtime v0.2.0 managed dependency upgrade.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:22:44+00:00",
+          "event": "excluded",
+          "item": "sprint-b-9b-launch-leases",
+          "reason": "B9B is later launch integration and does not install the initial workspace or perform the sc-runtime v0.2.0 dependency/sc-lint upgrade.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:22:45+00:00",
+          "event": "excluded",
+          "item": "sprint-b-11a-mobile",
+          "reason": "B11A is later native packaging and does not install the initial workspace or perform the sc-runtime v0.2.0 dependency/sc-lint upgrade.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:39:31+00:00",
+          "event": "excluded",
+          "item": "sprint-b-12-scheduling",
+          "reason": "B12 integrates scheduled operations; only the runtime-upgrade interrupt applies dependency updates supplied by sc-runtime 0.2.0.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:50:06+00:00",
+          "event": "excluded",
+          "item": "sprint-b-9c-expand-roster",
+          "reason": "B9C performs roster expansion and does not apply dependency updates supplied by sc-runtime 0.2.0; the runtime-upgrade interrupt owns that work.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T08:21:54+00:00",
+          "event": "excluded",
+          "item": "sprint-b-3a-schema-projection-contract",
+          "reason": "B3A freezes storage contracts and does not perform the sc-runtime 0.2.0 dependency upgrade.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-04T06:30:06+00:00",
+          "event": "excluded",
+          "item": "sprint-b-10a-daemon-api",
+          "reason": "B10A implements the daemon API after bootstrap and does not own the sc-runtime 0.2.0 dependency upgrade.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-04T17:46:35+00:00",
+          "event": "excluded",
+          "item": "sprint-b-6-observation",
+          "reason": "B6 implements the observation read boundary and does not perform the sc-runtime 0.2.0 upgrade or manage its dependency updates.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-05T00:20:11+00:00",
+          "event": "excluded",
+          "item": "sprint-b-5-definition-service",
+          "reason": "B5 implements definition-service behavior and does not perform the sc-runtime 0.2.0 managed dependency upgrade.",
+          "replaced": false
         }
       ],
       "exclude": [
@@ -299,6 +629,70 @@
         {
           "item": "sprint-b-12a-daemon-supervision",
           "reason": "B12A adds daemon lifecycle supervision and does not perform the sc-runtime 0.2.0 dependency upgrade."
+        },
+        {
+          "item": "sprint-b-1-generate-baseline",
+          "reason": "This sprint establishes the sc-runtime 0.1.1 baseline and does not cover the dependency updates in the sc-runtime 0.2.0 upgrade."
+        },
+        {
+          "item": "sprint-b-3-port-sqlite-parity",
+          "reason": "B3 ports scmux SQLite parity and does not perform the sc-runtime 0.2.0 dependency upgrade."
+        },
+        {
+          "item": "sprint-b-3b-service-launch-api-contract",
+          "reason": "B3B freezes service and launcher contracts but does not perform the sc-runtime 0.2.0 dependency upgrade."
+        },
+        {
+          "item": "sprint-b-3c-external-integration-contract",
+          "reason": "B3C freezes external integration contracts but does not perform the sc-runtime 0.2.0 dependency upgrade."
+        },
+        {
+          "item": "sprint-b-4a-local-schema-sqlite",
+          "reason": "B4A implements SQLite schema extensions and does not perform the sc-runtime v0.2.0 managed dependency upgrade."
+        },
+        {
+          "item": "sprint-b-7-herdr-launcher",
+          "reason": "sprint-b-7-herdr-launcher implements feature behavior and does not perform the sc-runtime v0.2.0 managed dependency upgrade."
+        },
+        {
+          "item": "sprint-b-8-tmux-launcher",
+          "reason": "sprint-b-8-tmux-launcher implements feature behavior and does not perform the sc-runtime v0.2.0 managed dependency upgrade."
+        },
+        {
+          "item": "sprint-b-9a-sync-projection",
+          "reason": "sprint-b-9a-sync-projection implements feature behavior and does not perform the sc-runtime v0.2.0 managed dependency upgrade."
+        },
+        {
+          "item": "sprint-b-9b-launch-leases",
+          "reason": "B9B is later launch integration and does not install the initial workspace or perform the sc-runtime v0.2.0 dependency/sc-lint upgrade."
+        },
+        {
+          "item": "sprint-b-11a-mobile",
+          "reason": "B11A is later native packaging and does not install the initial workspace or perform the sc-runtime v0.2.0 dependency/sc-lint upgrade."
+        },
+        {
+          "item": "sprint-b-12-scheduling",
+          "reason": "B12 integrates scheduled operations; only the runtime-upgrade interrupt applies dependency updates supplied by sc-runtime 0.2.0."
+        },
+        {
+          "item": "sprint-b-9c-expand-roster",
+          "reason": "B9C performs roster expansion and does not apply dependency updates supplied by sc-runtime 0.2.0; the runtime-upgrade interrupt owns that work."
+        },
+        {
+          "item": "sprint-b-3a-schema-projection-contract",
+          "reason": "B3A freezes storage contracts and does not perform the sc-runtime 0.2.0 dependency upgrade."
+        },
+        {
+          "item": "sprint-b-10a-daemon-api",
+          "reason": "B10A implements the daemon API after bootstrap and does not own the sc-runtime 0.2.0 dependency upgrade."
+        },
+        {
+          "item": "sprint-b-6-observation",
+          "reason": "B6 implements the observation read boundary and does not perform the sc-runtime 0.2.0 upgrade or manage its dependency updates."
+        },
+        {
+          "item": "sprint-b-5-definition-service",
+          "reason": "B5 implements definition-service behavior and does not perform the sc-runtime 0.2.0 managed dependency upgrade."
         }
       ]
     },
@@ -381,6 +775,104 @@
           "item": "sprint-b-12a-daemon-supervision",
           "reason": "B12A adds daemon lifecycle supervision and does not perform the sc-runtime 0.2.0 upgrade or install sc-lint.",
           "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:07:27+00:00",
+          "event": "excluded",
+          "item": "sprint-b-1-generate-baseline",
+          "reason": "This sprint establishes the sc-runtime 0.1.1 baseline and does not cover the sc-lint installation in the sc-runtime 0.2.0 upgrade.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:12:05+00:00",
+          "event": "excluded",
+          "item": "sprint-b-3-port-sqlite-parity",
+          "reason": "B3 ports scmux SQLite parity and does not install the sc-runtime 0.2.0 sc-lint consumer assets.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:12:59+00:00",
+          "event": "excluded",
+          "item": "sprint-b-3b-service-launch-api-contract",
+          "reason": "B3B freezes service and launcher contracts but does not install the sc-runtime 0.2.0 sc-lint assets.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:12:59+00:00",
+          "event": "excluded",
+          "item": "sprint-b-3c-external-integration-contract",
+          "reason": "B3C freezes external integration contracts but does not install the sc-runtime 0.2.0 sc-lint assets.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:17:43+00:00",
+          "event": "excluded",
+          "item": "sprint-b-4a-local-schema-sqlite",
+          "reason": "B4A implements SQLite schema extensions and does not install the sc-runtime v0.2.0 sc-lint consumer assets.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:20:51+00:00",
+          "event": "excluded",
+          "item": "sprint-b-7-herdr-launcher",
+          "reason": "sprint-b-7-herdr-launcher implements feature behavior and does not install the sc-runtime v0.2.0 sc-lint consumer assets.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:20:51+00:00",
+          "event": "excluded",
+          "item": "sprint-b-8-tmux-launcher",
+          "reason": "sprint-b-8-tmux-launcher implements feature behavior and does not install the sc-runtime v0.2.0 sc-lint consumer assets.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:20:52+00:00",
+          "event": "excluded",
+          "item": "sprint-b-9a-sync-projection",
+          "reason": "sprint-b-9a-sync-projection implements feature behavior and does not install the sc-runtime v0.2.0 sc-lint consumer assets.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:22:44+00:00",
+          "event": "excluded",
+          "item": "sprint-b-9b-launch-leases",
+          "reason": "B9B is later launch integration and does not install the initial workspace or perform the sc-runtime v0.2.0 dependency/sc-lint upgrade.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:22:45+00:00",
+          "event": "excluded",
+          "item": "sprint-b-11a-mobile",
+          "reason": "B11A is later native packaging and does not install the initial workspace or perform the sc-runtime v0.2.0 dependency/sc-lint upgrade.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:39:31+00:00",
+          "event": "excluded",
+          "item": "sprint-b-10a-daemon-api",
+          "reason": "B10A implements the daemon API boundary; only the runtime-upgrade interrupt installs sc-lint 0.8.4 or newer.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:50:06+00:00",
+          "event": "excluded",
+          "item": "sprint-b-9c-expand-roster",
+          "reason": "B9C performs roster expansion and does not install sc-lint; the runtime-upgrade interrupt owns the sc-lint 0.8.4 or newer installation.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T08:21:54+00:00",
+          "event": "excluded",
+          "item": "sprint-b-3a-schema-projection-contract",
+          "reason": "B3A freezes storage contracts and does not install the sc-runtime 0.2.0 sc-lint consumer assets.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-05T00:20:11+00:00",
+          "event": "excluded",
+          "item": "sprint-b-5-definition-service",
+          "reason": "B5 implements definition-service behavior and does not install the sc-runtime 0.2.0 sc-lint consumer assets.",
+          "replaced": false
         }
       ],
       "exclude": [
@@ -399,6 +891,62 @@
         {
           "item": "sprint-b-12a-daemon-supervision",
           "reason": "B12A adds daemon lifecycle supervision and does not perform the sc-runtime 0.2.0 upgrade or install sc-lint."
+        },
+        {
+          "item": "sprint-b-1-generate-baseline",
+          "reason": "This sprint establishes the sc-runtime 0.1.1 baseline and does not cover the sc-lint installation in the sc-runtime 0.2.0 upgrade."
+        },
+        {
+          "item": "sprint-b-3-port-sqlite-parity",
+          "reason": "B3 ports scmux SQLite parity and does not install the sc-runtime 0.2.0 sc-lint consumer assets."
+        },
+        {
+          "item": "sprint-b-3b-service-launch-api-contract",
+          "reason": "B3B freezes service and launcher contracts but does not install the sc-runtime 0.2.0 sc-lint assets."
+        },
+        {
+          "item": "sprint-b-3c-external-integration-contract",
+          "reason": "B3C freezes external integration contracts but does not install the sc-runtime 0.2.0 sc-lint assets."
+        },
+        {
+          "item": "sprint-b-4a-local-schema-sqlite",
+          "reason": "B4A implements SQLite schema extensions and does not install the sc-runtime v0.2.0 sc-lint consumer assets."
+        },
+        {
+          "item": "sprint-b-7-herdr-launcher",
+          "reason": "sprint-b-7-herdr-launcher implements feature behavior and does not install the sc-runtime v0.2.0 sc-lint consumer assets."
+        },
+        {
+          "item": "sprint-b-8-tmux-launcher",
+          "reason": "sprint-b-8-tmux-launcher implements feature behavior and does not install the sc-runtime v0.2.0 sc-lint consumer assets."
+        },
+        {
+          "item": "sprint-b-9a-sync-projection",
+          "reason": "sprint-b-9a-sync-projection implements feature behavior and does not install the sc-runtime v0.2.0 sc-lint consumer assets."
+        },
+        {
+          "item": "sprint-b-9b-launch-leases",
+          "reason": "B9B is later launch integration and does not install the initial workspace or perform the sc-runtime v0.2.0 dependency/sc-lint upgrade."
+        },
+        {
+          "item": "sprint-b-11a-mobile",
+          "reason": "B11A is later native packaging and does not install the initial workspace or perform the sc-runtime v0.2.0 dependency/sc-lint upgrade."
+        },
+        {
+          "item": "sprint-b-10a-daemon-api",
+          "reason": "B10A implements the daemon API boundary; only the runtime-upgrade interrupt installs sc-lint 0.8.4 or newer."
+        },
+        {
+          "item": "sprint-b-9c-expand-roster",
+          "reason": "B9C performs roster expansion and does not install sc-lint; the runtime-upgrade interrupt owns the sc-lint 0.8.4 or newer installation."
+        },
+        {
+          "item": "sprint-b-3a-schema-projection-contract",
+          "reason": "B3A freezes storage contracts and does not install the sc-runtime 0.2.0 sc-lint consumer assets."
+        },
+        {
+          "item": "sprint-b-5-definition-service",
+          "reason": "B5 implements definition-service behavior and does not install the sc-runtime 0.2.0 sc-lint consumer assets."
         }
       ]
     },
@@ -460,12 +1008,122 @@
           "item": "sprint-b-12-scheduling",
           "reason": "B12 integrates schedules through sc-cron and does not create or migrate Shpherd database schema objects.",
           "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:08:23+00:00",
+          "event": "excluded",
+          "item": "sprint-b-2-integrate-workspace",
+          "reason": "B2 freezes shared contract types but creates or migrates no Shpherd database schema objects; the schema port belongs to a later database sprint.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:08:54+00:00",
+          "event": "excluded",
+          "item": "sprint-b-1-generate-baseline",
+          "reason": "B1 generates and tests the runtime template baseline but does not port or migrate the scmux database schema.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:16:40+00:00",
+          "event": "excluded",
+          "item": "sprint-b-4b-postgres-projection-store",
+          "reason": "B4B implements a new cloud projection store and does not own the initial scmux SQLite schema port.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:18:32+00:00",
+          "event": "excluded",
+          "item": "sprint-b-6a-atm-projection",
+          "reason": "B6A implements an ATM adapter against frozen fixtures and creates or migrates no Shpherd database schema objects.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:22:44+00:00",
+          "event": "excluded",
+          "item": "sprint-b-9b-launch-leases",
+          "reason": "B9B composes existing stores and launchers but creates or migrates no Shpherd database schema object.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:22:44+00:00",
+          "event": "excluded",
+          "item": "sprint-b-9c-expand-roster",
+          "reason": "B9C composes roster and launch services and creates or migrates no Shpherd database schema object.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:39:31+00:00",
+          "event": "excluded",
+          "item": "sprint-b-6-observation",
+          "reason": "B6 implements read-only observation after schema contracts; B3 owns the initial scmux schema port.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T08:21:23+00:00",
+          "event": "excluded",
+          "item": "sprint-b-5-definition-service",
+          "reason": "B5 implements service-layer definition behavior over the completed store seam; it creates or migrates no database schema object.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T08:25:37+00:00",
+          "event": "excluded",
+          "item": "sprint-b-10a-daemon-api",
+          "reason": "B10A implements daemon transport, startup, health, and observability contracts; it creates or migrates no database schema object.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-05T17:45:32+00:00",
+          "event": "excluded",
+          "item": "sprint-b-12a-daemon-supervision",
+          "reason": "B12A composes and supervises the completed daemon and creates or migrates no Shpherd database schema objects.",
+          "replaced": false
         }
       ],
       "exclude": [
         {
           "item": "sprint-b-12-scheduling",
           "reason": "B12 integrates schedules through sc-cron and does not create or migrate Shpherd database schema objects."
+        },
+        {
+          "item": "sprint-b-2-integrate-workspace",
+          "reason": "B2 freezes shared contract types but creates or migrates no Shpherd database schema objects; the schema port belongs to a later database sprint."
+        },
+        {
+          "item": "sprint-b-1-generate-baseline",
+          "reason": "B1 generates and tests the runtime template baseline but does not port or migrate the scmux database schema."
+        },
+        {
+          "item": "sprint-b-4b-postgres-projection-store",
+          "reason": "B4B implements a new cloud projection store and does not own the initial scmux SQLite schema port."
+        },
+        {
+          "item": "sprint-b-6a-atm-projection",
+          "reason": "B6A implements an ATM adapter against frozen fixtures and creates or migrates no Shpherd database schema objects."
+        },
+        {
+          "item": "sprint-b-9b-launch-leases",
+          "reason": "B9B composes existing stores and launchers but creates or migrates no Shpherd database schema object."
+        },
+        {
+          "item": "sprint-b-9c-expand-roster",
+          "reason": "B9C composes roster and launch services and creates or migrates no Shpherd database schema object."
+        },
+        {
+          "item": "sprint-b-6-observation",
+          "reason": "B6 implements read-only observation after schema contracts; B3 owns the initial scmux schema port."
+        },
+        {
+          "item": "sprint-b-5-definition-service",
+          "reason": "B5 implements service-layer definition behavior over the completed store seam; it creates or migrates no database schema object."
+        },
+        {
+          "item": "sprint-b-10a-daemon-api",
+          "reason": "B10A implements daemon transport, startup, health, and observability contracts; it creates or migrates no database schema object."
+        },
+        {
+          "item": "sprint-b-12a-daemon-supervision",
+          "reason": "B12A composes and supervises the completed daemon and creates or migrates no Shpherd database schema objects."
         }
       ]
     },
@@ -520,6 +1178,63 @@
           "fields": [
             "fixtures"
           ]
+        },
+        {
+          "at": "2026-11-03T07:08:54+00:00",
+          "event": "excluded",
+          "item": "sprint-b-2-integrate-workspace",
+          "reason": "B2 preserves the generated client shell but ports no scmux dashboard or editor UI logic; UI parity belongs to later client sprints.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:09:23+00:00",
+          "event": "excluded",
+          "item": "sprint-b-1-generate-baseline",
+          "reason": "B1 generates and tests the runtime template baseline but does not port scmux dashboard or editor UI logic.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:22:45+00:00",
+          "event": "excluded",
+          "item": "sprint-b-11a-mobile",
+          "reason": "B11A packages the shared B11 application and adds native capability adapters; it creates or migrates no dashboard or editor UI logic.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T08:12:49+00:00",
+          "event": "excluded",
+          "item": "sprint-b-7-herdr-launcher",
+          "reason": "B7 ports the scmux hmux launcher as a daemon adapter and implements no dashboard or editor UI logic.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T08:21:55+00:00",
+          "event": "excluded",
+          "item": "sprint-b-3b-service-launch-api-contract",
+          "reason": "B3B freezes service, launcher, and API contracts but creates or migrates no dashboard or editor UI logic.",
+          "replaced": false
+        }
+      ],
+      "exclude": [
+        {
+          "item": "sprint-b-2-integrate-workspace",
+          "reason": "B2 preserves the generated client shell but ports no scmux dashboard or editor UI logic; UI parity belongs to later client sprints."
+        },
+        {
+          "item": "sprint-b-1-generate-baseline",
+          "reason": "B1 generates and tests the runtime template baseline but does not port scmux dashboard or editor UI logic."
+        },
+        {
+          "item": "sprint-b-11a-mobile",
+          "reason": "B11A packages the shared B11 application and adds native capability adapters; it creates or migrates no dashboard or editor UI logic."
+        },
+        {
+          "item": "sprint-b-7-herdr-launcher",
+          "reason": "B7 ports the scmux hmux launcher as a daemon adapter and implements no dashboard or editor UI logic."
+        },
+        {
+          "item": "sprint-b-3b-service-launch-api-contract",
+          "reason": "B3B freezes service, launcher, and API contracts but creates or migrates no dashboard or editor UI logic."
         }
       ]
     },
@@ -588,6 +1303,48 @@
           "item": "sprint-b-12a-daemon-supervision",
           "reason": "B12A installs and supervises the Shpherd daemon service and does not select a launch backend.",
           "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:12:06+00:00",
+          "event": "excluded",
+          "item": "sprint-b-3c-external-integration-contract",
+          "reason": "B3C freezes the hmux process contract but does not own Shpherd launcher default selection; B3B and launcher integration own that policy.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:16:40+00:00",
+          "event": "excluded",
+          "item": "sprint-b-4a-local-schema-sqlite",
+          "reason": "B4A persists the launcher policy fixed by B3A but does not choose or implement Shpherd launcher defaults.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:16:40+00:00",
+          "event": "excluded",
+          "item": "sprint-b-4b-postgres-projection-store",
+          "reason": "B4B stores projected launcher policy but does not select or implement Shpherd launcher defaults.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:20:16+00:00",
+          "event": "excluded",
+          "item": "sprint-b-9a-sync-projection",
+          "reason": "B9A synchronizes an already-selected launcher policy but does not define or implement backend selection.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T08:12:20+00:00",
+          "event": "excluded",
+          "item": "sprint-b-11a-mobile",
+          "reason": "B11A packages shared clients for iOS and Android but does not define or implement launch-backend selection.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-05T17:57:43+00:00",
+          "event": "excluded",
+          "item": "sprint-b-6-observation",
+          "reason": "B6 returns the persisted launcher policy through a read-only launch-preparation capability; B9B owns applying the omitted-selection Herdr default and performing launch.",
+          "replaced": false
         }
       ],
       "exclude": [
@@ -598,6 +1355,30 @@
         {
           "item": "sprint-b-12a-daemon-supervision",
           "reason": "B12A installs and supervises the Shpherd daemon service and does not select a launch backend."
+        },
+        {
+          "item": "sprint-b-3c-external-integration-contract",
+          "reason": "B3C freezes the hmux process contract but does not own Shpherd launcher default selection; B3B and launcher integration own that policy."
+        },
+        {
+          "item": "sprint-b-4a-local-schema-sqlite",
+          "reason": "B4A persists the launcher policy fixed by B3A but does not choose or implement Shpherd launcher defaults."
+        },
+        {
+          "item": "sprint-b-4b-postgres-projection-store",
+          "reason": "B4B stores projected launcher policy but does not select or implement Shpherd launcher defaults."
+        },
+        {
+          "item": "sprint-b-9a-sync-projection",
+          "reason": "B9A synchronizes an already-selected launcher policy but does not define or implement backend selection."
+        },
+        {
+          "item": "sprint-b-11a-mobile",
+          "reason": "B11A packages shared clients for iOS and Android but does not define or implement launch-backend selection."
+        },
+        {
+          "item": "sprint-b-6-observation",
+          "reason": "B6 returns the persisted launcher policy through a read-only launch-preparation capability; B9B owns applying the omitted-selection Herdr default and performing launch."
         }
       ]
     },
@@ -652,6 +1433,85 @@
           "fields": [
             "fixtures"
           ]
+        },
+        {
+          "at": "2026-11-03T07:12:06+00:00",
+          "event": "excluded",
+          "item": "sprint-b-3c-external-integration-contract",
+          "reason": "B3C freezes ATM, hmux, and sc-cron contracts and does not define or implement the tmux launcher adapter.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:12:58+00:00",
+          "event": "excluded",
+          "item": "sprint-b-3a-schema-projection-contract",
+          "reason": "B3A preserves a typed tmux selection through storage projection but does not implement or exercise actual tmux launching; B8 and B9B own that lifecycle.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:20:16+00:00",
+          "event": "excluded",
+          "item": "sprint-b-7-herdr-launcher",
+          "reason": "B7 implements only the Herdr/hmux adapter; explicit tmux launch support is owned by B8.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:20:16+00:00",
+          "event": "excluded",
+          "item": "sprint-b-9a-sync-projection",
+          "reason": "B9A synchronizes tmux configuration values but does not define team launcher configuration or implement tmux launching.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:43:10+00:00",
+          "event": "excluded",
+          "item": "sprint-b-10-dashboard",
+          "reason": "B10 is a read-only catalog/dashboard integration and neither defines launcher configuration nor implements tmux launching.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-04T06:13:06+00:00",
+          "event": "excluded",
+          "item": "sprint-b-4a-local-schema-sqlite",
+          "reason": "B4A persists schema and operation evidence but does not implement or exercise the tmux launcher; B8 and B9B own that lifecycle.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-05T17:57:43+00:00",
+          "event": "excluded",
+          "item": "sprint-b-6-observation",
+          "reason": "B6 returns explicit tmux policy as launch-preparation data but owns no tmux adapter or launch mutation; B8 and B9B close that behavior.",
+          "replaced": false
+        }
+      ],
+      "exclude": [
+        {
+          "item": "sprint-b-3c-external-integration-contract",
+          "reason": "B3C freezes ATM, hmux, and sc-cron contracts and does not define or implement the tmux launcher adapter."
+        },
+        {
+          "item": "sprint-b-3a-schema-projection-contract",
+          "reason": "B3A preserves a typed tmux selection through storage projection but does not implement or exercise actual tmux launching; B8 and B9B own that lifecycle."
+        },
+        {
+          "item": "sprint-b-7-herdr-launcher",
+          "reason": "B7 implements only the Herdr/hmux adapter; explicit tmux launch support is owned by B8."
+        },
+        {
+          "item": "sprint-b-9a-sync-projection",
+          "reason": "B9A synchronizes tmux configuration values but does not define team launcher configuration or implement tmux launching."
+        },
+        {
+          "item": "sprint-b-10-dashboard",
+          "reason": "B10 is a read-only catalog/dashboard integration and neither defines launcher configuration nor implements tmux launching."
+        },
+        {
+          "item": "sprint-b-4a-local-schema-sqlite",
+          "reason": "B4A persists schema and operation evidence but does not implement or exercise the tmux launcher; B8 and B9B own that lifecycle."
+        },
+        {
+          "item": "sprint-b-6-observation",
+          "reason": "B6 returns explicit tmux policy as launch-preparation data but owns no tmux adapter or launch mutation; B8 and B9B close that behavior."
         }
       ]
     },
@@ -720,6 +1580,104 @@
           "item": "sprint-b-12-scheduling",
           "reason": "B12 integrates scheduled operations through sc-cron and does not port the initial database schema or add Herdr-specific fields.",
           "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:08:23+00:00",
+          "event": "excluded",
+          "item": "sprint-b-2-integrate-workspace",
+          "reason": "B2 adds no database schema objects or Herdr-specific fields; initial schema parity and later field changes belong to database sprints.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:08:54+00:00",
+          "event": "excluded",
+          "item": "sprint-b-1-generate-baseline",
+          "reason": "B1 generates and tests the runtime template baseline; schema parity and later Herdr-specific fields belong to database migration sprints.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:12:59+00:00",
+          "event": "excluded",
+          "item": "sprint-b-3c-external-integration-contract",
+          "reason": "B3C changes no database schema and owns neither the initial scmux parity port nor later Herdr-specific schema fields.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:16:40+00:00",
+          "event": "excluded",
+          "item": "sprint-b-4b-postgres-projection-store",
+          "reason": "B4B changes only the new PostgreSQL projection schema; it neither ports the initial scmux SQLite schema nor adds Herdr-specific local fields.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:18:32+00:00",
+          "event": "excluded",
+          "item": "sprint-b-6-observation",
+          "reason": "B6 implements read-side observation services and creates or migrates no database schema fields.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:18:32+00:00",
+          "event": "excluded",
+          "item": "sprint-b-6a-atm-projection",
+          "reason": "B6A maps ATM data through an adapter and adds no Herdr-specific fields to the Shpherd database schema.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:21:22+00:00",
+          "event": "excluded",
+          "item": "sprint-b-7-herdr-launcher",
+          "reason": "B7 implements a Herdr process adapter and adds no database schema field; schema parity ordering belongs to the database migration sprints.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:22:44+00:00",
+          "event": "excluded",
+          "item": "sprint-b-9b-launch-leases",
+          "reason": "B9B adds no Herdr-specific database schema fields and does not own initial schema parity.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:22:45+00:00",
+          "event": "excluded",
+          "item": "sprint-b-9c-expand-roster",
+          "reason": "B9C adds no Herdr-specific database schema field and does not own initial schema parity.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T07:39:31+00:00",
+          "event": "excluded",
+          "item": "sprint-b-11-editor-actions",
+          "reason": "B11 ports editor and command behavior after storage integration; B3 and B4A own schema parity before extensions.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T08:21:23+00:00",
+          "event": "excluded",
+          "item": "sprint-b-5-definition-service",
+          "reason": "B5 consumes the completed schema through DefinitionStore and adds no Herdr-specific database field or initial parity migration.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-03T08:25:38+00:00",
+          "event": "excluded",
+          "item": "sprint-b-10a-daemon-api",
+          "reason": "B10A consumes completed store configuration through APIs and adds no Herdr-specific database field or initial parity migration.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-05T17:45:32+00:00",
+          "event": "excluded",
+          "item": "sprint-b-12a-daemon-supervision",
+          "reason": "B12A supervises the completed daemon after storage integration and owns neither initial scmux schema parity nor Herdr-specific schema fields.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-05T17:58:22+00:00",
+          "event": "excluded",
+          "item": "sprint-b-3b-service-launch-api-contract",
+          "reason": "B3B freezes service and launch contracts but creates or migrates no database schema fields; B3 and B4A own parity-before-extension ordering.",
+          "replaced": false
         }
       ],
       "exclude": [
@@ -730,6 +1688,740 @@
         {
           "item": "sprint-b-12-scheduling",
           "reason": "B12 integrates scheduled operations through sc-cron and does not port the initial database schema or add Herdr-specific fields."
+        },
+        {
+          "item": "sprint-b-2-integrate-workspace",
+          "reason": "B2 adds no database schema objects or Herdr-specific fields; initial schema parity and later field changes belong to database sprints."
+        },
+        {
+          "item": "sprint-b-1-generate-baseline",
+          "reason": "B1 generates and tests the runtime template baseline; schema parity and later Herdr-specific fields belong to database migration sprints."
+        },
+        {
+          "item": "sprint-b-3c-external-integration-contract",
+          "reason": "B3C changes no database schema and owns neither the initial scmux parity port nor later Herdr-specific schema fields."
+        },
+        {
+          "item": "sprint-b-4b-postgres-projection-store",
+          "reason": "B4B changes only the new PostgreSQL projection schema; it neither ports the initial scmux SQLite schema nor adds Herdr-specific local fields."
+        },
+        {
+          "item": "sprint-b-6-observation",
+          "reason": "B6 implements read-side observation services and creates or migrates no database schema fields."
+        },
+        {
+          "item": "sprint-b-6a-atm-projection",
+          "reason": "B6A maps ATM data through an adapter and adds no Herdr-specific fields to the Shpherd database schema."
+        },
+        {
+          "item": "sprint-b-7-herdr-launcher",
+          "reason": "B7 implements a Herdr process adapter and adds no database schema field; schema parity ordering belongs to the database migration sprints."
+        },
+        {
+          "item": "sprint-b-9b-launch-leases",
+          "reason": "B9B adds no Herdr-specific database schema fields and does not own initial schema parity."
+        },
+        {
+          "item": "sprint-b-9c-expand-roster",
+          "reason": "B9C adds no Herdr-specific database schema field and does not own initial schema parity."
+        },
+        {
+          "item": "sprint-b-11-editor-actions",
+          "reason": "B11 ports editor and command behavior after storage integration; B3 and B4A own schema parity before extensions."
+        },
+        {
+          "item": "sprint-b-5-definition-service",
+          "reason": "B5 consumes the completed schema through DefinitionStore and adds no Herdr-specific database field or initial parity migration."
+        },
+        {
+          "item": "sprint-b-10a-daemon-api",
+          "reason": "B10A consumes completed store configuration through APIs and adds no Herdr-specific database field or initial parity migration."
+        },
+        {
+          "item": "sprint-b-12a-daemon-supervision",
+          "reason": "B12A supervises the completed daemon after storage integration and owns neither initial scmux schema parity nor Herdr-specific schema fields."
+        },
+        {
+          "item": "sprint-b-3b-service-launch-api-contract",
+          "reason": "B3B freezes service and launch contracts but creates or migrates no database schema fields; B3 and B4A own parity-before-extension ordering."
+        }
+      ]
+    },
+    {
+      "id": "ANC-011",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Phase B must treat ATM as the source of truth for each running team instance.",
+      "quote": "yes, the source of truth of teams is atm (where the actual team lives).",
+      "kind": "directive",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-03",
+      "context": "Phase B architecture clarification in Codex",
+      "summary": "Use ATM as actual-state authority",
+      "scope": "Phase B beads that poll ATM or define team observation, roster reconciliation, and status reporting.",
+      "deterministic_check": "ATM observation tests prove Shpherd reads the running team instance from ATM rather than treating the stored definition as actual state.",
+      "fixtures": {
+        "pass": [
+          "ATM is the source of truth for the running team instance observed by Shpherd."
+        ],
+        "fail": [
+          "Shpherd treats its stored team definition as the actual running team state without consulting ATM."
+        ]
+      },
+      "question_overrides": {},
+      "version": 3,
+      "status": "locked",
+      "promoted_to": null,
+      "beads": {
+        "anchor": "shp-81l",
+        "plan_questions": "shp-81l.1",
+        "dev_questions": "shp-81l.2"
+      },
+      "history": [
+        {
+          "at": "2026-11-04T00:24:35+00:00",
+          "event": "created",
+          "status": "locked"
+        },
+        {
+          "at": "2026-11-04T00:25:23+00:00",
+          "event": "beads_set",
+          "beads": {
+            "anchor": "shp-81l",
+            "plan_questions": "shp-81l.1",
+            "dev_questions": "shp-81l.2"
+          }
+        },
+        {
+          "at": "2026-11-04T00:26:34+00:00",
+          "event": "updated",
+          "fields": [
+            "fixtures"
+          ]
+        },
+        {
+          "at": "2026-11-04T05:33:44+00:00",
+          "event": "updated",
+          "fields": [
+            "statement",
+            "deterministic_check",
+            "fixtures"
+          ],
+          "previous_statement": "Phase B must derive each running team instance's observed roster and runtime membership from ATM."
+        },
+        {
+          "at": "2026-11-04T06:00:26+00:00",
+          "event": "excluded",
+          "item": "sprint-b-2-integrate-workspace",
+          "reason": "B2 freezes shared identity and registration primitives but does not poll ATM or define team observation, roster reconciliation, or status reporting.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-05T00:20:12+00:00",
+          "event": "excluded",
+          "item": "sprint-b-5-definition-service",
+          "reason": "B5 persists desired team definitions but does not observe running team instances, reconcile runtime rosters, or report ATM-derived runtime status.",
+          "replaced": false
+        }
+      ],
+      "exclude": [
+        {
+          "item": "sprint-b-2-integrate-workspace",
+          "reason": "B2 freezes shared identity and registration primitives but does not poll ATM or define team observation, roster reconciliation, or status reporting."
+        },
+        {
+          "item": "sprint-b-5-definition-service",
+          "reason": "B5 persists desired team definitions but does not observe running team instances, reconcile runtime rosters, or report ATM-derived runtime status."
+        }
+      ]
+    },
+    {
+      "id": "ANC-012",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Phase B PostgreSQL must provide a fleet-wide view of teams across all computers.",
+      "quote": "The postgresdb is simply a view of all teams on all computers.",
+      "kind": "directive",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-03",
+      "context": "Phase B architecture clarification in Codex",
+      "summary": "Keep PostgreSQL as fleet read model",
+      "scope": "Phase B beads that define PostgreSQL schema, host synchronization, fleet views, or launch coordination.",
+      "deterministic_check": "PostgreSQL schema and boundary tests expose a fleet-wide team view and no launch-lease or launch-authority operation.",
+      "fixtures": {
+        "pass": [
+          "PostgreSQL displays teams from rand-m4 and rand-m5 together in one fleet view."
+        ],
+        "fail": [
+          "PostgreSQL grants a global team launch lease and rejects a second computer running the same named team."
+        ]
+      },
+      "question_overrides": {},
+      "version": 5,
+      "status": "locked",
+      "promoted_to": null,
+      "beads": {
+        "anchor": "shp-a0j",
+        "plan_questions": "shp-a0j.1",
+        "dev_questions": "shp-a0j.2"
+      },
+      "history": [
+        {
+          "at": "2026-11-04T00:24:38+00:00",
+          "event": "created",
+          "status": "locked"
+        },
+        {
+          "at": "2026-11-04T00:25:33+00:00",
+          "event": "beads_set",
+          "beads": {
+            "anchor": "shp-a0j",
+            "plan_questions": "shp-a0j.1",
+            "dev_questions": "shp-a0j.2"
+          }
+        },
+        {
+          "at": "2026-11-04T00:26:36+00:00",
+          "event": "updated",
+          "fields": [
+            "fixtures"
+          ]
+        },
+        {
+          "at": "2026-11-04T05:31:58+00:00",
+          "event": "updated",
+          "fields": [
+            "statement",
+            "deterministic_check",
+            "fixtures"
+          ],
+          "previous_statement": "Phase B PostgreSQL integration must consist of a host-qualified fleet read model populated from Shpherd host reports."
+        },
+        {
+          "at": "2026-11-04T05:32:16+00:00",
+          "event": "updated",
+          "fields": [
+            "fixtures"
+          ]
+        },
+        {
+          "at": "2026-11-04T05:33:50+00:00",
+          "event": "updated",
+          "fields": [
+            "statement",
+            "deterministic_check",
+            "fixtures"
+          ],
+          "previous_statement": "Phase B PostgreSQL integration must consist of a host-qualified fleet read model."
+        },
+        {
+          "at": "2026-11-04T05:54:51+00:00",
+          "event": "excluded",
+          "item": "sprint-b-6a-atm-projection",
+          "reason": "B6A implements the ATM adapter boundary and explicitly defers fleet projection; it does not implement the PostgreSQL fleet-wide view.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-04T06:00:26+00:00",
+          "event": "excluded",
+          "item": "sprint-b-2-integrate-workspace",
+          "reason": "B2 defines shared primitives but no PostgreSQL schema, host synchronization, fleet view, or launch-coordination behavior.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-04T06:10:04+00:00",
+          "event": "excluded",
+          "item": "sprint-b-3c-external-integration-contract",
+          "reason": "B3C defines external ATM, hmux, and sc-cron contracts and no PostgreSQL schema, synchronization, fleet-view, or PostgreSQL launch-coordination behavior.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-04T06:11:16+00:00",
+          "event": "excluded",
+          "item": "sprint-b-4c-static-adaptor",
+          "reason": "B4C implements the static store adaptor and carries no PostgreSQL team-view behavior or fleet projection.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-04T17:43:21+00:00",
+          "event": "excluded",
+          "item": "sprint-b-6-observation",
+          "reason": "B6 implements host-local definition and observation queries and defines no PostgreSQL schema, synchronization, fleet view, or launch coordination.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-05T00:20:12+00:00",
+          "event": "excluded",
+          "item": "sprint-b-5-definition-service",
+          "reason": "B5 owns host-local definition behavior and no PostgreSQL schema, host synchronization, fleet view, or cross-host launch coordination.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-05T17:44:13+00:00",
+          "event": "excluded",
+          "item": "sprint-b-8-tmux-launcher",
+          "reason": "B8 implements the host-local tmux compatibility adapter and no PostgreSQL fleet projection or cross-host fleet view.",
+          "replaced": false
+        }
+      ],
+      "exclude": [
+        {
+          "item": "sprint-b-6a-atm-projection",
+          "reason": "B6A implements the ATM adapter boundary and explicitly defers fleet projection; it does not implement the PostgreSQL fleet-wide view."
+        },
+        {
+          "item": "sprint-b-2-integrate-workspace",
+          "reason": "B2 defines shared primitives but no PostgreSQL schema, host synchronization, fleet view, or launch-coordination behavior."
+        },
+        {
+          "item": "sprint-b-3c-external-integration-contract",
+          "reason": "B3C defines external ATM, hmux, and sc-cron contracts and no PostgreSQL schema, synchronization, fleet-view, or PostgreSQL launch-coordination behavior."
+        },
+        {
+          "item": "sprint-b-4c-static-adaptor",
+          "reason": "B4C implements the static store adaptor and carries no PostgreSQL team-view behavior or fleet projection."
+        },
+        {
+          "item": "sprint-b-6-observation",
+          "reason": "B6 implements host-local definition and observation queries and defines no PostgreSQL schema, synchronization, fleet view, or launch coordination."
+        },
+        {
+          "item": "sprint-b-5-definition-service",
+          "reason": "B5 owns host-local definition behavior and no PostgreSQL schema, host synchronization, fleet view, or cross-host launch coordination."
+        },
+        {
+          "item": "sprint-b-8-tmux-launcher",
+          "reason": "B8 implements the host-local tmux compatibility adapter and no PostgreSQL fleet projection or cross-host fleet view."
+        }
+      ]
+    },
+    {
+      "id": "ANC-013",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Phase B must permit identical team and agent names to run concurrently on different hosts.",
+      "quote": "I would expect teams could move/be duplicated on multiple hosts. There is no problem running the same set of named agents on 2 computers and working on parallel non-intersecting work.",
+      "kind": "directive",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-03",
+      "context": "Phase B architecture clarification in Codex",
+      "summary": "Permit host-qualified duplicate teams",
+      "scope": "Phase B beads that define team identity, host enrollment, PostgreSQL projection, or launcher eligibility.",
+      "deterministic_check": "A multi-host fixture runs and displays identical team and agent names concurrently under distinct hosts.",
+      "fixtures": {
+        "pass": [
+          "rand-m4 and rand-m5 concurrently run atm-dev with identically named agents."
+        ],
+        "fail": [
+          "A global team-name uniqueness constraint prevents atm-dev from running on a second host."
+        ]
+      },
+      "question_overrides": {},
+      "version": 3,
+      "status": "locked",
+      "promoted_to": null,
+      "beads": {
+        "anchor": "shp-m4p",
+        "plan_questions": "shp-m4p.1",
+        "dev_questions": "shp-m4p.2"
+      },
+      "history": [
+        {
+          "at": "2026-11-04T00:24:40+00:00",
+          "event": "created",
+          "status": "locked"
+        },
+        {
+          "at": "2026-11-04T00:25:46+00:00",
+          "event": "beads_set",
+          "beads": {
+            "anchor": "shp-m4p",
+            "plan_questions": "shp-m4p.1",
+            "dev_questions": "shp-m4p.2"
+          }
+        },
+        {
+          "at": "2026-11-04T00:26:39+00:00",
+          "event": "updated",
+          "fields": [
+            "fixtures"
+          ]
+        },
+        {
+          "at": "2026-11-04T05:33:56+00:00",
+          "event": "updated",
+          "fields": [
+            "statement",
+            "deterministic_check",
+            "fixtures"
+          ],
+          "previous_statement": "Phase B must identify running team instances by host so identical team and agent names can run concurrently on different hosts."
+        },
+        {
+          "at": "2026-11-04T05:54:51+00:00",
+          "event": "excluded",
+          "item": "sprint-b-6a-atm-projection",
+          "reason": "B6A implements the ATM adapter boundary and explicitly defers fleet projection; it does not implement concurrent multi-host team identity or display.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-04T06:13:07+00:00",
+          "event": "excluded",
+          "item": "sprint-b-4a-local-schema-sqlite",
+          "reason": "B4A implements a host-local SQLite store and does not implement fleet projection or concurrent same-name instances across hosts; B4B and the adaptor own the cross-host view.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-04T17:43:24+00:00",
+          "event": "excluded",
+          "item": "sprint-b-6-observation",
+          "reason": "B6 consumes already-frozen Team and member identities for read-only host-local observation; it does not define team identity, host enrollment, PostgreSQL projection, or launcher eligibility.",
+          "replaced": false
+        }
+      ],
+      "exclude": [
+        {
+          "item": "sprint-b-6a-atm-projection",
+          "reason": "B6A implements the ATM adapter boundary and explicitly defers fleet projection; it does not implement concurrent multi-host team identity or display."
+        },
+        {
+          "item": "sprint-b-4a-local-schema-sqlite",
+          "reason": "B4A implements a host-local SQLite store and does not implement fleet projection or concurrent same-name instances across hosts; B4B and the adaptor own the cross-host view."
+        },
+        {
+          "item": "sprint-b-6-observation",
+          "reason": "B6 consumes already-frozen Team and member identities for read-only host-local observation; it does not define team identity, host enrollment, PostgreSQL projection, or launcher eligibility."
+        }
+      ]
+    },
+    {
+      "id": "ANC-014",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Phase B must allow an operator connected over SSH to start a Herdr or tmux session with active agents.",
+      "quote": "it allows anyone to start a herdr/tmux session with active agents over ssh.",
+      "kind": "directive",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-03",
+      "context": "Phase B architecture clarification in Codex",
+      "summary": "Launch persisted teams over SSH",
+      "scope": "Phase B beads that implement the shpherd CLI, persisted definitions, or Herdr and tmux launch adapters.",
+      "deterministic_check": "A noninteractive SSH-session integration test starts active agents through Herdr by default and tmux when selected.",
+      "fixtures": {
+        "pass": [
+          "An operator connected over SSH starts active agents in Herdr by default and in tmux when selected."
+        ],
+        "fail": [
+          "Shpherd requires a local graphical client and cannot start active agents from an SSH session."
+        ]
+      },
+      "question_overrides": {},
+      "version": 3,
+      "status": "locked",
+      "promoted_to": null,
+      "beads": {
+        "anchor": "shp-izw",
+        "plan_questions": "shp-izw.1",
+        "dev_questions": "shp-izw.2"
+      },
+      "history": [
+        {
+          "at": "2026-11-04T00:24:42+00:00",
+          "event": "created",
+          "status": "locked"
+        },
+        {
+          "at": "2026-11-04T00:25:57+00:00",
+          "event": "beads_set",
+          "beads": {
+            "anchor": "shp-izw",
+            "plan_questions": "shp-izw.1",
+            "dev_questions": "shp-izw.2"
+          }
+        },
+        {
+          "at": "2026-11-04T00:26:41+00:00",
+          "event": "updated",
+          "fields": [
+            "fixtures"
+          ]
+        },
+        {
+          "at": "2026-11-04T05:34:01+00:00",
+          "event": "updated",
+          "fields": [
+            "statement",
+            "deterministic_check",
+            "fixtures"
+          ],
+          "previous_statement": "The Phase B shpherd CLI must start a persisted team definition through Herdr or tmux when invoked in an SSH session on the target host."
+        },
+        {
+          "at": "2026-11-04T06:00:26+00:00",
+          "event": "excluded",
+          "item": "sprint-b-2-integrate-workspace",
+          "reason": "B2 defines launcher-policy primitives but does not implement the shpherd CLI, persisted definitions, or Herdr/tmux launch adapters; SSH launch is closed by later launch/API sprints.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-04T06:03:17+00:00",
+          "event": "excluded",
+          "item": "sprint-b-3a-schema-projection-contract",
+          "reason": "B3A defines storage and projection contracts for launcher selection but does not implement SSH access or session start; those behaviors belong to later launch and authenticated API work.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-04T06:10:04+00:00",
+          "event": "excluded",
+          "item": "sprint-b-3c-external-integration-contract",
+          "reason": "B3C freezes ATM, hmux, and sc-cron external contracts but does not implement the shpherd CLI, persisted definitions, or either launch adapter; SSH launch is closed by later launch/API sprints.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-04T06:19:55+00:00",
+          "event": "excluded",
+          "item": "sprint-b-8-tmux-launcher",
+          "reason": "B8 implements the tmux adapter boundary but does not plan the SSH CLI invocation or active-agent startup path.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-04T17:41:01+00:00",
+          "event": "exclusion_removed",
+          "item": "sprint-b-8-tmux-launcher"
+        },
+        {
+          "at": "2026-11-05T17:42:56+00:00",
+          "event": "excluded",
+          "item": "sprint-b-3b-service-launch-api-contract",
+          "reason": "B3B freezes CLI, daemon, and launcher contracts with doubles; B9B exclusively closes the real SSH-to-active-agent integration.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-05T17:42:56+00:00",
+          "event": "excluded",
+          "item": "sprint-b-4a-local-schema-sqlite",
+          "reason": "B4A implements local schema and SQLite storage only; B9B exclusively closes the real SSH-to-active-agent integration.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-05T17:42:56+00:00",
+          "event": "excluded",
+          "item": "sprint-b-7-herdr-launcher",
+          "reason": "B7 implements the guarded Herdr launcher adapter with doubles; B9B exclusively closes the real SSH-to-active-agent integration.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-05T17:42:56+00:00",
+          "event": "excluded",
+          "item": "sprint-b-8-tmux-launcher",
+          "reason": "B8 implements the guarded tmux compatibility adapter with doubles; B9B exclusively closes the real SSH-to-active-agent integration.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-05T17:44:59+00:00",
+          "event": "excluded",
+          "item": "sprint-b-10a-daemon-api",
+          "reason": "B10A proves SSH CLI-to-daemon wire mapping against stateful doubles; B9B exclusively composes real services, launch adapters, and active-agent start.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-05T17:57:43+00:00",
+          "event": "excluded",
+          "item": "sprint-b-6-observation",
+          "reason": "B6 supplies the production read-only launch input and owns no SSH transport, CLI/daemon mapping, launcher adapter, or active-agent start; B9B closes the end-to-end path.",
+          "replaced": false
+        }
+      ],
+      "exclude": [
+        {
+          "item": "sprint-b-2-integrate-workspace",
+          "reason": "B2 defines launcher-policy primitives but does not implement the shpherd CLI, persisted definitions, or Herdr/tmux launch adapters; SSH launch is closed by later launch/API sprints."
+        },
+        {
+          "item": "sprint-b-3a-schema-projection-contract",
+          "reason": "B3A defines storage and projection contracts for launcher selection but does not implement SSH access or session start; those behaviors belong to later launch and authenticated API work."
+        },
+        {
+          "item": "sprint-b-3c-external-integration-contract",
+          "reason": "B3C freezes ATM, hmux, and sc-cron external contracts but does not implement the shpherd CLI, persisted definitions, or either launch adapter; SSH launch is closed by later launch/API sprints."
+        },
+        {
+          "item": "sprint-b-3b-service-launch-api-contract",
+          "reason": "B3B freezes CLI, daemon, and launcher contracts with doubles; B9B exclusively closes the real SSH-to-active-agent integration."
+        },
+        {
+          "item": "sprint-b-4a-local-schema-sqlite",
+          "reason": "B4A implements local schema and SQLite storage only; B9B exclusively closes the real SSH-to-active-agent integration."
+        },
+        {
+          "item": "sprint-b-7-herdr-launcher",
+          "reason": "B7 implements the guarded Herdr launcher adapter with doubles; B9B exclusively closes the real SSH-to-active-agent integration."
+        },
+        {
+          "item": "sprint-b-8-tmux-launcher",
+          "reason": "B8 implements the guarded tmux compatibility adapter with doubles; B9B exclusively closes the real SSH-to-active-agent integration."
+        },
+        {
+          "item": "sprint-b-10a-daemon-api",
+          "reason": "B10A proves SSH CLI-to-daemon wire mapping against stateful doubles; B9B exclusively composes real services, launch adapters, and active-agent start."
+        },
+        {
+          "item": "sprint-b-6-observation",
+          "reason": "B6 supplies the production read-only launch input and owns no SSH transport, CLI/daemon mapping, launcher adapter, or active-agent start; B9B closes the end-to-end path."
+        }
+      ]
+    },
+    {
+      "id": "ANC-015",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Phase B must use sc-cron as a heartbeat that polls ATM agent state.",
+      "quote": "for mvp, cron would be heartbead for polling atm agent state.",
+      "kind": "directive",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-03",
+      "context": "Phase B architecture clarification in Codex",
+      "summary": "Limit MVP cron to ATM heartbeat",
+      "scope": "Phase B beads that integrate sc-cron, poll ATM agent state, publish status, or define scheduled operations.",
+      "deterministic_check": "The sc-cron registry and callback tests expose the ATM-state polling heartbeat and no scheduled launch or instruction job.",
+      "fixtures": {
+        "pass": [
+          "sc-cron runs a heartbeat that polls ATM agent state for Shpherd status."
+        ],
+        "fail": [
+          "An sc-cron job launches atm-dev at 2 a.m. and instructs atm-lead to begin a sprint during Phase B."
+        ]
+      },
+      "question_overrides": {},
+      "version": 3,
+      "status": "locked",
+      "promoted_to": null,
+      "beads": {
+        "anchor": "shp-atm",
+        "plan_questions": "shp-atm.1",
+        "dev_questions": "shp-atm.2"
+      },
+      "history": [
+        {
+          "at": "2026-11-04T00:24:44+00:00",
+          "event": "created",
+          "status": "locked"
+        },
+        {
+          "at": "2026-11-04T00:26:09+00:00",
+          "event": "beads_set",
+          "beads": {
+            "anchor": "shp-atm",
+            "plan_questions": "shp-atm.1",
+            "dev_questions": "shp-atm.2"
+          }
+        },
+        {
+          "at": "2026-11-04T00:26:45+00:00",
+          "event": "updated",
+          "fields": [
+            "fixtures"
+          ]
+        },
+        {
+          "at": "2026-11-04T05:34:06+00:00",
+          "event": "updated",
+          "fields": [
+            "statement",
+            "deterministic_check",
+            "fixtures"
+          ],
+          "previous_statement": "Phase B sc-cron integration must consist of an ATM-agent-state polling heartbeat."
+        },
+        {
+          "at": "2026-11-04T05:54:23+00:00",
+          "event": "excluded",
+          "item": "sprint-b-9b-launch-leases",
+          "reason": "B9B composes host-local launch safety and does not plan sc-cron wiring or ATM agent-state polling.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-04T05:54:51+00:00",
+          "event": "excluded",
+          "item": "sprint-b-6a-atm-projection",
+          "reason": "B6A supplies the ATM adapter consumed by the later B12 heartbeat but does not implement sc-cron heartbeat wiring.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-04T06:06:19+00:00",
+          "event": "excluded",
+          "item": "sprint-b-3b-service-launch-api-contract",
+          "reason": "B3B freezes service and launch API contracts but does not plan sc-cron wiring or ATM agent-state polling.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-04T06:26:28+00:00",
+          "event": "excluded",
+          "item": "sprint-b-9c-expand-roster",
+          "reason": "B9C implements an operator-triggered roster expansion workflow and does not integrate sc-cron, poll ATM on a heartbeat, publish scheduled status, or define a scheduled operation; its post-MVP sentence only excludes scheduling from this sprint.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-04T17:28:42+00:00",
+          "event": "excluded",
+          "item": "sprint-b-11-editor-actions",
+          "reason": "B11 implements editor and launch actions and does not implement the sc-cron ATM-state polling heartbeat.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-04T17:52:55+00:00",
+          "event": "excluded",
+          "item": "sprint-b-10-dashboard",
+          "reason": "B10 renders authenticated status snapshots and events but owns no sc-cron integration, ATM polling, status publication, timer, or scheduled operation.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-05T17:42:56+00:00",
+          "event": "excluded",
+          "item": "sprint-b-4b-postgres-projection-store",
+          "reason": "B4B implements the PostgreSQL projection store only; B12 owns sc-cron heartbeat polling of ATM agent state.",
+          "replaced": false
+        },
+        {
+          "at": "2026-11-05T17:44:59+00:00",
+          "event": "excluded",
+          "item": "sprint-b-10a-daemon-api",
+          "reason": "B10A maps injected readiness doubles to the health wire and owns no sc-cron registration or ATM polling; B12 owns the real heartbeat.",
+          "replaced": false
+        }
+      ],
+      "exclude": [
+        {
+          "item": "sprint-b-9b-launch-leases",
+          "reason": "B9B composes host-local launch safety and does not plan sc-cron wiring or ATM agent-state polling."
+        },
+        {
+          "item": "sprint-b-6a-atm-projection",
+          "reason": "B6A supplies the ATM adapter consumed by the later B12 heartbeat but does not implement sc-cron heartbeat wiring."
+        },
+        {
+          "item": "sprint-b-3b-service-launch-api-contract",
+          "reason": "B3B freezes service and launch API contracts but does not plan sc-cron wiring or ATM agent-state polling."
+        },
+        {
+          "item": "sprint-b-9c-expand-roster",
+          "reason": "B9C implements an operator-triggered roster expansion workflow and does not integrate sc-cron, poll ATM on a heartbeat, publish scheduled status, or define a scheduled operation; its post-MVP sentence only excludes scheduling from this sprint."
+        },
+        {
+          "item": "sprint-b-11-editor-actions",
+          "reason": "B11 implements editor and launch actions and does not implement the sc-cron ATM-state polling heartbeat."
+        },
+        {
+          "item": "sprint-b-10-dashboard",
+          "reason": "B10 renders authenticated status snapshots and events but owns no sc-cron integration, ATM polling, status publication, timer, or scheduled operation."
+        },
+        {
+          "item": "sprint-b-4b-postgres-projection-store",
+          "reason": "B4B implements the PostgreSQL projection store only; B12 owns sc-cron heartbeat polling of ATM agent state."
+        },
+        {
+          "item": "sprint-b-10a-daemon-api",
+          "reason": "B10A maps injected readiness doubles to the health wire and owns no sc-cron registration or ATM polling; B12 owns the real heartbeat."
         }
       ]
     }

@@ -1,0 +1,598 @@
+{
+  "schema": "plan-anchoring/run/1",
+  "run_id": "plan-20261103T081024Z-sprint-b-4b-postgres-projection-store",
+  "gate": "plan",
+  "created_at": "2026-11-03T08:10:24+00:00",
+  "anchors_path": "docs/plans/phase-b/anchors.json",
+  "plan": "phase-b",
+  "item": {
+    "id": "sprint-b-4b-postgres-projection-store",
+    "title": "sprint-b-4b-postgres-projection-store",
+    "source": "docs/plans/phase-b/sprint-b-4b-postgres-projection-store.md",
+    "chars": 2021,
+    "truncated": false,
+    "chars_before_reduction": 2021,
+    "code_reduced": {
+      "blocks": 0,
+      "lines": 0
+    }
+  },
+  "model_requested": "jev-latest",
+  "model_answered": "jev-1.14.0",
+  "threshold": 0.6,
+  "max_request_bytes": 24000,
+  "min_item_chars": 2000,
+  "dry_run": false,
+  "fixture": false,
+  "results": [
+    {
+      "anchor_id": "ANC-001",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Shpherd's initial runtime workspace must be generated from sc-runtime version 0.1.1.",
+      "quote": "install the sc-runtime templates at 0.1.1 (latest release)",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "Cargo metadata and the generation record identify sc-runtime 0.1.1 for the initial Shpherd scaffold.",
+      "kind": "directive",
+      "leaning": "not_applicable",
+      "question_set": {
+        "gate": "plan",
+        "version": 1,
+        "overridden": false
+      },
+      "questions_sha256": "45c142d4b4a63bd5c580d2407d06af54171ebec6302dd62d0ba982450416f8cd",
+      "verdict": "not_applicable",
+      "answers": {
+        "relevant": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.86,
+          "probabilities": {
+            "yes": 0.08,
+            "no": 0.91,
+            "unclear": 0.01
+          }
+        },
+        "addressed": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.97,
+          "probabilities": {
+            "yes": 0.0,
+            "no": 0.98,
+            "unclear": 0.02
+          }
+        },
+        "contradicted": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.96,
+          "probabilities": {
+            "yes": 0.02,
+            "no": 0.97,
+            "unclear": 0.01
+          }
+        }
+      },
+      "min_confidence": 0.86,
+      "explanation": "The anchor does not govern this bead.",
+      "usage": {
+        "input_tokens": 1518,
+        "output_tokens": 117
+      },
+      "attempts": 1,
+      "item_chars_sent": 2021,
+      "item_shortened": false,
+      "request_bytes": 5048
+    },
+    {
+      "anchor_id": "ANC-002",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Template installation and testing must precede scmux feature and UI migration in Phase B.",
+      "quote": "I would expect the plan to start w/ template installation and testing. Then have sprints to migrate the current scmux features and ui to shpherd.",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "Every scmux migration bead depends transitively on the completed sc-runtime installation-and-test bead.",
+      "kind": "directive",
+      "leaning": "not_applicable",
+      "question_set": {
+        "gate": "plan",
+        "version": 1,
+        "overridden": true
+      },
+      "questions_sha256": "28033f62b693356cfc1ba101f62befe38fd811a87fc664afd95100c78607b2f9",
+      "questions": {
+        "relevant": {
+          "criteria": {
+            "no": "The item concerns unrelated work and performs none of the template or migration activities.",
+            "unclear": "The described work is too vague to identify its relation to template setup or scmux migration.",
+            "yes": "The item installs or tests the runtime template, migrates scmux schema/features/UI, or sets dependencies for that work."
+          },
+          "instructions": "Does `item.text` concern the Phase B order between sc-runtime template installation/testing and scmux feature or UI migration? Judge subject overlap only.",
+          "type": "choice"
+        },
+        "addressed": {
+          "criteria": {
+            "no": "The item omits this prerequisite order, merely lists these topics, or proposes only the reverse order.",
+            "unclear": "The item suggests a prerequisite but leaves unclear whether both installation and testing must finish before migration.",
+            "yes": "The item requires completed template installation and passing baseline tests as prerequisites to scmux migration, directly or through a dependency chain to completed B1 gates."
+          },
+          "instructions": "Does `item.text` explicitly require successful sc-runtime template installation and testing before scmux feature or UI migration begins? Judge presence of this ordering constraint only, even if another passage conflicts.",
+          "type": "choice"
+        },
+        "contradicted": {
+          "criteria": {
+            "no": "The item has no conflicting authorization, including when it omits prerequisites or concerns unrelated work.",
+            "unclear": "The timing is ambiguous enough that migration may be authorized before the baseline passes.",
+            "yes": "The item permits migration before installation/testing finish, runs them concurrently, or postpones baseline completion until after migration."
+          },
+          "instructions": "Does `item.text` authorize scmux feature or UI migration before sc-runtime template installation and testing have passed? Judge explicit conflict with this ordering only. Silence is not conflict.",
+          "type": "choice"
+        }
+      },
+      "verdict": "not_applicable",
+      "answers": {
+        "relevant": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 1.0,
+          "probabilities": {
+            "no": 1.0,
+            "unclear": 0.0,
+            "yes": 0.0
+          }
+        },
+        "addressed": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 1.0,
+          "probabilities": {
+            "no": 1.0,
+            "unclear": 0.0,
+            "yes": 0.0
+          }
+        },
+        "contradicted": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 1.0,
+          "probabilities": {
+            "no": 1.0,
+            "unclear": 0.0,
+            "yes": 0.0
+          }
+        }
+      },
+      "min_confidence": 1.0,
+      "explanation": "The anchor does not govern this bead.",
+      "usage": {
+        "input_tokens": 1318,
+        "output_tokens": 117
+      },
+      "attempts": 1,
+      "item_chars_sent": 2021,
+      "item_shortened": false,
+      "request_bytes": 4361
+    },
+    {
+      "anchor_id": "ANC-003",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "The sc-runtime 0.2.0 upgrade must be the next Shpherd work started after version 0.2.0 is released.",
+      "quote": "updrade to 0.2.0 as soon as it lands",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "The tracker history shows no new feature bead started between the sc-runtime 0.2.0 release and the Shpherd 0.2.0 upgrade bead.",
+      "kind": "directive",
+      "leaning": "not_applicable",
+      "question_set": {
+        "gate": "plan",
+        "version": 1,
+        "overridden": false
+      },
+      "questions_sha256": "45c142d4b4a63bd5c580d2407d06af54171ebec6302dd62d0ba982450416f8cd",
+      "near_threshold": true,
+      "confirmed": true,
+      "verdict": "not_applicable",
+      "answers": {
+        "relevant": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.89,
+          "probabilities": {
+            "yes": 0.07,
+            "no": 0.93,
+            "unclear": 0.0
+          }
+        },
+        "addressed": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.98,
+          "probabilities": {
+            "yes": 0.0,
+            "no": 0.99,
+            "unclear": 0.01
+          }
+        },
+        "contradicted": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.64,
+          "probabilities": {
+            "yes": 0.19,
+            "no": 0.76,
+            "unclear": 0.05
+          }
+        }
+      },
+      "min_confidence": 0.64,
+      "explanation": "The anchor does not govern this bead.",
+      "usage": {
+        "input_tokens": 1530,
+        "output_tokens": 117
+      },
+      "attempts": 2,
+      "item_chars_sent": 2021,
+      "item_shortened": false,
+      "request_bytes": 5057
+    },
+    {
+      "anchor_id": "ANC-004",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Shpherd's sc-runtime 0.2.0 upgrade must include the dependency updates supplied by that release.",
+      "quote": "0.2.0 upgrades some dependencies and fully installs sc-lint 0.8.4+ on consumer repo",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "Shpherd's dependency manifests match a fresh sc-runtime 0.2.0 generation for managed dependency versions.",
+      "kind": "directive",
+      "leaning": "not_applicable",
+      "question_set": {
+        "gate": "plan",
+        "version": 1,
+        "overridden": false
+      },
+      "questions_sha256": "45c142d4b4a63bd5c580d2407d06af54171ebec6302dd62d0ba982450416f8cd",
+      "verdict": "not_applicable",
+      "answers": {
+        "relevant": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.83,
+          "probabilities": {
+            "yes": 0.1,
+            "no": 0.89,
+            "unclear": 0.01
+          }
+        },
+        "addressed": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 1.0,
+          "probabilities": {
+            "yes": 0.0,
+            "no": 1.0,
+            "unclear": 0.0
+          }
+        },
+        "contradicted": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.98,
+          "probabilities": {
+            "yes": 0.01,
+            "no": 0.99,
+            "unclear": 0.0
+          }
+        }
+      },
+      "min_confidence": 0.83,
+      "explanation": "The anchor does not govern this bead.",
+      "usage": {
+        "input_tokens": 1530,
+        "output_tokens": 117
+      },
+      "attempts": 1,
+      "item_chars_sent": 2021,
+      "item_shortened": false,
+      "request_bytes": 5050
+    },
+    {
+      "anchor_id": "ANC-005",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Shpherd's sc-runtime 0.2.0 upgrade must leave sc-lint 0.8.4 or newer fully installed in the consumer repository.",
+      "quote": "0.2.0 upgrades some dependencies and fully installs sc-lint 0.8.4+ on consumer repo",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "The consumer repository contains the complete sc-lint installation and its version check reports 0.8.4 or newer.",
+      "kind": "directive",
+      "leaning": "not_applicable",
+      "question_set": {
+        "gate": "plan",
+        "version": 1,
+        "overridden": false
+      },
+      "questions_sha256": "45c142d4b4a63bd5c580d2407d06af54171ebec6302dd62d0ba982450416f8cd",
+      "verdict": "not_applicable",
+      "answers": {
+        "relevant": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.88,
+          "probabilities": {
+            "yes": 0.08,
+            "no": 0.92,
+            "unclear": 0.0
+          }
+        },
+        "addressed": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.96,
+          "probabilities": {
+            "yes": 0.01,
+            "no": 0.97,
+            "unclear": 0.02
+          }
+        },
+        "contradicted": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 1.0,
+          "probabilities": {
+            "yes": 0.0,
+            "no": 1.0,
+            "unclear": 0.0
+          }
+        }
+      },
+      "min_confidence": 0.88,
+      "explanation": "The anchor does not govern this bead.",
+      "usage": {
+        "input_tokens": 1540,
+        "output_tokens": 117
+      },
+      "attempts": 1,
+      "item_chars_sent": 2021,
+      "item_shortened": false,
+      "request_bytes": 5066
+    },
+    {
+      "anchor_id": "ANC-007",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Shpherd's initial UI logic must be ported from scmux.",
+      "quote": "use the existing schema + ui logic in scmux",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "UI parity tests map each retained scmux dashboard and editor behavior to a Shpherd implementation and test.",
+      "kind": "directive",
+      "leaning": "not_applicable",
+      "question_set": {
+        "gate": "plan",
+        "version": 1,
+        "overridden": false
+      },
+      "questions_sha256": "45c142d4b4a63bd5c580d2407d06af54171ebec6302dd62d0ba982450416f8cd",
+      "verdict": "not_applicable",
+      "answers": {
+        "relevant": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.98,
+          "probabilities": {
+            "yes": 0.01,
+            "no": 0.99,
+            "unclear": 0.0
+          }
+        },
+        "addressed": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 1.0,
+          "probabilities": {
+            "yes": 0.0,
+            "no": 1.0,
+            "unclear": 0.0
+          }
+        },
+        "contradicted": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.91,
+          "probabilities": {
+            "yes": 0.05,
+            "no": 0.94,
+            "unclear": 0.01
+          }
+        }
+      },
+      "min_confidence": 0.91,
+      "explanation": "The anchor does not govern this bead.",
+      "usage": {
+        "input_tokens": 1512,
+        "output_tokens": 117
+      },
+      "attempts": 1,
+      "item_chars_sent": 2021,
+      "item_shortened": false,
+      "request_bytes": 5010
+    },
+    {
+      "anchor_id": "ANC-009",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Shpherd must support tmux launching.",
+      "quote": "but will also support tmux launching (default in scmux).",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "A launcher integration test proves an explicitly selected tmux backend can launch, observe, focus, and stop a team.",
+      "kind": "directive",
+      "leaning": "not_applicable",
+      "question_set": {
+        "gate": "plan",
+        "version": 1,
+        "overridden": false
+      },
+      "questions_sha256": "45c142d4b4a63bd5c580d2407d06af54171ebec6302dd62d0ba982450416f8cd",
+      "verdict": "not_applicable",
+      "answers": {
+        "relevant": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.85,
+          "probabilities": {
+            "yes": 0.1,
+            "no": 0.9,
+            "unclear": 0.0
+          }
+        },
+        "addressed": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.86,
+          "probabilities": {
+            "yes": 0.03,
+            "no": 0.91,
+            "unclear": 0.06
+          }
+        },
+        "contradicted": {
+          "type": "choice",
+          "choice": "no",
+          "confidence": 0.74,
+          "probabilities": {
+            "yes": 0.16,
+            "no": 0.83,
+            "unclear": 0.01
+          }
+        }
+      },
+      "min_confidence": 0.74,
+      "explanation": "The anchor does not govern this bead.",
+      "usage": {
+        "input_tokens": 1507,
+        "output_tokens": 117
+      },
+      "attempts": 1,
+      "item_chars_sent": 2021,
+      "item_shortened": false,
+      "request_bytes": 5012
+    },
+    {
+      "anchor_id": "ANC-006",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Shpherd's initial database schema must be ported from scmux.",
+      "quote": "use the existing schema + ui logic in scmux",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "A schema parity test compares Shpherd migrations with the pinned scmux schema and explains every intentional difference.",
+      "kind": "directive",
+      "leaning": null,
+      "verdict": "excluded",
+      "answers": null,
+      "min_confidence": null,
+      "exclusion": {
+        "item": "sprint-b-4b-postgres-projection-store",
+        "reason": "B4B implements a new cloud projection store and does not own the initial scmux SQLite schema port."
+      },
+      "explanation": "Excluded from this bead by the anchor's exclude list: B4B implements a new cloud projection store and does not own the initial scmux SQLite schema port.",
+      "attempts": 0
+    },
+    {
+      "anchor_id": "ANC-008",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Herdr must be Shpherd's default launcher.",
+      "quote": "shpherd will be herdr first (by default)",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "A launcher selection test proves an unset launcher chooses Herdr.",
+      "kind": "directive",
+      "leaning": null,
+      "verdict": "excluded",
+      "answers": null,
+      "min_confidence": null,
+      "exclusion": {
+        "item": "sprint-b-4b-postgres-projection-store",
+        "reason": "B4B stores projected launcher policy but does not select or implement Shpherd launcher defaults."
+      },
+      "explanation": "Excluded from this bead by the anchor's exclude list: B4B stores projected launcher policy but does not select or implement Shpherd launcher defaults.",
+      "attempts": 0
+    },
+    {
+      "anchor_id": "ANC-010",
+      "source_type": "ANC",
+      "source_ref": null,
+      "statement": "Shpherd's initial database port must establish scmux schema parity before adding Herdr-specific fields.",
+      "quote": "We may need to upgrade the scmux database schema i.e. add additional fields for herdr launching, but starting w/ parity is the goal.",
+      "stated_by": "randlee",
+      "stated_at": "2026-11-02",
+      "context": "Phase B sprint planning in Codex",
+      "anchor_version": 2,
+      "deterministic_check": "The schema-parity commit and tests precede any migration that adds Herdr-specific columns or tables.",
+      "kind": "directive",
+      "leaning": null,
+      "verdict": "excluded",
+      "answers": null,
+      "min_confidence": null,
+      "exclusion": {
+        "item": "sprint-b-4b-postgres-projection-store",
+        "reason": "B4B changes only the new PostgreSQL projection schema; it neither ports the initial scmux SQLite schema nor adds Herdr-specific local fields."
+      },
+      "explanation": "Excluded from this bead by the anchor's exclude list: B4B changes only the new PostgreSQL projection schema; it neither ports the initial scmux SQLite schema nor adds Herdr-specific local fields.",
+      "attempts": 0
+    }
+  ],
+  "summary": {
+    "counts": {
+      "not_applicable": 7,
+      "excluded": 3
+    },
+    "failing": [],
+    "leaning_counts": {
+      "not_applicable": 7
+    },
+    "unstable": [],
+    "errors": [],
+    "excluded": [
+      {
+        "anchor_id": "ANC-006",
+        "reason": "B4B implements a new cloud projection store and does not own the initial scmux SQLite schema port."
+      },
+      {
+        "anchor_id": "ANC-008",
+        "reason": "B4B stores projected launcher policy but does not select or implement Shpherd launcher defaults."
+      },
+      {
+        "anchor_id": "ANC-010",
+        "reason": "B4B changes only the new PostgreSQL projection schema; it neither ports the initial scmux SQLite schema nor adds Herdr-specific local fields."
+      }
+    ],
+    "shortened": [],
+    "pass": true
+  }
+}

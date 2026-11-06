@@ -1,0 +1,156 @@
+{
+  "schema": "plan-anchor/anchor-oracle/1",
+  "authority": {
+    "intent": {
+      "id": "phase-b-intent",
+      "version": "2026-11-02",
+      "sha256": "ac4bcb3deb11cdbc2ec5d2a75040e5ded329e25e1420f5d0aaca3b08fee55720",
+      "content": "# Intent - phase-b\n\nWritten 2026-11-02 by randlee and Codex.\n\n## What this plan is for\n\nPhase B turns the existing atm-shpherd product definition and client prototype into a working sc-runtime application. It begins with an untouched, tested sc-runtime 0.1.1 `sqlite-postgres` generation, then ports the current scmux schema, business behavior, and web UI into the Shpherd architecture.\n\nThe execution-ready boundary map, wave table, and sprint documents are indexed by `phase-b-plan.md`. The locked anchor record remains `anchors.json`; hardening may reorganize sprint ownership but may not weaken or replace those anchors.\n\nShpherd manages teams across computers through a local SQLite database synchronized with shared PostgreSQL state. Herdr is the default launcher; tmux remains an explicitly supported backend. The plan preserves scmux behavior first, then adds the minimum app-owned fields and adapters needed for Herdr, ATM roster management, multi-host operation, and later scheduling.\n\n## What success looks like\n\n- The generated sc-runtime baseline passes setup, lint, test, CLI-build, and daemon-build gates before scmux migration begins.\n- The `shpherd` CLI and `atm-shpherd` daemon reproduce the retained scmux schema, definition management, observation, launcher, and browser/Tauri UI behavior.\n- A team launches through Herdr by default and through tmux when explicitly configured.\n- SQLite-to-PostgreSQL synchronization makes team definitions available for safe launch on another authorized host.\n- The repository upgrades to sc-runtime 0.2.0 immediately after release, including its dependency refresh and complete sc-lint 0.8.4-or-newer consumer installation.\n\n## What is deliberately out of scope\n\n- AI chat, ontology generation, OxyGraph context providers, and schema-derived agent context graphs.\n- Replacing app-owned Shpherd schema, synchronization, launcher, or ATM policy with sc-runtime responsibilities.\n- Exact visual redesign beyond porting the retained scmux UI behavior into the existing browser/Tauri client.\n\n## Anchors\n\nAnchors for this plan live in `anchors.json` (record of truth) and are rendered to `anchors.md`. Requirements and ADRs that govern this plan are listed there too, under their own IDs.\n"
+    },
+    "anchors": {
+      "sha256": "ce10547a051ebf04a1d30d00798d4d4ff41fc383ecb747eac9a5400c502a74e6",
+      "records": [
+        {
+          "id": "ANC-012",
+          "version": 5,
+          "state": "locked",
+          "statement": "Phase B PostgreSQL must provide a fleet-wide view of teams across all computers.",
+          "quote": "The postgresdb is simply a view of all teams on all computers.",
+          "kind": "directive",
+          "scope": "Phase B beads that define PostgreSQL schema, host synchronization, fleet views, or launch coordination.",
+          "check": "PostgreSQL schema and boundary tests expose a fleet-wide team view and no launch-lease or launch-authority operation.",
+          "fixtures": {
+            "pass": [
+              "PostgreSQL displays teams from rand-m4 and rand-m5 together in one fleet view."
+            ],
+            "fail": [
+              "PostgreSQL grants a global team launch lease and rejects a second computer running the same named team."
+            ]
+          },
+          "summary": "Keep PostgreSQL as fleet read model",
+          "deterministic_check": "PostgreSQL schema and boundary tests expose a fleet-wide team view and no launch-lease or launch-authority operation.",
+          "context": "Phase B architecture clarification in Codex"
+        }
+      ]
+    }
+  },
+  "gate": "planning",
+  "roles": [
+    "relevant",
+    "addressed",
+    "contradicted"
+  ],
+  "frozen_before_live": true,
+  "cases": [
+    {
+      "id": "fixture-pass",
+      "text": "PostgreSQL displays teams from rand-m4 and rand-m5 together in one fleet view.",
+      "expected_answers": {
+        "relevant": "yes",
+        "addressed": "yes",
+        "contradicted": "no"
+      },
+      "expected_verdict": "satisfied",
+      "rationale": "Approved pass fixture: combines teams on two computers in fleet view."
+    },
+    {
+      "id": "fixture-fail",
+      "text": "PostgreSQL grants a global team launch lease and rejects a second computer running the same named team.",
+      "expected_answers": {
+        "relevant": "yes",
+        "addressed": "no",
+        "contradicted": "yes"
+      },
+      "expected_verdict": "contradicted",
+      "rationale": "Approved fail fixture and check forbid PostgreSQL launch authority; it contains no fleet-view commitment."
+    },
+    {
+      "id": "minimal",
+      "text": "PostgreSQL exposes a fleet-wide view of teams across all computers.",
+      "expected_answers": {
+        "relevant": "yes",
+        "addressed": "yes",
+        "contradicted": "no"
+      },
+      "expected_verdict": "satisfied",
+      "rationale": "Direct restatement of ANC-012 statement."
+    },
+    {
+      "id": "silence",
+      "text": "Implement PostgreSQL schema migrations.",
+      "expected_answers": {
+        "relevant": "yes",
+        "addressed": "no",
+        "contradicted": "no"
+      },
+      "expected_verdict": "not_addressed",
+      "rationale": "PostgreSQL schema lies in scope but no view or authority policy is specified."
+    },
+    {
+      "id": "topical-only",
+      "text": "Document the PostgreSQL fleet-view endpoint name, without specifying which teams or computers its result includes.",
+      "expected_answers": {
+        "relevant": "yes",
+        "addressed": "no",
+        "contradicted": "no"
+      },
+      "expected_verdict": "not_addressed",
+      "rationale": "A topical endpoint name does not commit to fleet coverage; omission is not conflict."
+    },
+    {
+      "id": "restricted-view",
+      "text": "The PostgreSQL team view intentionally contains only this computer's teams and excludes teams on every other computer.",
+      "expected_answers": {
+        "relevant": "yes",
+        "addressed": "no",
+        "contradicted": "yes"
+      },
+      "expected_verdict": "contradicted",
+      "rationale": "Explicit single-computer restriction conflicts with all-computers view."
+    },
+    {
+      "id": "irrelevant",
+      "text": "Adjust the logo spacing in the browser header CSS.",
+      "expected_answers": {
+        "relevant": "no",
+        "addressed": "no",
+        "contradicted": "no"
+      },
+      "expected_verdict": "not_applicable",
+      "rationale": "Presentation spacing neither affects nor depends on PostgreSQL fleet behavior."
+    },
+    {
+      "id": "duplicate-name",
+      "text": "Show teams from rand-m4 and rand-m5 together in the PostgreSQL fleet view. Retain both entries when team names match and permit both computers to run their respective teams; PostgreSQL grants no launch authority.",
+      "expected_answers": {
+        "relevant": "yes",
+        "addressed": "yes",
+        "contradicted": "no"
+      },
+      "expected_verdict": "satisfied",
+      "rationale": "Two-computer view satisfies statement and same-name independent launch follows approved fail boundary."
+    },
+    {
+      "id": "offline-local-cache",
+      "text": "When PostgreSQL is unavailable the CLI displays its local cached teams. When connected, the PostgreSQL fleet view displays teams across all computers.",
+      "expected_answers": {
+        "relevant": "yes",
+        "addressed": "yes",
+        "contradicted": "no"
+      },
+      "expected_verdict": "satisfied",
+      "rationale": "Local offline display does not narrow the PostgreSQL fleet view; no new availability requirement is invented."
+    },
+    {
+      "id": "mixed-conflict",
+      "text": "PostgreSQL displays all teams from all computers together in a fleet view, and grants a global team launch lease that rejects a second computer running the same named team.",
+      "expected_answers": {
+        "relevant": "yes",
+        "addressed": "yes",
+        "contradicted": "yes"
+      },
+      "expected_verdict": "contradicted",
+      "rationale": "Presence and conflict are independent: fleet view is stated but approved launch-authority boundary is broken."
+    }
+  ]
+}

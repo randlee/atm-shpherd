@@ -4,13 +4,18 @@ bead: shp-phase-b.22
 status: planned
 closure_type: contract
 target_boundary: service-launch-api-contract
-requirements: []
-adrs: [ADR-SHP-005, ADR-SHP-011, ADR-SHP-013, ADR-SHP-014]
+requirements: [ANC-002, ANC-008, ANC-009, ANC-011, ANC-012, ANC-013, REQ-DEFINITION, REQ-LAUNCH, REQ-API, REQ-OPERATE-SUPERVISION]
+adrs: [ADR-SHP-003, ADR-SHP-004, ADR-SHP-005, ADR-SHP-011, ADR-SHP-013, ADR-SHP-014]
 owned_paths:
   - docs/contracts/service-api/**
   - crates/shpherd-types/src/error.rs
   - crates/shpherd-types/src/command.rs
   - crates/shpherd-types/src/launch.rs
+  - crates/shpherd-types/src/health.rs
+  - crates/shpherd-service/src/contracts/definition.rs
+  - crates/shpherd-service/src/contracts/observation.rs
+  - crates/shpherd-service/src/contracts/launch.rs
+  - crates/shpherd-service/src/contracts/host_project.rs
   - boundaries/shpherd-service.yaml
   - boundaries/shpherd-daemon.yaml
   - boundaries/shpherd-cli.yaml
@@ -31,34 +36,51 @@ recommended_model: deep-reasoning
 
 ## Goal
 
-Freeze the service, guarded-launch, command, event, and error contracts consumed independently by the service, launcher, and API layers.
+Freeze the service, guarded-launch, command, event, error, and daemon health/readiness contracts consumed independently by the service, launcher, and API layers.
 
 ## Required work and deliverables
 
-- Consume B2's canonical identities/revisions/cursors/auth/bridge evidence and fix stable errors, the closed Armada/Fleet/Flotilla/Team and atomic Team-bundle model, sealed/open traits, complete read/roster/split-launcher surfaces, host enrollment/project binding, private lease guards, verified dispatch context, tagged command/response/event/resume envelopes, and stateful test doubles.
-- Approve deterministic CLI exit, HTTP status, event/reconnect behavior, clone policy, guarded-launch semantics, and host enrollment decisions in the ADRs owned by this sprint; consume B2's identity/revision/cursor decision and B3A's independent lease-authority decision only at their documented seams.
+- Per phase policy, B1's sc-runtime `v0.1.1` template installation and baseline tests and B2 must close before this contract; if `v0.2.0` is observed, its interrupt is the next Shpherd work started and completes before this contract starts or resumes.
+- Consume B2's identity/revision/cursor/auth/bridge evidence and freeze the contract signatures below plus their stateful doubles. In particular, fix the sealed `LaunchPreparationReader` and complete `LaunchPreparation` input, guarded launcher split, authenticated envelopes, and typed health/readiness input.
+- Specify that omitted launcher selection resolves to Herdr by default while an explicit tmux policy remains supported, and require contract fixtures for both selections.
+- Approve deterministic CLI exit, HTTP status, event/reconnect behavior, clone policy, guarded-launch semantics, and host enrollment decisions in the ADRs owned by this sprint; consume B2's identity/revision/cursor decision and B3A's fleet-view projection decision only at their documented seams.
+- Define observation contracts so ATM supplies the actual running-team instance and roster/runtime state; Shpherd definitions are desired state and cannot replace ATM runtime truth.
+- Expose B3A's PostgreSQL projection through a query seam that returns one combined fleet-wide team view across all computers.
+- Define the noninteractive `shpherd` CLI command and daemon wire mapping usable over SSH, including Herdr-default and explicit-tmux selection. Contract doubles prove request/response mapping only; B9B exclusively closes real SSH-to-CLI-to-daemon-to-launcher execution and active-agent start.
 
 ## Contract signatures
+
+This is an abridged API view; canonical contract modules own complete derives/serde and compilation. Potentially blocking service, host, and launcher operations return the workspace `BoxFuture<'a, T>` (`Send` future) convention; only immutable capability inspection stays synchronous.
 
 ```rust
 use serde::{Deserialize, Serialize};
 use shpherd_auth::AuthenticatedPrincipal;
-use shpherd_types::foundation::{ArmadaId, CorrelationId, DaemonInstanceId, DiscoveryId, DomainRevision,
-    EventCursor, FencingToken, FleetId, FlotillaId, GitRef, HostId, IdempotencyKey,
+use shpherd_types::foundation::{AggregateDigest, ArmadaId, CommandDigest, CorrelationId, DaemonInstanceId, DiscoveryId, DomainRevision,
+    EventCursor, FleetId, FlotillaId, GitRef, HostId, IdempotencyKey,
     AtmBinding, LauncherPolicy, LogicalConfigRef, LogicalProjectRef, OrderedPromptRefs, MemberId,
     MemberRole, OperationId, ProjectId, RequestId, RosterRegistrationEvidence,
-    RuntimeBackend, StreamId, TeamId, TeamParent, ValidParent, VariantDraftKey, VariantId};
+    RuntimeBackend, StreamId, TeamId, TeamParent, TeamPlacementId, ValidParent,
+    VariantDraftKey, VariantId, AtmMemberBinding};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)] #[serde(transparent)] pub struct ApiVersion(pub u16);
 
 pub enum ErrorCode { InvalidArgument, Unauthorized, NotFound, Conflict, Unavailable,
-    UnsupportedVersion, StaleRevision, LeaseLost, CapabilityMissing, Internal }
-pub enum RecoveryAction { Retry, Reauthenticate, Refresh, SelectHost, ReacquireLease, UpgradeClient }
+    UnsupportedVersion, StaleRevision, LaunchInProgress, CapabilityMissing, Internal }
+pub enum ErrorCause { Validation, Authentication, Authorization, MissingResource, RevisionMismatch,
+    LocalOperation, CapabilityNegotiation, DependencyUnavailable, InternalInvariant }
+pub enum ErrorDetails {
+    Field { name: String, reason: String },
+    Revision { current: DomainRevision },
+    Capability { required: String },
+    Dependency { name: String, retry_after_ms: Option<u64> },
+}
+pub enum RecoveryAction { Retry, Reauthenticate, Refresh, SelectHost, InspectLocalOperation, UpgradeClient }
 pub struct DomainError { pub code: ErrorCode, pub message: String, pub retryable: bool,
-    pub current_revision: Option<DomainRevision> }
+    pub cause: ErrorCause, pub details: Option<ErrorDetails> }
 pub struct ErrorEnvelope { pub api_version: ApiVersion, pub request_id: RequestId,
     pub correlation_id: CorrelationId, pub code: ErrorCode, pub message: String,
-    pub retryable: bool, pub recovery: Vec<RecoveryAction>, pub docs: Option<String> }
+    pub retryable: bool, pub cause: ErrorCause, pub details: Option<ErrorDetails>,
+    pub recovery: Vec<RecoveryAction>, pub docs: Option<String> }
 
 pub struct DispatchContext<'a> { pub principal: &'a AuthenticatedPrincipal,
     pub request_id: &'a RequestId, pub correlation_id: &'a CorrelationId }
@@ -67,7 +89,8 @@ pub enum DefinitionId { Armada(ArmadaId), Fleet(FleetId), Flotilla(FlotillaId), 
 pub enum ContainerId { Armada(ArmadaId), Fleet(FleetId), Flotilla(FlotillaId) }
 pub struct MemberDraft { pub name: String, pub variant: VariantDraftKey,
     pub role: MemberRole, pub agent_type: String,
-    pub model: Option<String>, pub requested_host: Option<HostId>, pub target_tab: Option<String> }
+    pub model: Option<String>, pub atm_member: Option<AtmMemberBinding>,
+    pub requested_host: Option<HostId>, pub target_tab: Option<String> }
 pub struct VariantDraft { pub key: VariantDraftKey, pub name: String,
     pub requested_host: Option<HostId>, pub config_override: Option<LogicalConfigRef>,
     pub git_ref_override: Option<GitRef>, pub backend: RuntimeBackend,
@@ -75,7 +98,9 @@ pub struct VariantDraft { pub key: VariantDraftKey, pub name: String,
 pub struct TeamDraft { pub name: String, pub project: LogicalProjectRef,
     pub config: LogicalConfigRef, pub prompts: OrderedPromptRefs, pub launcher: LauncherPolicy,
     pub atm: Option<AtmBinding>, pub members: Vec<MemberDraft>, pub variants: Vec<VariantDraft> }
-pub struct TeamBundle { pub team: TeamId, pub name: String, pub parent: TeamParent,
+pub struct TeamPlacement { pub placement: TeamPlacementId, pub team: TeamId,
+    pub parent: TeamParent, pub revision: DomainRevision }
+pub struct TeamBundle { pub team: TeamId, pub name: String, pub placements: Vec<TeamPlacement>,
     pub project: LogicalProjectRef, pub config: LogicalConfigRef, pub prompts: OrderedPromptRefs,
     pub launcher: LauncherPolicy, pub atm: Option<AtmBinding>, pub members: Vec<MemberSpec>,
     pub variants: Vec<VariantSpec> }
@@ -88,7 +113,7 @@ pub struct VariantSpec { pub id: VariantId, pub team: TeamId, pub name: String,
     pub runtime_binding: String }
 pub struct ContainerPatch { pub name: String }
 pub struct AggregateRevision { pub target: DomainRevision, pub parent: DomainRevision,
-    pub descendants_digest: String }
+    pub descendants_digest: AggregateDigest }
 pub enum DefinitionCommand {
     CreateArmada { name: String, key: IdempotencyKey },
     CreateFleet { parent: ArmadaId, expected_parent: DomainRevision, name: String, key: IdempotencyKey },
@@ -102,7 +127,7 @@ pub enum DefinitionCommand {
         expected_destination: DomainRevision, constraint: RunningConstraint, key: IdempotencyKey },
     MoveFlotilla { flotilla: FlotillaId, new_parent: FleetId, expected: AggregateRevision,
         expected_destination: DomainRevision, constraint: RunningConstraint, key: IdempotencyKey },
-    MoveTeam { team: TeamId, new_parent: TeamParent, expected: AggregateRevision,
+    MoveTeam { placement: TeamPlacementId, new_parent: TeamParent, expected: AggregateRevision,
         expected_destination: DomainRevision, constraint: RunningConstraint, key: IdempotencyKey },
     CloneArmada { armada: ArmadaId, expected: AggregateRevision, key: IdempotencyKey },
     CloneFleet { fleet: FleetId, destination: ArmadaId, expected: AggregateRevision,
@@ -111,7 +136,10 @@ pub enum DefinitionCommand {
         expected_destination: DomainRevision, key: IdempotencyKey },
     CloneTeam { team: TeamId, destination: TeamParent, expected: AggregateRevision,
         expected_destination: DomainRevision, constraint: RunningConstraint, key: IdempotencyKey },
-    Unlink { target: DefinitionId, expected: AggregateRevision, constraint: RunningConstraint, key: IdempotencyKey },
+    UnlinkTeamPlacement { placement: TeamPlacementId, expected: AggregateRevision,
+        constraint: RunningConstraint, key: IdempotencyKey },
+    UnlinkDefinition { target: ContainerId, expected: AggregateRevision,
+        constraint: RunningConstraint, key: IdempotencyKey },
     ImportTeam { source: DiscoveryId, destination: TeamParent,
         expected_destination: DomainRevision, key: IdempotencyKey },
 }
@@ -122,7 +150,8 @@ pub enum DefinitionResult { Created { id: DefinitionId, revision: AggregateRevis
 pub enum RunningConstraint { MustBeStopped, PreserveRuntimeIdentity, RejectIfDescendantRunning }
 
 pub struct MemberSpec { pub id: MemberId, pub team: TeamId, pub variant: VariantId,
-    pub role: MemberRole, pub agent_type: String, pub model: Option<String>,
+    pub name: String, pub atm_member: Option<AtmMemberBinding>, pub role: MemberRole,
+    pub agent_type: String, pub model: Option<String>,
     pub requested_host: Option<HostId>, pub target_tab: Option<String> }
 pub enum RosterCommand {
     Add { member: MemberSpec, expected: DomainRevision, key: IdempotencyKey },
@@ -170,10 +199,19 @@ pub struct RuntimeIdentity { pub backend: RuntimeBackend, pub host: HostId, pub 
     pub tab: Option<String>, pub pane: String }
 pub struct ActionEvidence { pub operation: OperationId, pub request: RequestId,
     pub revision: DomainRevision, pub recorded_at_unix_ms: u64, pub backend_evidence: String }
-pub struct LaunchLeaseGuard { team: TeamId, variant: VariantId, host: HostId, holder: DaemonInstanceId,
-    fencing: FencingToken, expires_at_unix_ms: u64, _private: () }
-pub(crate) struct ValidatedLeaseGrant { pub team: TeamId, pub variant: VariantId,
-    pub host: HostId, pub holder: DaemonInstanceId, pub fencing: FencingToken, pub expires_at_unix_ms: u64 }
+pub struct HostEligibilityInput { pub host: HostId, pub project: LogicalProjectRef,
+    pub git_ref: GitRef, pub config: LogicalConfigRef, pub launcher: LauncherPolicy,
+    pub backend: RuntimeBackend, pub runtime_binding: String,
+    pub required_capabilities: Vec<LauncherCapability> }
+pub struct LaunchPreparation { pub definition: TeamBundle, pub selected_variant: VariantSpec,
+    pub assigned_members: Vec<MemberSpec>, pub project: LogicalProjectRef,
+    pub effective_git_ref: GitRef, pub ordered_prompts: OrderedPromptRefs,
+    pub effective_config: LogicalConfigRef, pub backend: RuntimeBackend,
+    pub runtime_binding: String, pub eligibility: HostEligibilityInput,
+    pub revision: DomainRevision }
+// crates/shpherd-service/src/contracts/launch.rs; private construction stays with B9B.
+pub struct HostLaunchGuard { team: TeamId, variant: VariantId, host: HostId,
+    operation: OperationId, key: IdempotencyKey, _private: () }
 pub enum LaunchReadAction { DryRun, Observe, Focus }
 pub enum LaunchMutation { Start, StopTeam, Relaunch, Repair,
     SpawnAgent { member: MemberSpec, registration: RosterRegistrationEvidence },
@@ -186,31 +224,40 @@ pub struct LaunchMutationRequest { pub team: TeamId, pub variant: VariantId, pub
     pub mutation: LaunchMutation, pub key: IdempotencyKey }
 pub struct LaunchResult { pub reused: bool, pub runtime: Option<RuntimeIdentity>,
     pub state: ObservationState, pub evidence: ActionEvidence }
-pub struct HerdrLauncher { /* crate-owned adapter */ }
-pub struct TmuxLauncher { /* crate-owned adapter */ }
-pub enum Launcher { Herdr(HerdrLauncher), Tmux(TmuxLauncher) }
-mod sealed { pub trait Sealed {} }
-pub trait LauncherReader: sealed::Sealed {
+// crates/shpherd-service/src/contracts/launcher.rs; open port implemented only by allowlisted daemon adapters.
+pub trait LauncherReader: Send + Sync {
     fn capabilities(&self) -> &[LauncherCapability];
-    fn read(&self, request: LaunchReadRequest) -> Result<LaunchResult, DomainError>;
+    fn read(&self, request: LaunchReadRequest) -> BoxFuture<'_, Result<LaunchResult, DomainError>>;
 }
-pub trait GuardedLauncher: sealed::Sealed {
-    fn mutate(&self, guard: &LaunchLeaseGuard, request: LaunchMutationRequest) -> Result<LaunchResult, DomainError>;
+pub trait GuardedLauncher: Send + Sync {
+    fn mutate<'a>(&'a self, guard: &'a HostLaunchGuard, request: LaunchMutationRequest) -> BoxFuture<'a, Result<LaunchResult, DomainError>>;
 }
 
 pub struct HostEnrollment { pub host: HostId, pub daemon: DaemonInstanceId,
     pub key_fingerprint: String, pub capabilities: Vec<HostCapability>, pub enrolled_at_unix_ms: u64 }
 pub struct HostHealth { pub host: HostId, pub healthy: bool, pub checked_at_unix_ms: u64,
     pub diagnostics: Vec<Diagnostic> }
+pub enum ReadinessDependency { Configuration, Credentials, RequiredStores, Migrations,
+    OperationJournalRecovery, AtmHeartbeatRegistration, AtmHeartbeatFreshness }
+pub enum ReadinessDependencyState { Pending, Ready,
+    Failed { code: String }, Stale { last_success_unix_ms: Option<u64> } }
+pub struct ReadinessDependencyInput { pub dependency: ReadinessDependency,
+    pub state: ReadinessDependencyState, pub observed_at_unix_ms: u64,
+    pub required: bool }
+pub enum HealthState { LiveNotReady { blocking: Vec<ReadinessDependencyInput> }, Ready,
+    Degraded { reasons: Vec<ReadinessDependencyInput> }, Draining }
+pub trait ReadinessSource: Send + Sync {
+    fn snapshot(&self) -> BoxFuture<'_, Result<HealthState, DomainError>>;
+}
 pub struct ProjectBinding { pub project: ProjectId, pub host: HostId,
     pub logical_repository: String, pub local_checkout: String }
 pub enum HostCapability { Herdr, Tmux, Shell, LocalCheckout }
 pub struct EnrollmentRequest { pub host: HostId, pub daemon: DaemonInstanceId,
     pub public_key: String, pub proof: String, pub capabilities: Vec<HostCapability> }
-pub trait HostProjectResolver: sealed::Sealed {
-    fn enroll(&self, request: EnrollmentRequest) -> Result<HostEnrollment, DomainError>;
-    fn resolve(&self, project: &ProjectId, host: &HostId) -> Result<ProjectBinding, DomainError>;
-    fn validate_checkout(&self, binding: &ProjectBinding) -> Result<HostHealth, DomainError>;
+pub trait HostProjectResolver: Send + Sync {
+    fn enroll(&self, request: EnrollmentRequest) -> BoxFuture<'_, Result<HostEnrollment, DomainError>>;
+    fn resolve<'a>(&'a self, project: &'a ProjectId, host: &'a HostId) -> BoxFuture<'a, Result<ProjectBinding, DomainError>>;
+    fn validate_checkout<'a>(&'a self, binding: &'a ProjectBinding) -> BoxFuture<'a, Result<HostHealth, DomainError>>;
 }
 
 pub enum LaunchCommand { Read(LaunchReadRequest), Mutate(LaunchMutationRequest) }
@@ -220,6 +267,7 @@ pub enum CommandResult { Definition(DefinitionResult), Query { result: QueryResu
 pub enum TerminalOutcome { Completed { result: CommandResult },
     Conflict { error: ErrorEnvelope }, Rejected { error: ErrorEnvelope } }
 pub enum OriginalOutcome { Accepted { operation: OperationId }, Terminal(TerminalOutcome) }
+#[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(tag = "status", rename_all = "snake_case")]
 pub enum ResponseOutcome { Completed { result: CommandResult }, Accepted { operation: OperationId },
     Replayed { original_request: RequestId, original: Box<OriginalOutcome> },
@@ -238,37 +286,59 @@ pub struct EventEnvelope { pub api_version: ApiVersion, pub daemon: DaemonInstan
     pub stream: StreamId, pub cursor: EventCursor, pub correlation_id: CorrelationId,
     pub event: DaemonEvent }
 
-pub trait DefinitionService: sealed::Sealed {
-    fn execute(&self, context: &DispatchContext<'_>, command: DefinitionCommand) -> Result<DefinitionResult, DomainError>;
+pub struct OperationRecord { pub request: RequestId, pub correlation: CorrelationId,
+    pub operation: OperationId, pub key: Option<IdempotencyKey>, pub command_digest: CommandDigest,
+    pub original: OriginalOutcome, pub terminal: Option<TerminalOutcome>,
+    pub event: Option<EventEnvelope>, pub event_published: bool, pub revision: DomainRevision }
+pub trait OperationJournal: Send + Sync {
+    fn accept(&self, record: OperationRecord) -> BoxFuture<'_, Result<OperationRecord, DomainError>>;
+    fn complete(&self, record: OperationRecord) -> BoxFuture<'_, Result<OperationRecord, DomainError>>;
+    fn pending_events(&self, limit: u16) -> BoxFuture<'_, Result<Vec<OperationRecord>, DomainError>>;
+    fn mark_published(&self, operation: OperationId, expected: DomainRevision) -> BoxFuture<'_, Result<(), DomainError>>;
 }
-pub trait ObservationService: sealed::Sealed {
-    fn query(&self, context: &DispatchContext<'_>, query: Query, page: PageRequest) -> Result<(QueryResult, ReadMeta), DomainError>;
+
+// crates/shpherd-service/src/contracts; sealed beside permitted service implementations.
+mod sealed { pub trait Sealed {} }
+pub trait DefinitionService: sealed::Sealed + Send + Sync {
+    fn execute<'a>(&'a self, context: &'a DispatchContext<'a>, command: DefinitionCommand) -> BoxFuture<'a, Result<DefinitionResult, DomainError>>;
 }
-pub trait RosterService: sealed::Sealed {
-    fn execute(&self, context: &DispatchContext<'_>, command: RosterCommand) -> Result<RosterResult, DomainError>;
+pub trait ObservationService: sealed::Sealed + Send + Sync {
+    fn query<'a>(&'a self, context: &'a DispatchContext<'a>, query: Query, page: PageRequest) -> BoxFuture<'a, Result<(QueryResult, ReadMeta), DomainError>>;
+}
+pub trait LaunchPreparationReader: sealed::Sealed + Send + Sync {
+    fn prepare<'a>(&'a self, context: &'a DispatchContext<'a>, team: TeamId,
+        variant: VariantId, host: HostId) -> BoxFuture<'a, Result<LaunchPreparation, DomainError>>;
+}
+pub trait RosterService: sealed::Sealed + Send + Sync {
+    fn execute<'a>(&'a self, context: &'a DispatchContext<'a>, command: RosterCommand) -> BoxFuture<'a, Result<RosterResult, DomainError>>;
 }
 ```
 
 The B2 foundation owns the private-field ID/revision/cursor implementations, `TryFrom<&str>`, `FromStr`, `Display`, and custom serde. Persistent IDs accept only canonical uppercase ULID text; request IDs accept only canonical lowercase UUIDv7 text; `DomainRevision` begins at one, while `EventCursor::GENESIS` is zero and the first emitted event is cursor one. ATM IDs and revisions remain foreign strings and cross the application boundary only through explicit, fallible binding/conversion functions. There is no `From<String>` or lossy conversion.
 
-The closed hierarchy is Armada → Fleet → optional Flotilla → Team; `ValidParent` makes every other placement unrepresentable. Creating or replacing a Team validates its entire bundle in one transaction: logical project plus typed git ref, config and ordered nonempty prompt references, launcher policy, at least one uniquely keyed variant, every member's valid variant key/ID, unique members, per-variant backend/runtime binding, and exactly one `MemberRole::Captain`. Create/import may establish the immutable ATM binding; `TeamPatch` deliberately cannot alter it. Every create/edit/move/clone/unlink/import checks the target, source-parent, destination-parent, and descendants aggregate revisions it can invalidate; no partial member/variant commit or revision advance is allowed. ADR-SHP-014 makes Armada-view clones share references, Fleet/Flotilla clones preserve referenced Team IDs, and explicit Team clones mint new Team/member/variant IDs, remap every member variant reference, preserve prompt order and branch/backend/runtime bindings, and drop ATM binding.
+The closed Armada → Fleet → optional Flotilla → Team-placement → Team hierarchy follows ADR-SHP-014. Team-bundle validation is atomic: placement, project/ref, configuration, ordered prompts, launcher, variants, member assignments, backend/runtime bindings, and exactly one captain must all be valid. ATM binding is immutable after create/import; every hierarchy mutation checks all affected revisions and can neither partially commit nor advance a revision on failure.
 
-Only the private lease-validation module exposes `pub(crate) fn issue_launch_guard(validated: ValidatedLeaseGrant) -> LaunchLeaseGuard`; B9B alone creates that crate-private grant after validating B3A's authoritative receipt. External code cannot construct, clone, deserialize, or renew the guard. `LauncherReader` exposes only dry-run/observe/focus and remains usable when lease authority is unavailable; `GuardedLauncher` exposes only start/stop/relaunch/repair/spawn/nudge/member-stop/member-reconcile and requires both the guard and idempotency key. Compile-fail fixtures prove no mutation can be expressed through the read trait or without a guard. The stateful launcher double supports every capability, replay, injected failure, and evidence assertion.
+The sealed `LaunchPreparationReader` is the only production read capability B6 implements and B9B consumes. It returns one revision-bound Team/Variant input containing project/ref, prompts, assigned members, configuration, launcher, backend/runtime, requested host/capabilities, and definition revision. It grants no mutation or store access; B9B resolves checkout and validates eligibility.
+
+The opaque `HostLaunchGuard`, its crate-private issuer, and open launcher port definitions live together in `shpherd-service::contracts`; B9B implements host-local single-flight and durable idempotency validation in that same crate. `shpherd-service` depends on no daemon type. Independent Herdr/tmux concrete adapters implement the boundary-allowlisted service port and receive only a borrowed guard; they cannot construct, clone, or deserialize it. `LauncherReader` exposes only dry-run/observe/focus; `GuardedLauncher` exposes only start/stop/relaunch/repair/spawn/nudge/member-stop/member-reconcile and requires both the local guard and idempotency key. The guard serializes duplicate work only for one host/team/variant operation and cannot block the same names on another host. Contract fixtures compile skeletal cross-crate port implementers and negative fixtures prove an adapter cannot manufacture a guard or mutate through the read port; B7/B8/B9B own the real implementations and composition. The stateful launcher double supports every capability, replay, injected failure, cross-host duplicate names, and evidence assertion.
 
 Authentication claims never cross the wire in `CommandEnvelope`, `RosterCommand`, or ATM payloads. B10A parses and verifies transport credentials, then uses the B2-owned `shpherd-auth` issuer capability to obtain a non-serializable, private-constructor `AuthenticatedPrincipal`; the daemon injects a borrowed `DispatchContext` after checking request identity and scope. Domain/ATM authorization consume only that verified context, and neither depends on daemon. Fixtures reject forged JSON claims, expired principals, team-scope mismatch, confused-deputy ATM calls, principal/request substitution, and service/adaptor attempts to construct an issuer or principal.
 
 Every wire enum uses explicit serde tags, `deny_unknown_fields`, and stable snake-case names. `ResponseOutcome` makes invalid result/error/status combinations unrepresentable. A synchronous request returns exactly one completed/conflict/rejected terminal outcome; durable queued work returns one accepted outcome and exactly one eventual terminal `OperationCompleted`. Replay names the original request and embeds either the same accepted operation or its original terminal outcome; it never reports work as newly executed. Events and resume tokens carry both `DaemonInstanceId` and `StreamId`. An absent resume token starts from `EventCursor::GENESIS` (`0`), the first event is cursor `1`, and `after=0` means no event has been consumed. Cursor `u64::MAX` can be compared/read but emission fails closed with overflow; it never wraps. A daemon restart, stream mismatch, expired cursor, cursor overflow, or cursor from another stream yields `ResyncRequired` and a fresh snapshot rather than cross-stream continuation. Unsupported versions fail before dispatch. `DomainError` maps deterministically to the envelope, CLI exit, and HTTP status.
 
+`OperationJournal` is the service-level adapter: it commits request/idempotency digest and accepted outcome before dispatch, then atomically commits the domain state change, terminal outcome, and pending event before publish. Restart republishes only unmarked events; replay returns the original accepted or terminal outcome, and retention cannot remove an operation while its event is unpublished. B3A owns the lower `OperationJournalStore` DTO/error port, B4A owns its SQLite implementation, and B9B owns the service adapter from `OperationJournal` to that lower port as part of real host-local launch integration. B10A uses only the stateful service double. Boundary fixtures prohibit `shpherd-store-sqlite -> shpherd-service` and `shpherd-service -> shpherd-store-sqlite` imports.
+
 ## This sprint does not close
 
-No service behavior, launcher adapter, API route, client, host persistence, or lease persistence.
+No service behavior, launcher adapter, API route, client, heartbeat registration/poll, real readiness composition, or host-local operation persistence.
 
 ## Acceptance and validation
 
-- Named boundary manifests and ADR-SHP-005/011/013/014 fix every full hierarchy/team bundle, roster, query, host, split launcher, guard, authenticated dispatch context, tagged envelope, stream/resume token, error, and double consumed by B5/B6/B7/B8/B9B/B9C/B10A; B2/ADR-SHP-004 exclusively owns the imported identities, revisions, cursors, and bridge evidence.
+- This contract is a prerequisite for the scmux launcher and editor migrations; dispatch validation rejects B3B unless B1 is complete with successful sc-runtime template-installation and baseline-test evidence.
+- Named boundary manifests and ADR-SHP-005/011/013/014 fix every full hierarchy/team bundle, roster, query, host, launch-preparation reader/input, split launcher, guard, authenticated dispatch context, tagged envelope, stream/resume token, error, health/readiness state and dependency input, and double consumed by B5/B6/B7/B8/B9B/B9C/B10A/B12/B12A; B2/ADR-SHP-004 exclusively owns the imported identities, revisions, cursors, and bridge evidence.
 - Each owned ADR is approved and contains decision, alternatives, consequences, and executable evidence; the architecture index links it to this sole owner.
-- Compile-fail tests prove sealed traits, unconstructible guards/principals, and mutation unavailable on the read launcher; serialization/version/terminal-outcome/replay/restart-resync/auth-escalation and stateful-double contract tests, workspace build, and boundary validation pass. Cursor goldens cover absent token, `after=0`, first event `1`, MAX read, checked overflow, and serde rejection of invalid numeric forms.
-- Team-bundle goldens cover two stable draft variant keys, members on distinct variants, multiple ordered prompts, and distinct branch/backend/runtime bindings; create/edit/clone/launch/query/UI fixtures prove no field loss or implicit default.
+- Compile and negative-boundary tests prove service traits are sealed beside their service implementations, independent launcher adapters implement only the allowlisted open ports, guards/principals are unconstructible outside their owner, and mutation is unavailable on the read launcher. Serialization/version/terminal-outcome/replay/restart-resync/auth-escalation and stateful-double contract tests, workspace build, and boundary validation pass. Health goldens cover every required/optional dependency, pending/ready/failed/stale input, deterministic `LiveNotReady`/`Ready`/`Degraded`/`Draining` mapping, and a readiness double that imports no B3C external type. Error-mapping goldens prove every code preserves a typed cause and applicable details (including current revision), supplies actionable recovery, and round-trips without raw causes or secrets. Cursor goldens cover absent token, `after=0`, first event `1`, MAX read, checked overflow, and serde rejection of invalid numeric forms.
+- Team-bundle and launch-preparation contract goldens cover multiple placements for one Team, two stable draft variant keys, named members with stable ATM bindings on distinct variants, multiple ordered prompts, distinct branch/backend/runtime bindings, effective config/ref selection, and complete host-eligibility input. Clone/unlink goldens prove preserved Team references and last-reference cleanup are representable; B5/B6/B9B/B11 own execution, production reading, launch, query, and UI integration.
 - The B3B fixture compiles at the B2 prerequisite commit using only `shpherd-types::foundation` and `shpherd-auth`; imports from B3A/B3C are prohibited.
 
 Every deliverable is production-ready for contract closure.

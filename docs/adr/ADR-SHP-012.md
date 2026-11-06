@@ -1,8 +1,8 @@
-# ADR-SHP-012 — PostgreSQL lease authority
+# ADR-SHP-012 — PostgreSQL fleet read model and host-local launch safety
 
 - **Status:** Approved
 - **Owner:** B3A
-- **Decision:** PostgreSQL is the durable multi-host launch-lease authority. Tagged acquire/renew/release/transfer commands name team/variant, expected holder/fencing, daemon, duration, and idempotency key. Receipts expose replay/operation, database now/expiry, prior/new fencing, holder, and state; SQLite stores local evidence only.
-- **Alternatives rejected:** host clock authority, SQLite-granted multi-host lease, advisory locks without durable rows, or token reuse.
-- **Consequences:** launch requires PostgreSQL authority availability; expired ownership transfers increment fencing.
-- **Evidence:** B4B concurrent operation/error/replay tests and B9B unknown-outcome/crash/partition/stale-clock/transfer simulations.
+- **Decision:** PostgreSQL is a host-qualified, fleet-wide read model of Shpherd definitions and ATM-observed team/agent state across all enrolled computers. It grants no launch authority, ownership, lease, fencing token, or global name uniqueness. Each host prevents duplicate local side effects with a host-local single-flight guard plus durable idempotency/operation evidence. Identically named teams and agents may run concurrently on different hosts.
+- **Alternatives rejected:** PostgreSQL as a distributed launch authority, cross-host ownership transfer, global team-name uniqueness, or an advisory-lock/lease protocol.
+- **Consequences:** host launch remains available without PostgreSQL; a fleet view may be stale and reports each observation with source host, revision, and observation time. Operators explicitly create or import a local definition before launching it on another host.
+- **Evidence:** B4B host-qualified projection tests, B9A multi-host aggregation/replay tests, and B9B duplicate suppression plus concurrent same-name launch tests using two independent host-local B6-reader/B4A-journal compositions with PostgreSQL absent.

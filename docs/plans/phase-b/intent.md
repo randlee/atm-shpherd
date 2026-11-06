@@ -8,14 +8,15 @@ Phase B turns the existing atm-shpherd product definition and client prototype i
 
 The execution-ready boundary map, wave table, and sprint documents are indexed by `phase-b-plan.md`. The locked anchor record remains `anchors.json`; hardening may reorganize sprint ownership but may not weaken or replace those anchors.
 
-Shpherd manages teams across computers through a local SQLite database synchronized with shared PostgreSQL state. Herdr is the default launcher; tmux remains an explicitly supported backend. The plan preserves scmux behavior first, then adds the minimum app-owned fields and adapters needed for Herdr, ATM roster management, multi-host operation, and later scheduling.
+Shpherd is an operator convenience and status tool. ATM is the source of truth for each running team instance; Shpherd persists local launch definitions and observations in SQLite, publishes host-qualified reports to a shared PostgreSQL fleet view, and launches through independent Herdr or tmux adapters. PostgreSQL does not own teams or serialize launches, so identical team and agent names may run concurrently on different hosts. Phase B uses sc-cron only as the ATM-state polling heartbeat; scheduled launches and instructions are later work.
 
 ## What success looks like
 
 - The generated sc-runtime baseline passes setup, lint, test, CLI-build, and daemon-build gates before scmux migration begins.
 - The `shpherd` CLI and `atm-shpherd` daemon reproduce the retained scmux schema, definition management, observation, launcher, and browser/Tauri UI behavior.
 - A team launches through Herdr by default and through tmux when explicitly configured.
-- SQLite-to-PostgreSQL synchronization makes team definitions available for safe launch on another authorized host.
+- PostgreSQL shows host-qualified teams across all computers without becoming launch authority; an operator may explicitly create/import a local definition and launch it through `shpherd` over SSH.
+- The Phase B sc-cron heartbeat polls authoritative ATM agent state and refreshes Shpherd observations; it never schedules a launch or instruction.
 - The repository upgrades to sc-runtime 0.2.0 immediately after release, including its dependency refresh and complete sc-lint 0.8.4-or-newer consumer installation.
 
 ## What is deliberately out of scope
@@ -23,6 +24,7 @@ Shpherd manages teams across computers through a local SQLite database synchroni
 - AI chat, ontology generation, OxyGraph context providers, and schema-derived agent context graphs.
 - Replacing app-owned Shpherd schema, synchronization, launcher, or ATM policy with sc-runtime responsibilities.
 - Exact visual redesign beyond porting the retained scmux UI behavior into the existing browser/Tauri client.
+- PostgreSQL launch leases, global ownership/fencing, global team-name uniqueness, and scheduled/overnight team actions.
 
 ## Anchors
 

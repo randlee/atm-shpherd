@@ -3,61 +3,60 @@ id: b-12-scheduling
 bead: shp-phase-b.13
 status: planned
 closure_type: integration
-target_boundary: scheduled-operations
-requirements: [REQ-SCHEDULE]
-adrs: [ADR-SHP-005, ADR-SHP-009]
+target_boundary: atm-state-heartbeat
+requirements: [ANC-011, ANC-012, ANC-015, REQ-ATM, REQ-SYNC]
+adrs: [ADR-SHP-009, ADR-SHP-012, ADR-SHP-015]
 owned_paths:
-  - crates/shpherd-daemon/src/scheduling/**
-  - crates/shpherd-daemon/tests/scheduling/**
-  - crates/shpherd-service/src/scheduled_operations/**
-  - crates/shpherd-service/tests/scheduled_operations/**
+  - crates/shpherd-daemon/src/heartbeat/runtime/**
+  - crates/shpherd-daemon/tests/heartbeat/**
 relations:
   must_follow:
+    - sprint: b-1-generate-baseline
+      artifact: proven-installed-and-tested-runtime-template
     - sprint: b-3c-external-integration-contract
-      artifact: sc-cron-callback-schema-and-double
-    - sprint: b-9b-launch-leases
-      artifact: guarded-launch-command
+      artifact: sc-cron-atm-heartbeat-registration-freshness-contract-and-double
+    - sprint: b-3b-service-launch-api-contract
+      artifact: typed-readiness-dependency-input-contract
+    - sprint: b-6a-atm-projection
+      artifact: authoritative-atm-observation-adapter
+    - sprint: b-9a-sync-projection
+      artifact: host-report-projection-service
   parallel_safe: [b-11-editor-actions]
 recommended_agent: rust-service-developer
 recommended_model: deep-reasoning
 ---
 
-# B12 — Port schedules and recurring operations
+# B12 — Register the ATM-state polling heartbeat
 
 ## Goal
 
-Close recurring guarded operations through the pinned sc-cron contract with deterministic restart and missed-run behavior.
+Use sc-cron for one Phase B heartbeat that polls ATM agent state and refreshes Shpherd's local observations and host-qualified fleet report.
 
 ## Required work and deliverables
 
-- B12 may start while sc-runtime 0.2.0 is unavailable, but if 0.2.0 is released first, the B2-installed release gate must make the Shpherd 0.2.0 upgrade the next work started; that upgrade, including every dependency update supplied by the release, must finish before B12 begins or resumes.
-- Register Shpherd jobs through the approved sc-cron public API while keeping rows, traits, timers, and policy on their correct side of the boundary.
-- Integrate and contract-test sc-cron CRUD plus get/list reads, five-field minute-first grammar, six-field compatibility parsing, injected `Arc<dyn CronHandler + Send + Sync>`, cancellation, JSON callback payload, `CronError`, missed-run/restart policy, eligible-host/lease guarded execution, and aggregate failure isolation without reimplementing its parser.
-
-```rust
-pub trait ShpherdScheduleRegistry: sealed::Sealed {
-    fn upsert(&self, record: ScheduleRecord, expected: Option<u64>) -> Result<ScheduleRecord, CronError>;
-    fn get(&self, id: &ScheduleId) -> Result<ScheduleRecord, CronError>;
-    fn list(&self, query: ScheduleQuery) -> Result<SchedulePage, CronError>;
-    fn remove(&self, id: &ScheduleId, expected: u64) -> Result<(), CronError>;
-    fn register_handler(&self, handler: std::sync::Arc<dyn CronHandler>) -> Result<(), CronError>;
-}
-```
-
-The daemon owns this adapter and registers the B3C callback once; sc-cron never imports a Shpherd row or service trait.
+- Per phase policy, B1's sc-runtime `v0.1.1` template installation and baseline tests and B2 must close before this integration; if `v0.2.0` is observed, its interrupt is the next Shpherd work started and completes before this sprint starts or resumes.
+- Register exactly one application callback through the pinned sc-cron public API. The callback delegates to the independent ATM observation and fleet-projection components; sc-cron imports no Shpherd row or store trait. Persist/publish B3C's typed registration result and freshness snapshot, then map them at the daemon heartbeat boundary into B3B's `AtmHeartbeatRegistration` and `AtmHeartbeatFreshness` readiness-dependency inputs without either contract crate importing the other.
+- On each successful tick, poll ATM first, persist the host-local observation and definition drift, then publish a host-qualified report to PostgreSQL. PostgreSQL combines these reports from every enrolled computer into one fleet-wide team view. ATM is authoritative for actual team/member state; a failed or stale poll must not be presented as fresh truth.
+- Propagate cancellation and bounded timeout/retry behavior. Retry only typed transient ATM/projection failures, never authorization, validation, revision, or capability failures. One host/report failure is recorded without tight-looping or launching any work.
+- Keep all scheduled launches, roster changes, ATM messages, overnight instructions, general schedule CRUD, and schedule-editor policy outside Phase B.
 
 ## Relationships
 
-`must_follow` B3C's sc-cron callback schema/double and B9B's guarded command path. Parallel-safe with client and roster integration work.
+`must_follow` B3C's heartbeat registration/freshness contract, B3B's independent readiness-input contract, B6A's ATM adapter, and B9A's host-report projection. It has no dependency on launcher mutation or ownership state.
 
 ## This sprint does not close
 
-No OS service lifecycle; B12A owns supervision/reboot/upgrade behavior.
+No OS service lifecycle, real daemon-wide readiness decision, or arbitrary scheduled action; B12A owns supervision and composes B12's typed heartbeat state with the other real readiness dependencies. Future phases may compose scheduled launches from existing commands.
 
 ## Acceptance and validation
 
-- Source/version prerequisite and parser/callback fixtures are recorded; sc-cron imports no Shpherd type.
-- Schedule create/get/list/update/delete, revision conflict, invalid-expression, handler failure, and cancellation behavior pass through the pinned sc-cron API; Shpherd contains no duplicate cron parser.
-- Manual and scheduled launch share one command path; an unset launcher selects Herdr, an explicitly selected tmux backend remains available, and restart/missed-run plus isolated aggregate-failure fixtures pass.
+- B12 is the Phase B ATM-state heartbeat integration; it cannot start until B1 is complete with successful sc-runtime template-installation and baseline-test evidence.
+- Dependency validation proves every B12 dispatch follows B1 template install/test and B2 integration transitively through B3C, B6A, and B9A.
+- Dispatch fails unless the dependency graph contains a transitive `must_follow` path to completed B1 evidence proving the sc-runtime template was installed and every baseline test passed.
+- One heartbeat is registered and no scheduled launch/instruction job exists; contract tests cover the typed registration result plus never-succeeded/fresh/stale/failed freshness transitions and their B3B readiness-input mapping. Static checks find no general Shpherd schedule CRUD or scheduled-operation service.
+- A tick polls the authoritative ATM adapter before updating SQLite observations and PostgreSQL; source host, source revision, and observation time are retained. A two-host heartbeat fixture proves identically named teams and agents remain distinct host-qualified rows and are both visible concurrently.
+- Cancellation before/during work is terminal, restart resumes the heartbeat without duplicating a report, and transient retry stays within configured attempt/elapsed budgets.
+- ATM failure preserves the previous observation as explicitly stale; PostgreSQL failure does not alter ATM/local authority and is retried on a later heartbeat.
+- sc-cron and `shpherd-store-adaptor` import no Shpherd application row, ATM adapter, launcher, or timer policy.
 
-Every deliverable is production-ready for scheduled-operation integration.
+Every deliverable is production-ready for the Phase B ATM-state heartbeat.

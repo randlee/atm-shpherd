@@ -131,10 +131,12 @@ Evidence: scmux `docs/requirements.md` RT-01..RT-06, AH-01..AH-04, ORG-01;
 `runtime.rs`; and `dashboard/team-dashboard.jsx` `JumpModal` and
 `runStartStop`.
 
-**Port decision.** Shpherd obtains its own domain lease/fencing before hmux
-dynamic spawn. A client never executes hmux, opens a store, or decides a
-lease. The daemon records enough action evidence to reconcile a crash between
-roster registration and runtime spawn.
+**Port decision.** Shpherd durably accepts the operation, then issues a
+host-local single-flight guard before hmux dynamic spawn. A client never
+executes hmux, opens a store, or decides guard eligibility. The daemon records
+enough journal evidence to reconcile a crash between roster registration and
+runtime spawn. No distributed lease, fencing token, or cross-host ownership is
+introduced.
 
 ## Dashboard catalog and editor
 
@@ -149,7 +151,7 @@ Evidence: scmux `dashboard/team-dashboard.jsx` `Dashboard`,
 
 **Port decision.** Shpherd's browser and Tauri surfaces consume the same
 authenticated daemon API. They display validation/action results but contain
-no direct SQL, ATM, hmux, lease, or business-mutation implementation.
+no direct SQL, ATM, hmux, launch-guard, or business-mutation implementation.
 
 ## Acceptance-oriented invariants
 
@@ -162,7 +164,7 @@ no direct SQL, ATM, hmux, lease, or business-mutation implementation.
    cleanup.
 5. Discovery remains read-only until a user-import route invokes the writer.
 6. A launch validates before side effects, observes after side effects, and
-   rejects duplicate concurrent action/lease ownership.
+   rejects duplicate concurrent host-local operations through its guard and journal.
 7. Focus is viewer-only; stop is target-scoped; runtime evidence never becomes
    definition truth.
 8. A roster-expansion retry cannot create a second ATM member or a second
@@ -175,15 +177,13 @@ silently select one:
 
 1. The exact shared host-aggregate rows, local-only columns, provenance, and
    incompatible catalog/launch revision conflict policy.
-2. Domain lease/fencing lifetime, holder identity, recovery, and reconciliation
-   rules.
-3. Enrollment/authentication and logical-project to target-host checkout
+2. Enrollment/authentication and logical-project to target-host checkout
    binding.
-4. The ATM catalog projection/table-version contract and the roster-field
+3. The ATM catalog projection/table-version contract and the roster-field
    mapping.
-5. hmux capability/version negotiation, dynamic-spawn result contract, and
+4. hmux capability/version negotiation, dynamic-spawn result contract, and
    fallback behavior.
-6. The shared-reference versus copy-on-write semantics for each clone action,
+5. The shared-reference versus copy-on-write semantics for each clone action,
    especially the externally visible ATM identity of a copied Crew.
-7. Whether an optional MCP surface is enabled and, if so, its authorization
+6. Whether an optional MCP surface is enabled and, if so, its authorization
    model.

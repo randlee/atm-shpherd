@@ -1,6 +1,6 @@
 # atm-shpherd requirements index
 
-The normative product requirements are in `docs/atm-shpherd-prd.md`. Phase B also carries ten immutable user-approved requirements in `docs/plans/phase-b/anchors.json` (`ANC-001` through `ANC-010`). Sprint documents list the applicable anchors and PRD sections directly.
+The normative product requirements are in `docs/atm-shpherd-prd.md`. Phase B also carries fifteen immutable user-approved requirements in `docs/plans/phase-b/anchors.json` (`ANC-001` through `ANC-015`). Sprint documents list the applicable anchors and PRD sections directly.
 
 ## Phase B requirement groups
 
@@ -12,7 +12,7 @@ The normative product requirements are in `docs/atm-shpherd-prd.md`. Phase B als
 | REQ-LAUNCH | Herdr/hmux default with explicit tmux compatibility | ANC-008, ANC-009; PRD §§10-11 |
 | REQ-ATM | Versioned read-only ATM import and command-only roster mutation | PRD §§9-11; ATM/hmux contract |
 | REQ-SYNC | App-owned SQLite/PostgreSQL projection and deterministic reconciliation | PRD §7 |
-| REQ-LEASE | Multi-host eligibility, lease, fencing, and crash convergence | PRD §§7, 11 |
+| REQ-LAUNCH-SAFETY | Host-local eligibility, single-flight guard, durable operation journal, idempotency, and crash convergence; no distributed lease or fencing | PRD §§7, 11 |
 | REQ-API | Versioned authenticated daemon API; thin CLI/browser/Tauri clients | PRD §§4.2-4.3 |
 | REQ-UI-READ | Port retained scmux catalog/dashboard read behavior | ANC-007; PRD §§2, 4.3, 6 |
 | REQ-UI-COMMAND | Port editor and team command behavior to browser/desktop | PRD §§4.3, 6, 10-11 |

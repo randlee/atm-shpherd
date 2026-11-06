@@ -26,10 +26,15 @@ Prove the released generator baseline is reproducible and usable before any prod
 
 - Generate an untouched sc-runtime `v0.1.1` `sqlite-postgres` release workspace in an absent staging destination using a retained Shpherd answers file.
 - Prove published crates resolve without local patches and record setup/lint/test/CLI/daemon results.
+- Do not start B2 or any scmux schema, feature, or UI migration until this template installation and every recorded baseline gate pass.
 
 ## Relationships
 
-`parallel_safe`: none; this is the phase root. B2 `must_follow` because it consumes the proven generated tree and evidence digest.
+`parallel_safe`: none; this is the phase root. Successful B1 generation and all
+baseline setup, lint, test, CLI, and daemon gates are an explicit tracker
+prerequisite for B2 and every scmux schema, feature, and UI migration sprint.
+B2 `must_follow` because it consumes the proven generated tree and evidence
+digest; every later migration inherits that dependency transitively through B2.
 
 ## This sprint does not close
 
